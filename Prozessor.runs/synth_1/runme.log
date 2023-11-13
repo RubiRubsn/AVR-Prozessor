@@ -1,0 +1,227 @@
+
+*** Running vivado
+    with args -log toplevel.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source toplevel.tcl
+
+
+ECHO ist ausgeschaltet (OFF).
+ECHO ist ausgeschaltet (OFF).
+
+****** Vivado v2023.2 (64-bit)
+  **** SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
+  **** IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
+  **** SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source toplevel.tcl -notrace
+create_project: Time (s): cpu = 00:00:07 ; elapsed = 00:00:08 . Memory (MB): peak = 473.480 ; gain = 177.535
+Command: synth_design -top toplevel -part xc7a35tcpg236-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 7084
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 920.934 ; gain = 443.477
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'toplevel' [C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/toplevel.vhd:50]
+INFO: [Synth 8-3491] module 'Program_Counter' declared at 'C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Program_Counter.vhd:31' bound to instance 'Program_Counter_1' of component 'Program_Counter' [C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/toplevel.vhd:135]
+INFO: [Synth 8-638] synthesizing module 'Program_Counter' [C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Program_Counter.vhd:40]
+INFO: [Synth 8-256] done synthesizing module 'Program_Counter' (0#1) [C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Program_Counter.vhd:40]
+INFO: [Synth 8-3491] module 'prog_mem' declared at 'C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/prog_mem.vhd:34' bound to instance 'prog_mem_1' of component 'prog_mem' [C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/toplevel.vhd:142]
+INFO: [Synth 8-638] synthesizing module 'prog_mem' [C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/prog_mem.vhd:40]
+INFO: [Synth 8-256] done synthesizing module 'prog_mem' (0#1) [C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/prog_mem.vhd:40]
+INFO: [Synth 8-3491] module 'decoder' declared at 'C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/decoder.vhd:29' bound to instance 'decoder_1' of component 'decoder' [C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/toplevel.vhd:148]
+INFO: [Synth 8-638] synthesizing module 'decoder' [C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/decoder.vhd:43]
+INFO: [Synth 8-256] done synthesizing module 'decoder' (0#1) [C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/decoder.vhd:43]
+INFO: [Synth 8-3491] module 'Reg_File' declared at 'C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Reg_File.vhd:27' bound to instance 'Reg_File_1' of component 'Reg_File' [C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/toplevel.vhd:159]
+INFO: [Synth 8-638] synthesizing module 'Reg_File' [C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Reg_File.vhd:42]
+INFO: [Synth 8-256] done synthesizing module 'Reg_File' (0#1) [C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Reg_File.vhd:42]
+INFO: [Synth 8-3491] module 'ALU' declared at 'C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/ALU.vhd:29' bound to instance 'ALU_1' of component 'ALU' [C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/toplevel.vhd:170]
+INFO: [Synth 8-638] synthesizing module 'ALU' [C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/ALU.vhd:37]
+INFO: [Synth 8-256] done synthesizing module 'ALU' (0#1) [C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/ALU.vhd:37]
+INFO: [Synth 8-256] done synthesizing module 'toplevel' (0#1) [C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/toplevel.vhd:50]
+WARNING: [Synth 8-7129] Port Addr[8] in module prog_mem is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Addr[7] in module prog_mem is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Addr[6] in module prog_mem is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Addr[5] in module prog_mem is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Addr[4] in module prog_mem is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Addr[3] in module prog_mem is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Addr[2] in module prog_mem is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Addr[1] in module prog_mem is either unconnected or has no load
+WARNING: [Synth 8-7129] Port Addr[0] in module prog_mem is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 1028.918 ; gain = 551.461
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1028.918 ; gain = 551.461
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a35tcpg236-1
+---------------------------------------------------------------------------------
+INFO: [Device 21-403] Loading part xc7a35tcpg236-1
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1028.918 ; gain = 551.461
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1028.918 ; gain = 551.461
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input    9 Bit       Adders := 1     
+	   3 Input    8 Bit       Adders := 1     
++---XORs : 
+	   2 Input      1 Bit         XORs := 1     
++---Registers : 
+	                9 Bit    Registers := 1     
++---Muxes : 
+	   2 Input    8 Bit        Muxes := 2     
+	   4 Input    8 Bit        Muxes := 2     
+	   2 Input    6 Bit        Muxes := 1     
+	   4 Input    6 Bit        Muxes := 1     
+	   2 Input    5 Bit        Muxes := 2     
+	   4 Input    5 Bit        Muxes := 2     
+	   2 Input    2 Bit        Muxes := 1     
+	   4 Input    2 Bit        Muxes := 1     
+	   2 Input    1 Bit        Muxes := 3     
+	   4 Input    1 Bit        Muxes := 3     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 90 (col length:60)
+BRAMs: 100 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+WARNING: [Synth 8-3917] design toplevel has port w_e_SREG[7] driven by constant 0
+WARNING: [Synth 8-3917] design toplevel has port w_e_SREG[6] driven by constant 0
+WARNING: [Synth 8-3917] design toplevel has port Status[7] driven by constant 0
+WARNING: [Synth 8-3917] design toplevel has port Status[6] driven by constant 0
+WARNING: [Synth 8-3917] design toplevel has port Status[5] driven by constant 0
+WARNING: [Synth 8-7129] Port reset in module toplevel is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:17 ; elapsed = 00:00:26 . Memory (MB): peak = 1211.156 ; gain = 733.699
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:17 ; elapsed = 00:00:26 . Memory (MB): peak = 1211.156 ; gain = 733.699
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:17 ; elapsed = 00:00:26 . Memory (MB): peak = 1211.156 ; gain = 733.699
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:23 ; elapsed = 00:00:32 . Memory (MB): peak = 1211.156 ; gain = 733.699
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:23 ; elapsed = 00:00:32 . Memory (MB): peak = 1211.156 ; gain = 733.699
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:23 ; elapsed = 00:00:32 . Memory (MB): peak = 1211.156 ; gain = 733.699
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:23 ; elapsed = 00:00:32 . Memory (MB): peak = 1211.156 ; gain = 733.699
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:23 ; elapsed = 00:00:32 . Memory (MB): peak = 1211.156 ; gain = 733.699
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:23 ; elapsed = 00:00:32 . Memory (MB): peak = 1211.156 ; gain = 733.699
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-----+------+
+|      |Cell |Count |
++------+-----+------+
+|1     |OBUF |    16|
++------+-----+------+
+
+Report Instance Areas: 
++------+---------+-------+------+
+|      |Instance |Module |Cells |
++------+---------+-------+------+
+|1     |top      |       |    16|
++------+---------+-------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:23 ; elapsed = 00:00:32 . Memory (MB): peak = 1211.156 ; gain = 733.699
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 16 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:23 ; elapsed = 00:00:32 . Memory (MB): peak = 1211.156 ; gain = 733.699
+Synthesis Optimization Complete : Time (s): cpu = 00:00:23 ; elapsed = 00:00:32 . Memory (MB): peak = 1211.156 ; gain = 733.699
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1215.047 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1311.551 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Das System kann den angegebenen Pfad nicht finden.
+Synth Design complete | Checksum: 96ee3e95
+INFO: [Common 17-83] Releasing license: Synthesis
+27 Infos, 16 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:25 ; elapsed = 00:00:35 . Memory (MB): peak = 1311.551 ; gain = 838.070
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1311.551 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'C:/Users/Rubsen/Documents/Vivado/Prozessor/Prozessor.runs/synth_1/toplevel.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file toplevel_utilization_synth.rpt -pb toplevel_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Mon Nov 13 12:48:08 2023...

@@ -17,31 +17,29 @@
 -- Additional Comments:
 -- 
 ----------------------------------------------------------------------------------
-
-
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-
-library work;
-use work.pkg_instrmem.all;
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+LIBRARY work;
+USE work.pkg_instrmem.ALL;
 
 -- following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
-use IEEE.NUMERIC_STD.ALL;
+USE IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity prog_mem is
-    Port ( Addr : in STD_LOGIC_VECTOR (8 downto 0);
-           Instr : out STD_LOGIC_VECTOR (15 downto 0));
-end prog_mem;
+ENTITY prog_mem IS
+  PORT (
+    Addr : IN STD_LOGIC_VECTOR (8 DOWNTO 0);
+    Instr : OUT STD_LOGIC_VECTOR (15 DOWNTO 0));
+END prog_mem;
 
-architecture Behavioral of prog_mem is
+ARCHITECTURE Behavioral OF prog_mem IS
 
-begin
+BEGIN
   Instr <= PROGMEM(to_integer(unsigned(Addr)));
 
-end Behavioral;
+END Behavioral;
