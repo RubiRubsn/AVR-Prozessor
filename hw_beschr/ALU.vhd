@@ -17,90 +17,89 @@
 -- Additional Comments:
 -- 
 ----------------------------------------------------------------------------------
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE ieee.numeric_std.ALL;
+LIBRARY work;
+USE work.pkg_processor.ALL;
+ENTITY ALU IS
+  PORT (
+    OPCODE : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+    OPA : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+    OPB : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+    K : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    RES : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
+    Status : OUT STD_LOGIC_VECTOR (7 DOWNTO 0));
+END ALU;
 
-
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use ieee.numeric_std.all;
-library work;
-use work.pkg_processor.all;
-
-
-entity ALU is
-    Port ( OPCODE : in STD_LOGIC_VECTOR (3 downto 0);
-           OPA : in STD_LOGIC_VECTOR (7 downto 0);
-           OPB : in STD_LOGIC_VECTOR (7 downto 0);
-           RES : out STD_LOGIC_VECTOR (7 downto 0);
-           Status : out STD_LOGIC_VECTOR (7 downto 0));
-end ALU;
-
-architecture Behavioral of ALU is
-  signal z : std_logic := '0';            -- Zero Flag
-  signal c : std_logic := '0';            -- Carry Flag
-  signal v : std_logic := '0';            -- Overflow Flag
-  signal n : std_logic := '0';            -- negative flag
-  signal s : std_logic := '0';            -- sign flag
-  signal erg : std_logic_vector(7 downto 0);  -- Zwischenergebnis
-begin
+ARCHITECTURE Behavioral OF ALU IS
+  SIGNAL z : STD_LOGIC := '0'; -- Zero Flag
+  SIGNAL c : STD_LOGIC := '0'; -- Carry Flag
+  SIGNAL v : STD_LOGIC := '0'; -- Overflow Flag
+  SIGNAL n : STD_LOGIC := '0'; -- negative flag
+  SIGNAL s : STD_LOGIC := '0'; -- sign flag
+  SIGNAL erg : STD_LOGIC_VECTOR(7 DOWNTO 0); -- Zwischenergebnis
+BEGIN
   -- purpose: Kern-ALU zur Berechnung des Datenausganges
   -- type   : combinational
   -- inputs : OPA, OPB, OPCODE
   -- outputs: erg
-  kern_ALU: process (OPA, OPB, OPCODE)
-  begin  -- process kern_ALU
-    erg <= "00000000";                  -- verhindert Latches
-    case OPCODE is
-      -- ADD --> Addition
-      when "0000" =>
-        erg <= std_logic_vector(unsigned(OPA) + unsigned(OPB));
-      -- SUB
-      when "0001" =>
-        erg <= std_logic_vector(unsigned(OPA) - unsigned(OPB));
-      -- OR
-      when "0010" =>
-        erg <= OPA or OPB;
-      -- alle anderen Operationen...
-        
-      when others => null;
-    end case;
-  end process kern_ALU;
+  kern_ALU : PROCESS (OPA, OPB, OPCODE, K)
+  BEGIN -- process kern_ALU
+    erg <= "00000000"; -- verhindert Latches
+    CASE OPCODE IS
+        -- ADD --> Addition
+      WHEN "0000" =>
+        erg <= STD_LOGIC_VECTOR(unsigned(OPA) + unsigned(OPB));
+        -- SUB
+      WHEN "0001" =>
+        erg <= STD_LOGIC_VECTOR(unsigned(OPA) - unsigned(OPB));
+        -- OR
+      WHEN "0010" =>
+        erg <= OPA OR OPB;
+        --LDI
+      WHEN "1110" =>
+        erg <= K;
+        -- alle anderen Operationen...
+      WHEN OTHERS => NULL;
+    END CASE;
+  END PROCESS kern_ALU;
 
   -- purpose: berechnet die Statusflags
   -- type   : combinational
   -- inputs : OPA, OPB, OPCODE, erg
   -- outputs: z, c, v, n
-  Berechnung_SREG: process (OPA, OPB, OPCODE, erg)
-  begin  -- process Berechnung_SREG
-    z<=not (erg(7) or erg(6) or erg(5) or erg(4) or erg(3) or erg(2) or erg(1) or erg(0));
+  Berechnung_SREG : PROCESS (OPA, OPB, OPCODE, erg)
+  BEGIN -- process Berechnung_SREG
+    z <= NOT (erg(7) OR erg(6) OR erg(5) OR erg(4) OR erg(3) OR erg(2) OR erg(1) OR erg(0));
     n <= erg(7);
 
-    c <= '0';                           -- um Latches zu verhindern
+    c <= '0'; -- um Latches zu verhindern
     v <= '0';
-    
-    case OPCODE is
-      -- ADD
-      when "0000" =>
-        c<=(OPA(7) AND OPB(7)) OR (OPB(7) AND (not erg(7))) OR ((not erg(7)) AND OPA(7));
-        v<=(OPA(7) AND OPB(7) AND (not erg(7))) OR ((not OPA(7)) and (not OPB(7)) and  erg(7));
 
-      -- SUB
-      when "0001" =>
-        c<=(not OPA(7) and OPB(7)) or (OPB(7) and erg(7)) or (not OPA(7) and erg(7));
-        v<=(OPA(7) and not OPB(7) and not erg(7)) or (not OPA(7) and OPB(7) and erg(7));
+    CASE OPCODE IS
+        -- ADD
+      WHEN "0000" =>
+        c <= (OPA(7) AND OPB(7)) OR (OPB(7) AND (NOT erg(7))) OR ((NOT erg(7)) AND OPA(7));
+        v <= (OPA(7) AND OPB(7) AND (NOT erg(7))) OR ((NOT OPA(7)) AND (NOT OPB(7)) AND erg(7));
 
-      -- OR
-      when "0010" =>
-        c<='0';
-        v<='0';
-      -- alle anderen Operationen...
+        -- SUB
+      WHEN "0001" =>
+        c <= (NOT OPA(7) AND OPB(7)) OR (OPB(7) AND erg(7)) OR (NOT OPA(7) AND erg(7));
+        v <= (OPA(7) AND NOT OPB(7) AND NOT erg(7)) OR (NOT OPA(7) AND OPB(7) AND erg(7));
 
-      when others => null;
-    end case;
-    
-  end process Berechnung_SREG;  
+        -- OR
+      WHEN "0010" =>
+        c <= '0';
+        v <= '0';
+        -- alle anderen Operationen...
+      WHEN OTHERS => NULL;
+    END CASE;
 
-  s <= v xor n;
+  END PROCESS Berechnung_SREG;
+
+  s <= v XOR n;
   RES <= erg;
   Status <= '0' & '0' & '0' & s & v & n & z & c;
-  
-end Behavioral;
+
+END Behavioral;

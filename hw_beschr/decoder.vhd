@@ -33,8 +33,8 @@ ENTITY decoder IS
     addr_opb : OUT STD_LOGIC_VECTOR(4 DOWNTO 0); -- Adresse von 2. Operand
     OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0); -- Opcode für ALU
     w_e_regfile : OUT STD_LOGIC; -- write enable for Registerfile
-    w_e_SREG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)--; -- einzeln Write_enables für SREG - Bits
-
+    w_e_SREG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- einzeln Write_enables für SREG - Bits
+    K : OUT STD_LOGIC_VECTOR (7 DOWNTO 0) --konstanten wert
     -- hier kommen noch die ganzen Steuersignale der Multiplexer...
 
   );
@@ -55,6 +55,7 @@ BEGIN -- Behavioral
     -- Etwas muss man hier schon nachdenken und sich die Operationen genau ansehen...
 
     -- Vorzuweisung der Signale, um Latches zu verhindern
+    K <= "00000000";
     addr_opa <= "00000";
     addr_opb <= "00000";
     OPCODE <= op_NOP;
@@ -85,8 +86,12 @@ BEGIN -- Behavioral
 
       WHEN OTHERS =>
         CASE Instr(15 DOWNTO 12) IS
+            --LDI  
           WHEN "1110" =>
-            -- LDI...
+            K <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
+            OPCODE <= op_ldi;
+            addr_opa <= '1' & Instr(7 DOWNTO 4);
+            w_e_regfile <= '1';
           WHEN OTHERS => NULL;
         END CASE;
     END CASE;

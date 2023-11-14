@@ -19,68 +19,66 @@
 -- 2015-06-23  1.0      bvoss	Created
 -------------------------------------------------------------------------------
 
-library ieee;
-use ieee.std_logic_1164.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
 
 -------------------------------------------------------------------------------
 
-entity toplevel_tb is
+ENTITY toplevel_tb IS
 
-end toplevel_tb;
+END toplevel_tb;
 
 -------------------------------------------------------------------------------
 
-architecture behaviour of toplevel_tb is
+ARCHITECTURE behaviour OF toplevel_tb IS
 
-  component toplevel
-    port (
-      reset    : in  STD_LOGIC;
-      clk      : in  STD_LOGIC;
-      w_e_SREG : out std_logic_vector(7 downto 0);
-      Status   : out STD_LOGIC_VECTOR (7 downto 0));
-  end component;
+  COMPONENT toplevel
+    PORT (
+      reset : IN STD_LOGIC;
+      clk : IN STD_LOGIC--;
+      --w_e_SREG : out std_logic_vector(7 downto 0);
+      --Status   : out STD_LOGIC_VECTOR (7 downto 0)
+    );
+  END COMPONENT;
 
   -- component ports
-  signal reset    : STD_LOGIC;
-  signal clk      : STD_LOGIC:='0';
-  signal w_e_SREG : std_logic_vector(7 downto 0);
-  signal Status   : STD_LOGIC_VECTOR (7 downto 0);
-
-
-begin  -- behaviour
+  SIGNAL reset : STD_LOGIC;
+  SIGNAL clk : STD_LOGIC := '0';
+  --  signal w_e_SREG : std_logic_vector(7 downto 0);
+  -- signal Status   : STD_LOGIC_VECTOR (7 downto 0);
+BEGIN -- behaviour
 
   -- component instantiation
-  DUT: toplevel
-    port map (
-      reset    => reset,
-      clk      => clk,
-      w_e_SREG => w_e_SREG,
-      Status   => Status);
+  DUT : toplevel
+  PORT MAP(
+    reset => reset,
+    clk => clk--,
+    --w_e_SREG => w_e_SREG,
+    --Status => Status
+  );
 
   -- clock generation
-  clk <= not clk after 10 ns;
+  clk <= NOT clk AFTER 10 ns;
 
   -- waveform generation
-  WaveGen_Proc: process
-  begin
+  WaveGen_Proc : PROCESS
+  BEGIN
     -- insert signal assignments here
-    wait for 20ns;
+    WAIT FOR 20ns;
     reset <= '1';
-    wait for 101ns;
+    WAIT FOR 101ns;
     reset <= '0';
-    wait;
+    WAIT;
 
-  end process WaveGen_Proc;
+  END PROCESS WaveGen_Proc;
 
-  
-
-end behaviour;
+END behaviour;
 
 -------------------------------------------------------------------------------
 
-configuration toplevel_tb_behaviour_cfg of toplevel_tb is
-  for behaviour
-  end for;
-end toplevel_tb_behaviour_cfg;
+CONFIGURATION toplevel_tb_behaviour_cfg OF toplevel_tb IS
+  FOR behaviour
+  END FOR;
+END toplevel_tb_behaviour_cfg;
 
 -------------------------------------------------------------------------------

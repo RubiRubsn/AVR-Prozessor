@@ -1,16 +1,21 @@
-library ieee;
-use ieee.std_logic_1164.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
 -- ---------------------------------------------------------------------------------
 -- Memory initialisation package
 -- ---------------------------------------------------------------------------------
-package pkg_instrmem is
+PACKAGE pkg_instrmem IS
 
-	type t_instrMem   is array(0 to 512-1) of std_logic_vector(15 downto 0);
-	constant PROGMEM : t_instrMem := (
+	TYPE t_instrMem IS ARRAY(0 TO 512 - 1) OF STD_LOGIC_VECTOR(15 DOWNTO 0);
+	CONSTANT PROGMEM : t_instrMem := (
 		"0000000000000000",
-		"0000000000000000",
-		
-		others => (others => '0')
+		"1110111100011111",
+		"1110000000100101",
+		"0000111100010010",
+		"1110000000010001",
+		"1110000000100101",
+		"0001101100010010",
+
+		OTHERS => (OTHERS => '0')
 	);
 
-end package pkg_instrmem;
+END PACKAGE pkg_instrmem;

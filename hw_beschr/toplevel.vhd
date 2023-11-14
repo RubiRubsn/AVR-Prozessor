@@ -37,13 +37,14 @@ ENTITY toplevel IS
 
     -- global ports
     reset : IN STD_LOGIC;
-    clk : IN STD_LOGIC;
+    clk : IN STD_LOGIC--;
 
     -- ports to "decoder_1"
-    w_e_SREG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    --w_e_SREG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
 
     -- ports to "ALU_1"
-    Status : OUT STD_LOGIC_VECTOR (7 DOWNTO 0));
+    --Status : OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
+  );
 
 END toplevel;
 
@@ -64,6 +65,7 @@ ARCHITECTURE Behavioral OF toplevel IS
   SIGNAL OPCODE : STD_LOGIC_VECTOR(3 DOWNTO 0);
   SIGNAL w_e_regfile : STD_LOGIC;
   SIGNAL sel_immediate : STD_LOGIC;
+  SIGNAL K : STD_LOGIC_VECTOR (7 DOWNTO 0);
 
   -- outputs of Regfile
   SIGNAL data_opa : STD_LOGIC_VECTOR (7 DOWNTO 0);
@@ -73,6 +75,8 @@ ARCHITECTURE Behavioral OF toplevel IS
   -- auxiliary signals
   SIGNAL PM_data : STD_LOGIC_VECTOR(7 DOWNTO 0); -- used for wiring immediate data
 
+  SIGNAL Status : STD_LOGIC_VECTOR(7 DOWNTO 0);
+  SIGNAL w_e_SREG : STD_LOGIC_VECTOR(7 DOWNTO 0);
   -----------------------------------------------------------------------------
   -- Component declarations
   -----------------------------------------------------------------------------
@@ -96,10 +100,20 @@ ARCHITECTURE Behavioral OF toplevel IS
       addr_opb : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
       OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
       w_e_regfile : OUT STD_LOGIC;
-      w_e_SREG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+      w_e_SREG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+      K : OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
       --hier fehlt etwas
     );
 
+  END COMPONENT;
+
+  COMPONENT SREG
+    PORT (
+      clk : IN STD_LOGIC;
+      Status : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+      w_e_SREG : IN STD_LOGIC_VECTOR (7 DOWNTO 0)--;
+      --Status_out : OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
+    );
   END COMPONENT;
 
   COMPONENT Reg_File
@@ -121,6 +135,7 @@ ARCHITECTURE Behavioral OF toplevel IS
       OPCODE : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
       OPA : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
       OPB : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+      K : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       RES : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
       Status : OUT STD_LOGIC_VECTOR (7 DOWNTO 0));
   END COMPONENT;
@@ -152,7 +167,8 @@ BEGIN
     addr_opb => addr_opb,
     OPCODE => OPCODE,
     w_e_regfile => w_e_regfile,
-    w_e_SREG => w_e_SREG);
+    w_e_SREG => w_e_SREG,
+    K => K);
 
   -- instance "Reg_File_1"
 
@@ -173,7 +189,16 @@ BEGIN
     OPA => data_opa,
     OPB => data_opb,
     RES => data_res,
-    Status => Status);
+    Status => Status,
+    K => K);
+
+  SREG_1 : SREG
+  PORT MAP(
+    clk => clk,
+    Status => Status,
+    w_e_SREG => w_e_SREG
+    --Status_out =>
+  );
 
   PM_Data <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
 

@@ -1,0 +1,15 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../hw_beschr/pkg_processor.vhd" \
+"../../../../hw_beschr/ALU.vhd" \
+"../../../../hw_beschr/Program_Counter.vhd" \
+"../../../../hw_beschr/Reg_File.vhd" \
+"../../../../hw_beschr/SREG.vhd" \
+"../../../../hw_beschr/decoder.vhd" \
+"../../../../hw_beschr/pkg_instrmem.vhd" \
+"../../../../hw_beschr/prog_mem.vhd" \
+"../../../../hw_beschr/toplevel.vhd" \
+"../../../../hw_beschr/toplevel_tb.vhd" \
+
+# Do not sort compile order
+nosort
