@@ -152,12 +152,54 @@ BEGIN -- Behavioral
             OPCODE <= op_ori;
             w_e_SREG <= "00011110";
             w_e_regfile <= '1';
+            --andi
           WHEN "0111" =>
             K <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
             addr_opa <= '1' & Instr(7 DOWNTO 4);
             OPCODE <= op_andi;
             w_e_SREG <= "00011110";
             w_e_regfile <= '1';
+            --ASR, lsr, com, dec, inc
+          WHEN "1001" =>
+            CASE Instr(2 DOWNTO 0) IS
+                --asr
+              WHEN "101" =>
+                addr_opa <= Instr(8 DOWNTO 4);
+                OPCODE <= op_asr;
+                SUB_OPCODE <= sub_op_asr;
+                w_e_regfile <= '1';
+                w_e_SREG <= "00011111";
+                --lsr
+              WHEN "110" =>
+                addr_opa <= Instr(8 DOWNTO 4);
+                OPCODE <= op_lsr;
+                SUB_OPCODE <= sub_op_lsr;
+                w_e_regfile <= '1';
+                w_e_SREG <= "00011111";
+                --dec
+              WHEN "010" =>
+                K <= "0000000" & '1';
+                addr_opa <= Instr(8 DOWNTO 4);
+                OPCODE <= op_dec;
+                w_e_SREG <= "00011110";
+                w_e_regfile <= '1';
+                --inc
+              WHEN "011" =>
+                addr_opa <= Instr(8 DOWNTO 4);
+                OPCODE <= op_inc;
+                SUB_OPCODE <= sub_op_inc;
+                w_e_regfile <= '1';
+                w_e_SREG <= "00011111";
+                --com
+              WHEN "000" =>
+                addr_opa <= Instr(8 DOWNTO 4);
+                OPCODE <= op_com;
+                SUB_OPCODE <= sub_op_com;
+                w_e_regfile <= '1';
+                w_e_SREG <= "00011111";
+              WHEN OTHERS => NULL;
+            END CASE;
+
           WHEN OTHERS => NULL;
         END CASE;
     END CASE;

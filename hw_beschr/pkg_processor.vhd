@@ -22,7 +22,16 @@ PACKAGE pkg_processor IS
   CONSTANT sub_op_MOV : STD_LOGIC_VECTOR(1 DOWNTO 0) := "11"; -- MOV
   CONSTANT op_cpi : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0011"; -- CPI
   CONSTANT op_subi : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0011"; -- subi
+  CONSTANT op_dec : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0011"; -- dec
   CONSTANT op_ori : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0110"; -- ori
   CONSTANT op_andi : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0111"; -- andi
+  CONSTANT op_asr : STD_LOGIC_VECTOR(3 DOWNTO 0) := "1001"; -- asr
+  CONSTANT sub_op_asr : STD_LOGIC_VECTOR(1 DOWNTO 0) := "00"; -- asr
+  CONSTANT op_lsr : STD_LOGIC_VECTOR(3 DOWNTO 0) := "1001"; -- lsr
+  CONSTANT sub_op_lsr : STD_LOGIC_VECTOR(1 DOWNTO 0) := "01"; -- lsr
+  CONSTANT op_inc : STD_LOGIC_VECTOR(3 DOWNTO 0) := "1001"; -- inc
+  CONSTANT sub_op_inc : STD_LOGIC_VECTOR(1 DOWNTO 0) := "10"; -- inc
+  CONSTANT op_com : STD_LOGIC_VECTOR(3 DOWNTO 0) := "1001"; -- com
+  CONSTANT sub_op_com : STD_LOGIC_VECTOR(1 DOWNTO 0) := "11"; -- com
   CONSTANT op_ldi : STD_LOGIC_VECTOR(3 DOWNTO 0) := "1110"; -- Load immediate
 END pkg_processor;

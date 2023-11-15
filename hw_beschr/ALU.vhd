@@ -46,7 +46,7 @@ BEGIN
   -- type   : combinational
   -- inputs : OPA, OPB, OPCODE
   -- outputs: erg
-  kern_ALU : PROCESS (OPA, OPB, OPCODE, K)
+  kern_ALU : PROCESS (OPA, OPB, OPCODE, K, SUB_OPCODE, SREG_IN)
   BEGIN -- process kern_ALU
     erg <= "00000000"; -- verhindert Latches
     CASE OPCODE IS
@@ -91,6 +91,27 @@ BEGIN
         --andi
       WHEN "0111" =>
         erg <= OPA AND K;
+        --asr,lsr,com,dec,inc
+      WHEN "1001" =>
+        --asr,lsr
+        IF SUB_OPCODE(1) = '0' THEN
+          erg(6 DOWNTO 0) <= OPA(7 DOWNTO 1);
+          IF SUB_OPCODE(0) = '0' THEN
+            --asr
+            erg(7) <= OPA(7);
+          ELSE
+            --lsr
+            erg(7) <= '0';
+          END IF;
+        ELSE
+          --inc
+          IF SUB_OPCODE(0) = '0' THEN
+            erg <= STD_LOGIC_VECTOR(unsigned(OPA) + 1);
+          ELSE
+            --com
+            erg <= STD_LOGIC_VECTOR(255 - unsigned(OPA));
+          END IF;
+        END IF;
         --LDI
       WHEN "1110" =>
         erg <= K;
@@ -103,7 +124,7 @@ BEGIN
   -- type   : combinational
   -- inputs : OPA, OPB, OPCODE, erg
   -- outputs: z, c, v, n
-  Berechnung_SREG : PROCESS (OPA, OPB, OPCODE, erg)
+  Berechnung_SREG : PROCESS (OPA, OPB, OPCODE, erg, SUB_OPCODE, K)
   BEGIN -- process Berechnung_SREG
     z <= NOT (erg(7) OR erg(6) OR erg(5) OR erg(4) OR erg(3) OR erg(2) OR erg(1) OR erg(0));
     n <= erg(7);
@@ -144,6 +165,22 @@ BEGIN
       WHEN "0111" =>
         c <= '0';
         v <= '0';
+      WHEN "1001" =>
+        IF SUB_OPCODE(1) = '0' THEN
+          c <= OPA(0);
+          v <= (erg(7)) XOR (OPA(0));
+        ELSE
+          IF SUB_OPCODE(0) = '0' THEN
+            --inc
+            c <= '0';
+            v <= (erg(7) AND NOT erg(6)AND NOT erg(5)AND NOT erg(4)AND NOT erg(3)AND NOT erg(2)AND NOT erg(1)AND NOT erg(0));
+          ELSE
+            --com
+            c <= '1';
+            v <= '0';
+          END IF;
+
+        END IF;
         -- alle anderen Operationen...
 
       WHEN OTHERS => NULL;
