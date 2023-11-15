@@ -32,6 +32,7 @@ ENTITY decoder IS
     addr_opa : OUT STD_LOGIC_VECTOR(4 DOWNTO 0); -- Adresse von 1. Operand
     addr_opb : OUT STD_LOGIC_VECTOR(4 DOWNTO 0); -- Adresse von 2. Operand
     OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0); -- Opcode für ALU
+    SUB_OPCODE : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
     w_e_regfile : OUT STD_LOGIC; -- write enable for Registerfile
     w_e_SREG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- einzeln Write_enables für SREG - Bits
     K : OUT STD_LOGIC_VECTOR (7 DOWNTO 0) --konstanten wert
@@ -59,6 +60,7 @@ BEGIN -- Behavioral
     addr_opa <= "00000";
     addr_opb <= "00000";
     OPCODE <= op_NOP;
+    SUB_OPCODE <= "00";
     w_e_regfile <= '0';
     w_e_SREG <= "00000000";
 
@@ -77,13 +79,51 @@ BEGIN -- Behavioral
         OPCODE <= op_sub;
         w_e_regfile <= '1';
         w_e_SREG <= "00111111";
+        --CP
+      WHEN "000101" =>
+        addr_opa <= Instr(8 DOWNTO 4);
+        addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
+        OPCODE <= op_CP;
+        w_e_SREG <= "00111111";
+        --ADC
+      WHEN "000111" =>
+        addr_opa <= Instr(8 DOWNTO 4);
+        addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
+        OPCODE <= op_ADC;
+        SUB_OPCODE <= sub_op_ADC;
+        w_e_SREG <= "00111111";
+        w_e_regfile <= '1';
+        --AND
+      WHEN "001000" =>
+        addr_opa <= Instr(8 DOWNTO 4);
+        addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
+        OPCODE <= op_and;
+        SUB_OPCODE <= sub_op_and;
+        w_e_regfile <= '1';
+        w_e_SREG <= "00011110";
+        --EOR
+      WHEN "001001" =>
+        addr_opa <= Instr(8 DOWNTO 4);
+        addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
+        OPCODE <= op_eor;
+        SUB_OPCODE <= sub_op_eor;
+        w_e_regfile <= '1';
+        w_e_SREG <= "00011110";
+        --OR
       WHEN "001010" =>
         addr_opa <= Instr(8 DOWNTO 4);
         addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
         OPCODE <= op_or;
+        SUB_OPCODE <= sub_op_or;
         w_e_regfile <= '1';
         w_e_SREG <= "00011110";
-
+        --mov
+      WHEN "001011" =>
+        addr_opa <= Instr(8 DOWNTO 4);
+        addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
+        OPCODE <= op_MOV;
+        SUB_OPCODE <= sub_op_MOV;
+        w_e_regfile <= '1';
       WHEN OTHERS =>
         CASE Instr(15 DOWNTO 12) IS
             --LDI  
@@ -91,6 +131,32 @@ BEGIN -- Behavioral
             K <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
             OPCODE <= op_ldi;
             addr_opa <= '1' & Instr(7 DOWNTO 4);
+            w_e_regfile <= '1';
+            --cpi
+          WHEN "0011" =>
+            K <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
+            addr_opa <= '1' & Instr(7 DOWNTO 4);
+            OPCODE <= op_cpi;
+            w_e_SREG <= "00011111";
+            --SUBI
+          WHEN "0101" =>
+            K <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
+            addr_opa <= '1' & Instr(7 DOWNTO 4);
+            OPCODE <= op_subi;
+            w_e_SREG <= "00011111";
+            w_e_regfile <= '1';
+            --ORI
+          WHEN "0110" =>
+            K <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
+            addr_opa <= '1' & Instr(7 DOWNTO 4);
+            OPCODE <= op_ori;
+            w_e_SREG <= "00011110";
+            w_e_regfile <= '1';
+          WHEN "0111" =>
+            K <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
+            addr_opa <= '1' & Instr(7 DOWNTO 4);
+            OPCODE <= op_andi;
+            w_e_SREG <= "00011110";
             w_e_regfile <= '1';
           WHEN OTHERS => NULL;
         END CASE;

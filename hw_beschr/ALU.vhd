@@ -25,9 +25,11 @@ USE work.pkg_processor.ALL;
 ENTITY ALU IS
   PORT (
     OPCODE : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+    SUB_OPCODE : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
     OPA : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
     OPB : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
     K : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SREG_IN : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
     RES : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
     Status : OUT STD_LOGIC_VECTOR (7 DOWNTO 0));
 END ALU;
@@ -51,12 +53,44 @@ BEGIN
         -- ADD --> Addition
       WHEN "0000" =>
         erg <= STD_LOGIC_VECTOR(unsigned(OPA) + unsigned(OPB));
-        -- SUB
+        -- SUB or adc
       WHEN "0001" =>
-        erg <= STD_LOGIC_VECTOR(unsigned(OPA) - unsigned(OPB));
-        -- OR
+        IF SUB_OPCODE(0) = '0' THEN
+
+          erg <= STD_LOGIC_VECTOR(unsigned(OPA) - unsigned(OPB));
+        ELSIF SUB_OPCODE(0) = '1' THEN
+          IF SREG_IN(0) = '1' THEN
+            erg <= STD_LOGIC_VECTOR(unsigned(OPA) + unsigned(OPB) + 1);
+          ELSE
+            erg <= STD_LOGIC_VECTOR(unsigned(OPA) + unsigned(OPB));
+          END IF;
+
+        END IF;
+
+        -- OR oder MOV
       WHEN "0010" =>
-        erg <= OPA OR OPB;
+        IF SUB_OPCODE = "00" THEN
+          --And
+          erg <= OPA AND OPB;
+        ELSIF SUB_OPCODE = "01" THEN
+          --eor
+          erg <= OPA XOR OPB;
+        ELSIF SUB_OPCODE = "10" THEN
+          --or
+          erg <= OPA OR OPB;
+        ELSIF SUB_OPCODE = "11" THEN
+          --mov 
+          erg <= OPB;
+        END IF;
+        --cpi, subi
+      WHEN "0011" =>
+        erg <= STD_LOGIC_VECTOR(unsigned(OPA) - unsigned(K));
+        --ori
+      WHEN "0110" =>
+        erg <= OPA OR K;
+        --andi
+      WHEN "0111" =>
+        erg <= OPA AND K;
         --LDI
       WHEN "1110" =>
         erg <= K;
@@ -83,16 +117,35 @@ BEGIN
         c <= (OPA(7) AND OPB(7)) OR (OPB(7) AND (NOT erg(7))) OR ((NOT erg(7)) AND OPA(7));
         v <= (OPA(7) AND OPB(7) AND (NOT erg(7))) OR ((NOT OPA(7)) AND (NOT OPB(7)) AND erg(7));
 
-        -- SUB
+        -- SUB oder ADC
       WHEN "0001" =>
-        c <= (NOT OPA(7) AND OPB(7)) OR (OPB(7) AND erg(7)) OR (NOT OPA(7) AND erg(7));
-        v <= (OPA(7) AND NOT OPB(7) AND NOT erg(7)) OR (NOT OPA(7) AND OPB(7) AND erg(7));
-
-        -- OR
+        IF SUB_OPCODE(0) = '0' THEN
+          --sub
+          c <= (NOT OPA(7) AND OPB(7)) OR (OPB(7) AND erg(7)) OR (NOT OPA(7) AND erg(7));
+          v <= (OPA(7) AND NOT OPB(7) AND NOT erg(7)) OR (NOT OPA(7) AND OPB(7) AND erg(7));
+        ELSIF SUB_OPCODE(0) = '1' THEN
+          --adc 
+          c <= (OPA(7) AND OPB(7)) OR (OPB(7) AND NOT erg(7)) OR (NOT erg(7) AND OPA(7));
+          v <= (OPA(7) AND OPB(7) AND NOT erg(7)) OR (NOT OPA(7) AND NOT OPB(7) AND erg(7));
+        END IF;
+        -- OR, and, eor
       WHEN "0010" =>
         c <= '0';
         v <= '0';
+      WHEN "0011" =>
+        --cpi, subi
+        c <= (NOT OPA(7) AND K(7)) OR (K(7) AND erg(7)) OR (NOT OPA(7) AND erg(7));
+        v <= (OPA(7) AND NOT K(7) AND NOT erg(7)) OR (NOT OPA(7) AND K(7) AND erg(7));
+        --ORI
+      WHEN "0110" =>
+        c <= '0';
+        v <= '0';
+        --andi
+      WHEN "0111" =>
+        c <= '0';
+        v <= '0';
         -- alle anderen Operationen...
+
       WHEN OTHERS => NULL;
     END CASE;
 

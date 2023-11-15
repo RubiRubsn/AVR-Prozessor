@@ -1,5 +1,8 @@
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/pkg_processor.vhd" into library xil_defaultlib
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/ALU.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'ALU'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/decoder.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'decoder'
 INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/pkg_instrmem.vhd" into library xil_defaultlib
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/prog_mem.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'prog_mem'
 INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/toplevel.vhd" into library xil_defaultlib
 INFO: [VRFC 10-3107] analyzing entity 'toplevel'
