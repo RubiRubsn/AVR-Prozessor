@@ -63,7 +63,6 @@ ARCHITECTURE Behavioral OF toplevel IS
   SIGNAL addr_opa : STD_LOGIC_VECTOR(4 DOWNTO 0);
   SIGNAL addr_opb : STD_LOGIC_VECTOR(4 DOWNTO 0);
   SIGNAL OPCODE : STD_LOGIC_VECTOR(3 DOWNTO 0);
-  SIGNAL SUB_OPCODE : STD_LOGIC_VECTOR(1 DOWNTO 0);
   SIGNAL w_e_regfile : STD_LOGIC;
   SIGNAL sel_immediate : STD_LOGIC;
   SIGNAL K : STD_LOGIC_VECTOR (7 DOWNTO 0);
@@ -101,7 +100,6 @@ ARCHITECTURE Behavioral OF toplevel IS
       addr_opa : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
       addr_opb : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
       OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-      SUB_OPCODE : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
       w_e_regfile : OUT STD_LOGIC;
       w_e_SREG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
       K : OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
@@ -136,7 +134,6 @@ ARCHITECTURE Behavioral OF toplevel IS
   COMPONENT ALU
     PORT (
       OPCODE : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
-      SUB_OPCODE : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
       OPA : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
       OPB : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
       K : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -171,7 +168,6 @@ BEGIN
     addr_opa => addr_opa,
     addr_opb => addr_opb,
     OPCODE => OPCODE,
-    SUB_OPCODE => SUB_OPCODE,
     w_e_regfile => w_e_regfile,
     w_e_SREG => w_e_SREG,
     K => K);
@@ -192,7 +188,6 @@ BEGIN
   ALU_1 : ALU
   PORT MAP(
     OPCODE => OPCODE,
-    SUB_OPCODE => SUB_OPCODE,
     OPA => data_opa,
     OPB => data_opb,
     RES => data_res,

@@ -32,7 +32,6 @@ ENTITY decoder IS
     addr_opa : OUT STD_LOGIC_VECTOR(4 DOWNTO 0); -- Adresse von 1. Operand
     addr_opb : OUT STD_LOGIC_VECTOR(4 DOWNTO 0); -- Adresse von 2. Operand
     OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0); -- Opcode für ALU
-    SUB_OPCODE : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
     w_e_regfile : OUT STD_LOGIC; -- write enable for Registerfile
     w_e_SREG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- einzeln Write_enables für SREG - Bits
     K : OUT STD_LOGIC_VECTOR (7 DOWNTO 0) --konstanten wert
@@ -60,146 +59,139 @@ BEGIN -- Behavioral
     addr_opa <= "00000";
     addr_opb <= "00000";
     OPCODE <= op_NOP;
-    SUB_OPCODE <= "00";
     w_e_regfile <= '0';
     w_e_SREG <= "00000000";
 
     CASE Instr(15 DOWNTO 10) IS
-        -- ADD
       WHEN "000011" =>
         addr_opa <= Instr(8 DOWNTO 4);
+        -- ADD, LSL
         addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
-        OPCODE <= op_add;
+        OPCODE <= op_ADD;
         w_e_regfile <= '1';
         w_e_SREG <= "00111111";
-        -- SUB
-      WHEN "000110" =>
-        addr_opa <= Instr(8 DOWNTO 4);
-        addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
-        OPCODE <= op_sub;
-        w_e_regfile <= '1';
-        w_e_SREG <= "00111111";
-        --CP
       WHEN "000101" =>
+        --CP
         addr_opa <= Instr(8 DOWNTO 4);
         addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
         OPCODE <= op_CP;
         w_e_SREG <= "00111111";
-        --ADC
+      WHEN "000110" =>
+        -- SUB
+        addr_opa <= Instr(8 DOWNTO 4);
+        addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
+        OPCODE <= op_SUB;
+        w_e_regfile <= '1';
+        w_e_SREG <= "00111111";
       WHEN "000111" =>
+        --ADC, ROL
         addr_opa <= Instr(8 DOWNTO 4);
         addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
         OPCODE <= op_ADC;
-        SUB_OPCODE <= sub_op_ADC;
+
         w_e_SREG <= "00111111";
         w_e_regfile <= '1';
-        --AND
       WHEN "001000" =>
+        --AND
         addr_opa <= Instr(8 DOWNTO 4);
         addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
-        OPCODE <= op_and;
-        SUB_OPCODE <= sub_op_and;
+        OPCODE <= op_AND;
         w_e_regfile <= '1';
         w_e_SREG <= "00011110";
-        --EOR
       WHEN "001001" =>
+        --EOR
         addr_opa <= Instr(8 DOWNTO 4);
         addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
-        OPCODE <= op_eor;
-        SUB_OPCODE <= sub_op_eor;
+        OPCODE <= op_EOR;
         w_e_regfile <= '1';
         w_e_SREG <= "00011110";
-        --OR
       WHEN "001010" =>
+        --OR
         addr_opa <= Instr(8 DOWNTO 4);
         addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
-        OPCODE <= op_or;
-        SUB_OPCODE <= sub_op_or;
+        OPCODE <= op_OR;
         w_e_regfile <= '1';
         w_e_SREG <= "00011110";
-        --mov
       WHEN "001011" =>
+        --mov
         addr_opa <= Instr(8 DOWNTO 4);
         addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
         OPCODE <= op_MOV;
-        SUB_OPCODE <= sub_op_MOV;
         w_e_regfile <= '1';
       WHEN OTHERS =>
         CASE Instr(15 DOWNTO 12) IS
-            --LDI  
-          WHEN "1110" =>
-            K <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
-            OPCODE <= op_ldi;
-            addr_opa <= '1' & Instr(7 DOWNTO 4);
-            w_e_regfile <= '1';
-            --cpi
           WHEN "0011" =>
+            --cpi
             K <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
             addr_opa <= '1' & Instr(7 DOWNTO 4);
-            OPCODE <= op_cpi;
+            OPCODE <= op_CPI;
             w_e_SREG <= "00011111";
-            --SUBI
           WHEN "0101" =>
+            --SUBI
             K <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
             addr_opa <= '1' & Instr(7 DOWNTO 4);
-            OPCODE <= op_subi;
+            OPCODE <= op_SUBI;
             w_e_SREG <= "00011111";
             w_e_regfile <= '1';
-            --ORI
           WHEN "0110" =>
+            --ORI
             K <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
             addr_opa <= '1' & Instr(7 DOWNTO 4);
-            OPCODE <= op_ori;
+            OPCODE <= op_ORI;
             w_e_SREG <= "00011110";
             w_e_regfile <= '1';
-            --andi
           WHEN "0111" =>
+            --andi
             K <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
             addr_opa <= '1' & Instr(7 DOWNTO 4);
-            OPCODE <= op_andi;
+            OPCODE <= op_ANDI;
             w_e_SREG <= "00011110";
             w_e_regfile <= '1';
+
             --ASR, lsr, com, dec, inc
           WHEN "1001" =>
             CASE Instr(2 DOWNTO 0) IS
-                --asr
+              WHEN "000" =>
+                --com
+                addr_opa <= Instr(8 DOWNTO 4);
+                OPCODE <= op_COM;
+                K <= "11111111";
+                w_e_regfile <= '1';
+                w_e_SREG <= "00011111";
               WHEN "101" =>
+                --asr
                 addr_opa <= Instr(8 DOWNTO 4);
-                OPCODE <= op_asr;
-                SUB_OPCODE <= sub_op_asr;
+                OPCODE <= op_ASR;
                 w_e_regfile <= '1';
                 w_e_SREG <= "00011111";
-                --lsr
-              WHEN "110" =>
-                addr_opa <= Instr(8 DOWNTO 4);
-                OPCODE <= op_lsr;
-                SUB_OPCODE <= sub_op_lsr;
-                w_e_regfile <= '1';
-                w_e_SREG <= "00011111";
-                --dec
               WHEN "010" =>
+                --dec
                 K <= "0000000" & '1';
                 addr_opa <= Instr(8 DOWNTO 4);
-                OPCODE <= op_dec;
+                OPCODE <= op_DEC;
                 w_e_SREG <= "00011110";
                 w_e_regfile <= '1';
-                --inc
               WHEN "011" =>
+                --inc
                 addr_opa <= Instr(8 DOWNTO 4);
-                OPCODE <= op_inc;
-                SUB_OPCODE <= sub_op_inc;
+                OPCODE <= op_INC;
+                K <= "0000000" & '1';
                 w_e_regfile <= '1';
                 w_e_SREG <= "00011111";
-                --com
-              WHEN "000" =>
+              WHEN "110" =>
+                --lsr
                 addr_opa <= Instr(8 DOWNTO 4);
-                OPCODE <= op_com;
-                SUB_OPCODE <= sub_op_com;
+                OPCODE <= op_LSR;
                 w_e_regfile <= '1';
                 w_e_SREG <= "00011111";
               WHEN OTHERS => NULL;
             END CASE;
-
+          WHEN "1110" =>
+            --LDI  
+            K <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
+            OPCODE <= op_LDI;
+            addr_opa <= '1' & Instr(7 DOWNTO 4);
+            w_e_regfile <= '1';
           WHEN OTHERS => NULL;
         END CASE;
     END CASE;

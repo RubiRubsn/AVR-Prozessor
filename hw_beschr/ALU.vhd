@@ -25,7 +25,6 @@ USE work.pkg_processor.ALL;
 ENTITY ALU IS
   PORT (
     OPCODE : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
-    SUB_OPCODE : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
     OPA : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
     OPB : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
     K : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -40,91 +39,76 @@ ARCHITECTURE Behavioral OF ALU IS
   SIGNAL v : STD_LOGIC := '0'; -- Overflow Flag
   SIGNAL n : STD_LOGIC := '0'; -- negative flag
   SIGNAL s : STD_LOGIC := '0'; -- sign flag
+  SIGNAL OPCODE_SLICE_E : STD_LOGIC := '0';
+  SIGNAL OPCODE_SLICE_U : STD_LOGIC_VECTOR (2 DOWNTO 0);
+  SIGNAL MUX_OUT_ASR_LSR : STD_LOGIC := '0';
+  SIGNAL ADD1_OUT : STD_LOGIC_VECTOR(7 DOWNTO 0);
+  SIGNAL MUX_OUT_OPB_K : STD_LOGIC_VECTOR(7 DOWNTO 0);
+  SIGNAL CARRY_ACHT_BIT : STD_LOGIC_VECTOR(7 DOWNTO 0);
   SIGNAL erg : STD_LOGIC_VECTOR(7 DOWNTO 0); -- Zwischenergebnis
 BEGIN
-  -- purpose: Kern-ALU zur Berechnung des Datenausganges
-  -- type   : combinational
-  -- inputs : OPA, OPB, OPCODE
-  -- outputs: erg
-  kern_ALU : PROCESS (OPA, OPB, OPCODE, K, SUB_OPCODE, SREG_IN)
-  BEGIN -- process kern_ALU
-    erg <= "00000000"; -- verhindert Latches
-    CASE OPCODE IS
-        -- ADD --> Addition
-      WHEN "0000" =>
-        erg <= STD_LOGIC_VECTOR(unsigned(OPA) + unsigned(OPB));
-        -- SUB or adc
-      WHEN "0001" =>
-        IF SUB_OPCODE(0) = '0' THEN
+  OPCODE_SLICE_E <= OPCODE(0);
+  OPCODE_SLICE_U <= OPCODE(3 DOWNTO 1);
+  ADD1_OUT <= STD_LOGIC_VECTOR(unsigned(OPA) + unsigned(MUX_OUT_OPB_K));
+  CARRY_ACHT_BIT <= "0000000" & SREG_IN(0);
 
-          erg <= STD_LOGIC_VECTOR(unsigned(OPA) - unsigned(OPB));
-        ELSIF SUB_OPCODE(0) = '1' THEN
-          IF SREG_IN(0) = '1' THEN
-            erg <= STD_LOGIC_VECTOR(unsigned(OPA) + unsigned(OPB) + 1);
-          ELSE
-            erg <= STD_LOGIC_VECTOR(unsigned(OPA) + unsigned(OPB));
-          END IF;
+  --
+  --
+  mux_OPB_K : PROCESS (OPCODE_SLICE_E, OPB, K)
+  BEGIN
+    IF OPCODE_SLICE_E = '0' THEN
+      MUX_OUT_OPB_K <= OPB;
+    ELSE
+      MUX_OUT_OPB_K <= K;
+    END IF;
+  END PROCESS; -- mux_OPB_K
 
-        END IF;
+  --
+  --
+  MUX_ASR_LSR : PROCESS (OPCODE_SLICE_E, OPA)
+  BEGIN
+    IF OPCODE_SLICE_E = '0' THEN
+      MUX_OUT_ASR_LSR <= OPA(7);
+    ELSE
+      MUX_OUT_ASR_LSR <= '0';
+    END IF;
 
-        -- OR oder MOV
-      WHEN "0010" =>
-        IF SUB_OPCODE = "00" THEN
-          --And
-          erg <= OPA AND OPB;
-        ELSIF SUB_OPCODE = "01" THEN
-          --eor
-          erg <= OPA XOR OPB;
-        ELSIF SUB_OPCODE = "10" THEN
-          --or
-          erg <= OPA OR OPB;
-        ELSIF SUB_OPCODE = "11" THEN
-          --mov 
-          erg <= OPB;
-        END IF;
-        --cpi, subi
-      WHEN "0011" =>
-        erg <= STD_LOGIC_VECTOR(unsigned(OPA) - unsigned(K));
-        --ori
-      WHEN "0110" =>
-        erg <= OPA OR K;
-        --andi
-      WHEN "0111" =>
-        erg <= OPA AND K;
-        --asr,lsr,com,dec,inc
-      WHEN "1001" =>
-        --asr,lsr
-        IF SUB_OPCODE(1) = '0' THEN
-          erg(6 DOWNTO 0) <= OPA(7 DOWNTO 1);
-          IF SUB_OPCODE(0) = '0' THEN
-            --asr
-            erg(7) <= OPA(7);
-          ELSE
-            --lsr
-            erg(7) <= '0';
-          END IF;
-        ELSE
-          --inc
-          IF SUB_OPCODE(0) = '0' THEN
-            erg <= STD_LOGIC_VECTOR(unsigned(OPA) + 1);
-          ELSE
-            --com
-            erg <= STD_LOGIC_VECTOR(255 - unsigned(OPA));
-          END IF;
-        END IF;
-        --LDI
-      WHEN "1110" =>
-        erg <= K;
-        -- alle anderen Operationen...
+  END PROCESS; -- MUX_ASR_LSR_MUX
+
+  --
+  --
+  ERG_MUX : PROCESS (OPA, OPB, CARRY_ACHT_BIT, ADD1_OUT, OPCODE_SLICE_U, MUX_OUT_OPB_K, MUX_OUT_ASR_LSR)
+  BEGIN
+    CASE OPCODE_SLICE_U IS
+      WHEN "000" =>
+        --add
+        erg <= ADD1_OUT;
+      WHEN "001" =>
+        --adc
+        erg <= STD_LOGIC_VECTOR(unsigned(ADD1_OUT) + unsigned(CARRY_ACHT_BIT));
+      WHEN "010" =>
+        -- sub
+        erg <= STD_LOGIC_VECTOR(unsigned(OPA) - unsigned(MUX_OUT_OPB_K));
+      WHEN "011" =>
+        erg <= OPA OR MUX_OUT_OPB_K;
+      WHEN "100" =>
+        erg <= OPA XOR MUX_OUT_OPB_K;
+      WHEN "101" =>
+        erg <= OPA AND MUX_OUT_OPB_K;
+      WHEN "110" =>
+        erg <= MUX_OUT_OPB_K;
+      WHEN "111" =>
+        erg(7) <= MUX_OUT_ASR_LSR;
+        erg(6 DOWNTO 0) <= OPA(7 DOWNTO 1);
       WHEN OTHERS => NULL;
     END CASE;
-  END PROCESS kern_ALU;
+  END PROCESS; -- ERG_MUX
 
   -- purpose: berechnet die Statusflags
   -- type   : combinational
   -- inputs : OPA, OPB, OPCODE, erg
   -- outputs: z, c, v, n
-  Berechnung_SREG : PROCESS (OPA, OPB, OPCODE, erg, SUB_OPCODE, K)
+  Berechnung_SREG : PROCESS (OPA, OPB, OPCODE_SLICE_U, erg, K, OPCODE_SLICE_E)
   BEGIN -- process Berechnung_SREG
     z <= NOT (erg(7) OR erg(6) OR erg(5) OR erg(4) OR erg(3) OR erg(2) OR erg(1) OR erg(0));
     n <= erg(7);
@@ -132,57 +116,43 @@ BEGIN
     c <= '0'; -- um Latches zu verhindern
     v <= '0';
 
-    CASE OPCODE IS
-        -- ADD
-      WHEN "0000" =>
-        c <= (OPA(7) AND OPB(7)) OR (OPB(7) AND (NOT erg(7))) OR ((NOT erg(7)) AND OPA(7));
-        v <= (OPA(7) AND OPB(7) AND (NOT erg(7))) OR ((NOT OPA(7)) AND (NOT OPB(7)) AND erg(7));
+    CASE OPCODE_SLICE_U IS
+      WHEN "000" =>
+        IF OPCODE_SLICE_E = '0' THEN
+          --add, LSL
+          c <= (OPA(7) AND OPB(7)) OR (OPB(7) AND (NOT erg(7))) OR ((NOT erg(7)) AND OPA(7));
+          v <= (OPA(7) AND OPB(7) AND (NOT erg(7))) OR ((NOT OPA(7)) AND (NOT OPB(7)) AND erg(7));
+        ELSE
+          --inc
+          c <= '0';
+          v <= (erg(7) AND NOT erg(6)AND NOT erg(5)AND NOT erg(4)AND NOT erg(3)AND NOT erg(2)AND NOT erg(1)AND NOT erg(0));
 
-        -- SUB oder ADC
-      WHEN "0001" =>
-        IF SUB_OPCODE(0) = '0' THEN
-          --sub
+        END IF;
+
+      WHEN "001" =>
+        --adc
+        c <= (OPA(7) AND OPB(7)) OR (OPB(7) AND NOT erg(7)) OR (NOT erg(7) AND OPA(7));
+        v <= (OPA(7) AND OPB(7) AND NOT erg(7)) OR (NOT OPA(7) AND NOT OPB(7) AND erg(7));
+      WHEN "010" =>
+        IF OPCODE_SLICE_E = '0' THEN
+          --SUB, CP
           c <= (NOT OPA(7) AND OPB(7)) OR (OPB(7) AND erg(7)) OR (NOT OPA(7) AND erg(7));
           v <= (OPA(7) AND NOT OPB(7) AND NOT erg(7)) OR (NOT OPA(7) AND OPB(7) AND erg(7));
-        ELSIF SUB_OPCODE(0) = '1' THEN
-          --adc 
-          c <= (OPA(7) AND OPB(7)) OR (OPB(7) AND NOT erg(7)) OR (NOT erg(7) AND OPA(7));
-          v <= (OPA(7) AND OPB(7) AND NOT erg(7)) OR (NOT OPA(7) AND NOT OPB(7) AND erg(7));
-        END IF;
-        -- OR, and, eor
-      WHEN "0010" =>
-        c <= '0';
-        v <= '0';
-      WHEN "0011" =>
-        --cpi, subi
-        c <= (NOT OPA(7) AND K(7)) OR (K(7) AND erg(7)) OR (NOT OPA(7) AND erg(7));
-        v <= (OPA(7) AND NOT K(7) AND NOT erg(7)) OR (NOT OPA(7) AND K(7) AND erg(7));
-        --ORI
-      WHEN "0110" =>
-        c <= '0';
-        v <= '0';
-        --andi
-      WHEN "0111" =>
-        c <= '0';
-        v <= '0';
-      WHEN "1001" =>
-        IF SUB_OPCODE(1) = '0' THEN
-          c <= OPA(0);
-          v <= (erg(7)) XOR (OPA(0));
         ELSE
-          IF SUB_OPCODE(0) = '0' THEN
-            --inc
-            c <= '0';
-            v <= (erg(7) AND NOT erg(6)AND NOT erg(5)AND NOT erg(4)AND NOT erg(3)AND NOT erg(2)AND NOT erg(1)AND NOT erg(0));
-          ELSE
-            --com
-            c <= '1';
-            v <= '0';
-          END IF;
+          -- subi, cpi, DEC
+          c <= (NOT OPA(7) AND K(7)) OR (K(7) AND erg(7)) OR (NOT OPA(7) AND erg(7));
+          v <= (OPA(7) AND NOT K(7) AND NOT erg(7)) OR (NOT OPA(7) AND K(7) AND erg(7));
 
         END IF;
-        -- alle anderen Operationen...
-
+      WHEN "100" =>
+        IF OPCODE_SLICE_E = '1' THEN
+          --com
+          c <= '1';
+        END IF;
+        -- ASR, LSR
+      WHEN "111" =>
+        c <= OPA(0);
+        v <= (erg(7)) XOR (OPA(0));
       WHEN OTHERS => NULL;
     END CASE;
 

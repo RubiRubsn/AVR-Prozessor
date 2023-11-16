@@ -50,7 +50,8 @@ ARCHITECTURE Behavioral OF SREG IS
     SIGNAL WE : STD_LOGIC_VECTOR (7 DOWNTO 0);
 BEGIN
     WE <= w_e_SREG;
-    Status_out <= c & z & n & v & s & h & t & i;
+    Status_out <= i & t & h & s & v & n & z & c;
+
     ff : PROCESS (clk)
     BEGIN
         IF clk'event AND clk = '1' THEN
