@@ -41,9 +41,9 @@ ENTITY decoder IS
 END decoder;
 
 ARCHITECTURE Behavioral OF decoder IS
-
+  SIGNAL SEL_SCR : STD_LOGIC_VECTOR(1 DOWNTO 0),
 BEGIN -- Behavioral
-
+  SEL_SCR <= Instr(11) & Instr(7);
   -- purpose: Decodierprozess
   -- type   : combinational
   -- inputs : Instr
@@ -118,6 +118,62 @@ BEGIN -- Behavioral
         addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
         OPCODE <= op_MOV;
         w_e_regfile <= '1';
+      WHEN "100101" =>
+        IF Instr(3) = '0' THEN
+          CASE Instr(2 DOWNTO 0) IS
+            WHEN "000" =>
+              --com
+              addr_opa <= Instr(8 DOWNTO 4);
+              OPCODE <= op_COM;
+              K <= "11111111";
+              w_e_regfile <= '1';
+              w_e_SREG <= "00011111";
+            WHEN "101" =>
+              --asr
+              addr_opa <= Instr(8 DOWNTO 4);
+              OPCODE <= op_ASR;
+              w_e_regfile <= '1';
+              w_e_SREG <= "00011111";
+            WHEN "010" =>
+              --dec
+              K <= "0000000" & '1';
+              addr_opa <= Instr(8 DOWNTO 4);
+              OPCODE <= op_DEC;
+              w_e_SREG <= "00011110";
+              w_e_regfile <= '1';
+            WHEN "011" =>
+              --inc
+              addr_opa <= Instr(8 DOWNTO 4);
+              OPCODE <= op_INC;
+              K <= "0000000" & '1';
+              w_e_regfile <= '1';
+              w_e_SREG <= "00011111";
+            WHEN "110" =>
+              --lsr
+              addr_opa <= Instr(8 DOWNTO 4);
+              OPCODE <= op_LSR;
+              w_e_regfile <= '1';
+              w_e_SREG <= "00011111";
+            WHEN OTHERS => NULL;
+          END CASE;
+        ELSE
+          CASE(SEL_SCR) IS
+
+          WHEN "00" =>
+            --sec
+            OPCODE <= op_COM;
+            w_e_SREG <= "00000001";
+          WHEN "01" =>
+            -- clc
+            OPCODE <= op_CLC;
+            w_e_SREG <= "00000001";
+          WHEN "10" =>
+            --ret
+
+          WHEN OTHERS => NULL
+
+          END CASE;
+        END IF;
       WHEN OTHERS =>
         CASE Instr(15 DOWNTO 12) IS
           WHEN "0011" =>
@@ -150,42 +206,7 @@ BEGIN -- Behavioral
 
             --ASR, lsr, com, dec, inc
           WHEN "1001" =>
-            CASE Instr(2 DOWNTO 0) IS
-              WHEN "000" =>
-                --com
-                addr_opa <= Instr(8 DOWNTO 4);
-                OPCODE <= op_COM;
-                K <= "11111111";
-                w_e_regfile <= '1';
-                w_e_SREG <= "00011111";
-              WHEN "101" =>
-                --asr
-                addr_opa <= Instr(8 DOWNTO 4);
-                OPCODE <= op_ASR;
-                w_e_regfile <= '1';
-                w_e_SREG <= "00011111";
-              WHEN "010" =>
-                --dec
-                K <= "0000000" & '1';
-                addr_opa <= Instr(8 DOWNTO 4);
-                OPCODE <= op_DEC;
-                w_e_SREG <= "00011110";
-                w_e_regfile <= '1';
-              WHEN "011" =>
-                --inc
-                addr_opa <= Instr(8 DOWNTO 4);
-                OPCODE <= op_INC;
-                K <= "0000000" & '1';
-                w_e_regfile <= '1';
-                w_e_SREG <= "00011111";
-              WHEN "110" =>
-                --lsr
-                addr_opa <= Instr(8 DOWNTO 4);
-                OPCODE <= op_LSR;
-                w_e_regfile <= '1';
-                w_e_SREG <= "00011111";
-              WHEN OTHERS => NULL;
-            END CASE;
+
           WHEN "1110" =>
             --LDI  
             K <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
