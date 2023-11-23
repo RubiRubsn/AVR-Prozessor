@@ -91,9 +91,11 @@ OPTRACE "Adding files" START { }
 read_vhdl -library xil_defaultlib {
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/pkg_processor.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/ALU.vhd
+  C:/Users/Rubsen/Documents/Vivado/Prozessor/Prozessor.srcs/sources_1/new/Data_Memory.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Program_Counter.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Reg_File.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/SREG.vhd
+  C:/Users/Rubsen/Documents/Vivado/Prozessor/Prozessor.srcs/sources_1/new/Stack_Pointer.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/decoder.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/pkg_instrmem.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/prog_mem.vhd

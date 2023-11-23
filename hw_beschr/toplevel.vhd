@@ -66,18 +66,31 @@ ARCHITECTURE Behavioral OF toplevel IS
   SIGNAL w_e_regfile : STD_LOGIC;
   SIGNAL sel_immediate : STD_LOGIC;
   SIGNAL K : STD_LOGIC_VECTOR (7 DOWNTO 0);
+  SIGNAL DM_W_E : STD_LOGIC;
+  SIGNAL SEL_MUX_RES : STD_LOGIC;
 
   -- outputs of Regfile
   SIGNAL data_opa : STD_LOGIC_VECTOR (7 DOWNTO 0);
   SIGNAL data_opb : STD_LOGIC_VECTOR (7 DOWNTO 0);
-  SIGNAL data_res : STD_LOGIC_VECTOR(7 DOWNTO 0);
+  SIGNAL Z_A : STD_LOGIC_VECTOR (9 DOWNTO 0);
+  --output of MUX
+  SIGNAL REG_DI : STD_LOGIC_VECTOR (7 DOWNTO 0);
 
+  --output of Data Memory
+  SIGNAL RAM_DO : STD_LOGIC_VECTOR (7 DOWNTO 0);
+  --alu
+  SIGNAL data_res : STD_LOGIC_VECTOR(7 DOWNTO 0); --output from alu
   -- auxiliary signals
   SIGNAL PM_data : STD_LOGIC_VECTOR(7 DOWNTO 0); -- used for wiring immediate data
 
   SIGNAL Status : STD_LOGIC_VECTOR(7 DOWNTO 0);
   SIGNAL SREG_out : STD_LOGIC_VECTOR(7 DOWNTO 0);
   SIGNAL w_e_SREG : STD_LOGIC_VECTOR(7 DOWNTO 0);
+
+  SIGNAL SEL_ADD_SP : STD_LOGIC;
+  SIGNAL SEL_PM_ADR_WESP : STD_LOGIC;
+  SIGNAL Z_SP_Addr : STD_LOGIC_VECTOR(9 DOWNTO 0);
+  SIGNAL SP_Addr : STD_LOGIC_VECTOR(9 DOWNTO 0);
   -----------------------------------------------------------------------------
   -- Component declarations
   -----------------------------------------------------------------------------
@@ -94,6 +107,7 @@ ARCHITECTURE Behavioral OF toplevel IS
       Addr : IN STD_LOGIC_VECTOR (8 DOWNTO 0);
       Instr : OUT STD_LOGIC_VECTOR (15 DOWNTO 0));
   END COMPONENT;
+
   COMPONENT decoder
     PORT (
       Instr : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
@@ -102,7 +116,11 @@ ARCHITECTURE Behavioral OF toplevel IS
       OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
       w_e_regfile : OUT STD_LOGIC;
       w_e_SREG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-      K : OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
+      K : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
+      DM_W_E : OUT STD_LOGIC;
+      SEL_MUX_RES : OUT STD_LOGIC;
+      SEL_ADD_SP : OUT STD_LOGIC;
+      SEL_PM_ADR_WESP : OUT STD_LOGIC
       --hier fehlt etwas
     );
 
@@ -125,9 +143,28 @@ ARCHITECTURE Behavioral OF toplevel IS
       w_e_regfile : IN STD_LOGIC;
       data_opa : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
       data_opb : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
-      data_in : IN STD_LOGIC_VECTOR (7 DOWNTO 0)
+      data_in : IN STD_LOGIC_VECTOR (7 DOWNTO 0); -- muss ich noch einsortieren sieht ja unmöglich aus hier...
+      Z : OUT STD_LOGIC_VECTOR (9 DOWNTO 0)
       --data_res : IN STD_LOGIC_VECTOR (7 DOWNTO 0)
       --hier fehlt etwas
+    );
+  END COMPONENT;
+
+  COMPONENT Stack_Pointer
+    PORT (
+      clk : IN STD_LOGIC;
+      SEL_ADD_SP : IN STD_LOGIC;
+      SEL_PM_ADR_WESP : IN STD_LOGIC;
+      Addr : OUT STD_LOGIC_VECTOR(9 DOWNTO 0));
+  END COMPONENT;
+
+  COMPONENT Data_Memory
+    PORT (
+      CLK : IN STD_LOGIC;
+      WE : IN STD_LOGIC;
+      A : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
+      DI : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      DO : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
     );
   END COMPONENT;
 
@@ -170,7 +207,12 @@ BEGIN
     OPCODE => OPCODE,
     w_e_regfile => w_e_regfile,
     w_e_SREG => w_e_SREG,
-    K => K);
+    K => K,
+    DM_W_E => DM_W_E,
+    SEL_MUX_RES => SEL_MUX_RES,
+    SEL_ADD_SP => SEL_ADD_SP,
+    SEL_PM_ADR_WESP => SEL_PM_ADR_WESP
+  );
 
   -- instance "Reg_File_1"
 
@@ -182,7 +224,25 @@ BEGIN
     w_e_regfile => w_e_regfile,
     data_opa => data_opa,
     data_opb => data_opb,
-    data_in => data_res);
+    data_in => REG_DI,
+    Z => Z_A);
+
+  Stack_Pointer_1 : Stack_Pointer
+  PORT MAP(
+    clk => clk,
+    SEL_ADD_SP => SEL_ADD_SP,
+    SEL_PM_ADR_WESP => SEL_PM_ADR_WESP,
+    Addr => SP_Addr
+  );
+
+  Data_Memory_1 : Data_Memory
+  PORT MAP(
+    CLK => clk,
+    WE => DM_W_E,
+    A => Z_SP_Addr,
+    DI => data_opa,
+    DO => RAM_DO
+  );
 
   -- instance "ALU_1"
   ALU_1 : ALU
@@ -202,7 +262,10 @@ BEGIN
     w_e_SREG => w_e_SREG,
     Status_out => SREG_OUT
   );
-
+  REG_DI <= data_res WHEN SEL_MUX_RES = '0' ELSE
+    RAM_DO;
   PM_Data <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
+  Z_SP_Addr <= Z_A WHEN SEL_PM_ADR_WESP = '0' ELSE
+    SP_Addr;
 
 END Behavioral;

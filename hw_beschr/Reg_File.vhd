@@ -28,7 +28,8 @@ ENTITY Reg_File IS
     w_e_regfile : IN STD_LOGIC;
     data_opa : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
     data_opb : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
-    data_in : IN STD_LOGIC_VECTOR (7 DOWNTO 0)
+    data_in : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+    Z : OUT STD_LOGIC_VECTOR (9 DOWNTO 0)
   );
 END Reg_File;
 
@@ -55,5 +56,6 @@ BEGIN
   -- nebenlaeufiges Lesen der Registerspeicher
   data_opa <= register_speicher(to_integer(unsigned(addr_opa)));
   data_opb <= register_speicher(to_integer(unsigned(addr_opb)));
-
+  Z(9 DOWNTO 8) <= (register_speicher(31) (1 DOWNTO 0));
+  Z(7 DOWNTO 0) <= (register_speicher(30));
 END Behavioral;

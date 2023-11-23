@@ -34,21 +34,25 @@ ENTITY decoder IS
     OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0); -- Opcode für ALU
     w_e_regfile : OUT STD_LOGIC; -- write enable for Registerfile
     w_e_SREG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); -- einzeln Write_enables für SREG - Bits
-    K : OUT STD_LOGIC_VECTOR (7 DOWNTO 0) --konstanten wert
+    K : OUT STD_LOGIC_VECTOR (7 DOWNTO 0); --konstanten wert
+    DM_W_E : OUT STD_LOGIC;
+    SEL_MUX_RES : OUT STD_LOGIC;
+    SEL_ADD_SP : OUT STD_LOGIC;
+    SEL_PM_ADR_WESP : OUT STD_LOGIC
     -- hier kommen noch die ganzen Steuersignale der Multiplexer...
 
   );
 END decoder;
 
 ARCHITECTURE Behavioral OF decoder IS
-  SIGNAL SEL_SCR : STD_LOGIC_VECTOR(1 DOWNTO 0),
+  SIGNAL SEL_SCR : STD_LOGIC_VECTOR(1 DOWNTO 0);
 BEGIN -- Behavioral
   SEL_SCR <= Instr(11) & Instr(7);
   -- purpose: Decodierprozess
   -- type   : combinational
   -- inputs : Instr
   -- outputs: addr_opa, addr_opb, OPCODE, w_e_regfile, w_e_SREG, ...
-  dec_mux : PROCESS (Instr)
+  dec_mux : PROCESS (Instr, SEL_SCR)
   BEGIN -- process dec_mux
     -- ACHTUNG!!!
     -- So einfach wie hier unten ist das Ganze nicht! Es soll nur den Anfang erleichtern!
@@ -61,6 +65,10 @@ BEGIN -- Behavioral
     OPCODE <= op_NOP;
     w_e_regfile <= '0';
     w_e_SREG <= "00000000";
+    DM_W_E <= '0';
+    SEL_MUX_RES <= '0';
+    SEL_ADD_SP <= '0';
+    SEL_PM_ADR_WESP <= '0';
 
     CASE Instr(15 DOWNTO 10) IS
       WHEN "000011" =>
@@ -118,6 +126,34 @@ BEGIN -- Behavioral
         addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
         OPCODE <= op_MOV;
         w_e_regfile <= '1';
+      WHEN "100000" =>
+        --LD und ST
+        IF Instr(9) = '1' THEN
+          --ST
+          addr_opa <= Instr(8 DOWNTO 4);
+          DM_W_E <= '1';
+        ELSE
+          addr_opa <= Instr(8 DOWNTO 4);
+          SEL_MUX_RES <= '1';
+          w_e_regfile <= '1';
+        END IF;
+      WHEN "100100" =>
+        --PUSH,POP
+        IF Instr(9) = '0' THEN
+          --POP
+          addr_opa <= Instr(8 DOWNTO 4);
+          SEL_MUX_RES <= '1';
+          SEL_ADD_SP <= '0';
+          SEL_PM_ADR_WESP <= '1';
+          w_e_regfile <= '1';
+        ELSE
+          --PUSH
+          addr_opa <= Instr(8 DOWNTO 4);
+          DM_W_E <= '1';
+          SEL_ADD_SP <= '1';
+          SEL_PM_ADR_WESP <= '1';
+
+        END IF;
       WHEN "100101" =>
         IF Instr(3) = '0' THEN
           CASE Instr(2 DOWNTO 0) IS
@@ -170,7 +206,7 @@ BEGIN -- Behavioral
           WHEN "10" =>
             --ret
 
-          WHEN OTHERS => NULL
+          WHEN OTHERS => NULL;
 
           END CASE;
         END IF;

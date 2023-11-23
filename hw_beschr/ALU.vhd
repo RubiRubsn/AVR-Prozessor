@@ -46,12 +46,14 @@ ARCHITECTURE Behavioral OF ALU IS
   SIGNAL MUX_OUT_OPB_K : STD_LOGIC_VECTOR(7 DOWNTO 0);
   SIGNAL CARRY_ACHT_BIT : STD_LOGIC_VECTOR(7 DOWNTO 0);
   SIGNAL erg : STD_LOGIC_VECTOR(7 DOWNTO 0); -- Zwischenergebnis
+  SIGNAL MUX_V : STD_LOGIC_VECTOR(1 DOWNTO 0);
 BEGIN
   OPCODE_SLICE_E <= OPCODE(0);
   OPCODE_SLICE_U <= OPCODE(3 DOWNTO 1);
   ADD1_OUT <= STD_LOGIC_VECTOR(unsigned(OPA) + unsigned(MUX_OUT_OPB_K));
   CARRY_ACHT_BIT <= "0000000" & SREG_IN(0);
-
+  MUX_V(1) <= (OPCODE(3) OR (OPCODE(2) AND OPCODE(1)));
+  MUX_V(0) <= ((OPCODE(2) AND (NOT OPCODE(1))) OR (OPCODE(3) AND OPCODE(2)));
   --
   --
   mux_OPB_K : PROCESS (OPCODE_SLICE_E, OPB, K)
@@ -108,7 +110,7 @@ BEGIN
   -- type   : combinational
   -- inputs : OPA, OPB, OPCODE, erg
   -- outputs: z, c, v, n
-  Berechnung_SREG : PROCESS (OPA, OPB, OPCODE_SLICE_U, erg, K, OPCODE_SLICE_E)
+  Berechnung_SREG : PROCESS (OPA, MUX_OUT_OPB_K, OPCODE_SLICE_U, erg, K, OPCODE_SLICE_E)
   BEGIN -- process Berechnung_SREG
     z <= NOT (erg(7) OR erg(6) OR erg(5) OR erg(4) OR erg(3) OR erg(2) OR erg(1) OR erg(0));
     n <= erg(7);
@@ -116,42 +118,31 @@ BEGIN
     c <= '0'; -- um Latches zu verhindern
     v <= '0';
 
-    CASE OPCODE_SLICE_U IS
-      WHEN "000" =>
-        IF OPCODE_SLICE_E = '0' THEN
-          --add, LSL
-          c <= (OPA(7) AND OPB(7)) OR (OPB(7) AND (NOT erg(7))) OR ((NOT erg(7)) AND OPA(7));
-          v <= (OPA(7) AND OPB(7) AND (NOT erg(7))) OR ((NOT OPA(7)) AND (NOT OPB(7)) AND erg(7));
-        ELSE
-          --inc
-          c <= '0';
-          v <= (erg(7) AND NOT erg(6)AND NOT erg(5)AND NOT erg(4)AND NOT erg(3)AND NOT erg(2)AND NOT erg(1)AND NOT erg(0));
-
-        END IF;
-
-      WHEN "001" =>
-        --adc
-        c <= (OPA(7) AND OPB(7)) OR (OPB(7) AND NOT erg(7)) OR (NOT erg(7) AND OPA(7));
-        v <= (OPA(7) AND OPB(7) AND NOT erg(7)) OR (NOT OPA(7) AND NOT OPB(7) AND erg(7));
-      WHEN "010" =>
-        IF OPCODE_SLICE_E = '0' THEN
-          --SUB, CP
-          c <= (NOT OPA(7) AND OPB(7)) OR (OPB(7) AND erg(7)) OR (NOT OPA(7) AND erg(7));
-          v <= (OPA(7) AND NOT OPB(7) AND NOT erg(7)) OR (NOT OPA(7) AND OPB(7) AND erg(7));
-        ELSE
-          -- subi, cpi, DEC
-          c <= (NOT OPA(7) AND K(7)) OR (K(7) AND erg(7)) OR (NOT OPA(7) AND erg(7));
-          v <= (OPA(7) AND NOT K(7) AND NOT erg(7)) OR (NOT OPA(7) AND K(7) AND erg(7));
-
-        END IF;
-      WHEN "100" =>
-        IF OPCODE_SLICE_E = '1' THEN
-          --com
-          c <= '1';
-        END IF;
-        -- ASR, LSR
-      WHEN "111" =>
+    --erzeugung C
+    CASE OPCODE_SLICE_U (2 DOWNTO 1) IS
+      WHEN "00" =>
+        --add, LSL, ADC
+        c <= (OPA(7) AND MUX_OUT_OPB_K(7)) OR (MUX_OUT_OPB_K(7) AND (NOT erg(7))) OR ((NOT erg(7)) AND OPA(7));
+      WHEN "01" =>
+        --SUB,cp,SUBI,CPI,DEC
+        c <= (NOT OPA(7) AND MUX_OUT_OPB_K(7)) OR (MUX_OUT_OPB_K(7) AND erg(7)) OR (NOT OPA(7) AND erg(7));
+      WHEN "10" =>
+        --COM
+        c <= '1';
+      WHEN "11" =>
         c <= OPA(0);
+      WHEN OTHERS => NULL;
+    END CASE;
+
+    --erzeugung V
+    CASE MUX_V IS
+      WHEN "00" =>
+        v <= (OPA(7) AND MUX_OUT_OPB_K(7) AND (NOT erg(7))) OR ((NOT OPA(7)) AND (NOT MUX_OUT_OPB_K(7)) AND erg(7));
+      WHEN "01" =>
+        v <= ((OPA(7) AND (NOT MUX_OUT_OPB_K(7)) AND (NOT erg(7))) OR ((NOT OPA(7)) AND MUX_OUT_OPB_K(7) AND erg(7)));
+      WHEN "10" =>
+        v <= '0';
+      WHEN "11" =>
         v <= (erg(7)) XOR (OPA(0));
       WHEN OTHERS => NULL;
     END CASE;
