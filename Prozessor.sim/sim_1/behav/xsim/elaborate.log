@@ -17,6 +17,7 @@ Compiling package xil_defaultlib.pkg_instrmem
 Compiling architecture behavioral of entity xil_defaultlib.Program_Counter [program_counter_default]
 Compiling architecture behavioral of entity xil_defaultlib.prog_mem [prog_mem_default]
 Compiling architecture behavioral of entity xil_defaultlib.decoder [decoder_default]
+Compiling architecture behavioral of entity xil_defaultlib.State_Machine [state_machine_default]
 Compiling architecture behavioral of entity xil_defaultlib.Reg_File [reg_file_default]
 Compiling architecture behavioral of entity xil_defaultlib.Stack_Pointer [stack_pointer_default]
 Compiling architecture behavioral of entity xil_defaultlib.Data_Memory [data_memory_default]

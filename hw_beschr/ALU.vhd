@@ -110,7 +110,7 @@ BEGIN
   -- type   : combinational
   -- inputs : OPA, OPB, OPCODE, erg
   -- outputs: z, c, v, n
-  Berechnung_SREG : PROCESS (OPA, MUX_OUT_OPB_K, OPCODE_SLICE_U, erg, K, OPCODE_SLICE_E)
+  Berechnung_SREG : PROCESS (OPA, MUX_OUT_OPB_K, OPCODE_SLICE_U, erg, K, OPCODE_SLICE_E, MUX_V)
   BEGIN -- process Berechnung_SREG
     z <= NOT (erg(7) OR erg(6) OR erg(5) OR erg(4) OR erg(3) OR erg(2) OR erg(1) OR erg(0));
     n <= erg(7);

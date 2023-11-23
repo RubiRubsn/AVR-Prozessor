@@ -29,6 +29,7 @@ USE work.pkg_processor.ALL;
 ENTITY decoder IS
   PORT (
     Instr : IN STD_LOGIC_VECTOR(15 DOWNTO 0); -- Eingang vom Programmspeicher
+    STATE_IN : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
     addr_opa : OUT STD_LOGIC_VECTOR(4 DOWNTO 0); -- Adresse von 1. Operand
     addr_opb : OUT STD_LOGIC_VECTOR(4 DOWNTO 0); -- Adresse von 2. Operand
     OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0); -- Opcode für ALU
@@ -38,7 +39,11 @@ ENTITY decoder IS
     DM_W_E : OUT STD_LOGIC;
     SEL_MUX_RES : OUT STD_LOGIC;
     SEL_ADD_SP : OUT STD_LOGIC;
-    SEL_PM_ADR_WESP : OUT STD_LOGIC
+    SEL_DM_ADR : OUT STD_LOGIC;
+    WE_SP : OUT STD_LOGIC;
+    CD_PC : OUT STD_LOGIC;
+    W_E_SM : OUT STD_LOGIC;
+    STATE_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
     -- hier kommen noch die ganzen Steuersignale der Multiplexer...
 
   );
@@ -52,7 +57,7 @@ BEGIN -- Behavioral
   -- type   : combinational
   -- inputs : Instr
   -- outputs: addr_opa, addr_opb, OPCODE, w_e_regfile, w_e_SREG, ...
-  dec_mux : PROCESS (Instr, SEL_SCR)
+  dec_mux : PROCESS (Instr, SEL_SCR, STATE_IN)
   BEGIN -- process dec_mux
     -- ACHTUNG!!!
     -- So einfach wie hier unten ist das Ganze nicht! Es soll nur den Anfang erleichtern!
@@ -68,7 +73,11 @@ BEGIN -- Behavioral
     DM_W_E <= '0';
     SEL_MUX_RES <= '0';
     SEL_ADD_SP <= '0';
-    SEL_PM_ADR_WESP <= '0';
+    SEL_DM_ADR <= '0';
+    WE_SP <= '0';
+    CD_PC <= '0';
+    W_E_SM <= '0';
+    STATE_OUT <= "00";
 
     CASE Instr(15 DOWNTO 10) IS
       WHEN "000011" =>
@@ -140,18 +149,29 @@ BEGIN -- Behavioral
       WHEN "100100" =>
         --PUSH,POP
         IF Instr(9) = '0' THEN
-          --POP
-          addr_opa <= Instr(8 DOWNTO 4);
-          SEL_MUX_RES <= '1';
-          SEL_ADD_SP <= '0';
-          SEL_PM_ADR_WESP <= '1';
-          w_e_regfile <= '1';
+          --POP in 2 takten
+          IF STATE_IN = "00" THEN
+            CD_PC <= '1'; -- program counter anhalten
+            State_Out <= "01";
+            W_E_SM <= '1';
+            SEL_ADD_SP <= '0'; --SP +
+            WE_SP <= '1';
+          ELSIF STATE_IN = "01" THEN
+            CD_PC <= '0';
+            State_Out <= "00";
+            W_E_SM <= '1';
+            SEL_MUX_RES <= '1';
+            SEL_DM_ADR <= '1';
+            w_e_regfile <= '1';
+            addr_opa <= Instr(8 DOWNTO 4);
+          END IF;
         ELSE
           --PUSH
           addr_opa <= Instr(8 DOWNTO 4);
           DM_W_E <= '1';
           SEL_ADD_SP <= '1';
-          SEL_PM_ADR_WESP <= '1';
+          WE_SP <= '1';
+          SEL_DM_ADR <= '1';
 
         END IF;
       WHEN "100101" =>

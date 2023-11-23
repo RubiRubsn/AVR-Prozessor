@@ -17,40 +17,41 @@
 -- Additional Comments:
 -- 
 ----------------------------------------------------------------------------------
-
-
-library IEEE;
-use IEEE.STD_LOGIC_1164.all;
-use IEEE.NUMERIC_STD.all;
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.NUMERIC_STD.ALL;
 
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx leaf cells in this code.
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Program_Counter is
-  port (
-    reset : in  std_logic;
-    clk   : in  std_logic;
-    Addr  : out std_logic_vector (8 downto 0));
-end Program_Counter;
+ENTITY Program_Counter IS
+  PORT (
+    reset : IN STD_LOGIC;
+    clk : IN STD_LOGIC;
+    CD_PC : IN STD_LOGIC;
+    Addr : OUT STD_LOGIC_VECTOR (8 DOWNTO 0));
+END Program_Counter;
 
 -- Rudimentaerer Programmzaehler ohne Ruecksetzen und springen...
 
-architecture Behavioral of Program_Counter is
-  signal PC_reg : std_logic_vector(8 downto 0);
-begin
-  count : process (clk)
-  begin  -- process count
-    if clk'event and clk = '1' then     -- rising clock edge
-      if reset = '1' then               -- synchronous reset (active high)
+ARCHITECTURE Behavioral OF Program_Counter IS
+  SIGNAL PC_reg : STD_LOGIC_VECTOR(8 DOWNTO 0);
+BEGIN
+  count : PROCESS (clk)
+  BEGIN -- process count
+    IF clk'event AND clk = '1' THEN -- rising clock edge
+      IF reset = '1' THEN -- synchronous reset (active high)
         PC_reg <= "000000000";
-      else
-        PC_reg <= std_logic_vector(unsigned(PC_reg) + 1);
-      end if;
-    end if;
-  end process count;
+      ELSE
+        IF CD_PC = '0' THEN
+          PC_reg <= STD_LOGIC_VECTOR(unsigned(PC_reg) + 1);
+        END IF;
+      END IF;
+    END IF;
+  END PROCESS count;
 
   Addr <= PC_reg;
 
-end Behavioral;
+END Behavioral;

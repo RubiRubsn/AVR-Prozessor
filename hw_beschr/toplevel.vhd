@@ -68,6 +68,12 @@ ARCHITECTURE Behavioral OF toplevel IS
   SIGNAL K : STD_LOGIC_VECTOR (7 DOWNTO 0);
   SIGNAL DM_W_E : STD_LOGIC;
   SIGNAL SEL_MUX_RES : STD_LOGIC;
+  SIGNAL CD_PC : STD_LOGIC;
+  SIGNAL W_E_SM : STD_LOGIC;
+  SIGNAL STATE_DEC_TO_SM : STD_LOGIC_VECTOR(1 DOWNTO 0);
+
+  -- outputs of State Machine
+  SIGNAL STATE_SM_TO_DEC : STD_LOGIC_VECTOR (1 DOWNTO 0);
 
   -- outputs of Regfile
   SIGNAL data_opa : STD_LOGIC_VECTOR (7 DOWNTO 0);
@@ -88,7 +94,8 @@ ARCHITECTURE Behavioral OF toplevel IS
   SIGNAL w_e_SREG : STD_LOGIC_VECTOR(7 DOWNTO 0);
 
   SIGNAL SEL_ADD_SP : STD_LOGIC;
-  SIGNAL SEL_PM_ADR_WESP : STD_LOGIC;
+  SIGNAL SEL_DM_ADR : STD_LOGIC;
+  SIGNAL WE_SP : STD_LOGIC;
   SIGNAL Z_SP_Addr : STD_LOGIC_VECTOR(9 DOWNTO 0);
   SIGNAL SP_Addr : STD_LOGIC_VECTOR(9 DOWNTO 0);
   -----------------------------------------------------------------------------
@@ -99,6 +106,7 @@ ARCHITECTURE Behavioral OF toplevel IS
     PORT (
       reset : IN STD_LOGIC;
       clk : IN STD_LOGIC;
+      CD_PC : IN STD_LOGIC;
       Addr : OUT STD_LOGIC_VECTOR (8 DOWNTO 0));
   END COMPONENT;
 
@@ -111,6 +119,7 @@ ARCHITECTURE Behavioral OF toplevel IS
   COMPONENT decoder
     PORT (
       Instr : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+      STATE_IN : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
       addr_opa : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
       addr_opb : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
       OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
@@ -120,10 +129,23 @@ ARCHITECTURE Behavioral OF toplevel IS
       DM_W_E : OUT STD_LOGIC;
       SEL_MUX_RES : OUT STD_LOGIC;
       SEL_ADD_SP : OUT STD_LOGIC;
-      SEL_PM_ADR_WESP : OUT STD_LOGIC
+      SEL_DM_ADR : OUT STD_LOGIC;
+      WE_SP : OUT STD_LOGIC;
+      CD_PC : OUT STD_LOGIC;
+      W_E_SM : OUT STD_LOGIC;
+      STATE_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
       --hier fehlt etwas
     );
 
+  END COMPONENT;
+
+  COMPONENT State_Machine
+    PORT (
+      clk : STD_LOGIC;
+      State_in : IN STD_LOGIC_VECTOR (1 DOWNTO 0);
+      W_E : IN STD_LOGIC;
+      State_Out : OUT STD_LOGIC_VECTOR (1 DOWNTO 0)
+    );
   END COMPONENT;
 
   COMPONENT SREG
@@ -154,7 +176,7 @@ ARCHITECTURE Behavioral OF toplevel IS
     PORT (
       clk : IN STD_LOGIC;
       SEL_ADD_SP : IN STD_LOGIC;
-      SEL_PM_ADR_WESP : IN STD_LOGIC;
+      WE_SP : IN STD_LOGIC;
       Addr : OUT STD_LOGIC_VECTOR(9 DOWNTO 0));
   END COMPONENT;
 
@@ -190,6 +212,7 @@ BEGIN
   PORT MAP(
     reset => reset,
     clk => clk,
+    CD_PC => CD_PC,
     Addr => Addr);
 
   -- instance "prog_mem_1"
@@ -202,6 +225,7 @@ BEGIN
   decoder_1 : decoder
   PORT MAP(
     Instr => Instr,
+    STATE_IN => STATE_SM_TO_DEC,
     addr_opa => addr_opa,
     addr_opb => addr_opb,
     OPCODE => OPCODE,
@@ -211,7 +235,19 @@ BEGIN
     DM_W_E => DM_W_E,
     SEL_MUX_RES => SEL_MUX_RES,
     SEL_ADD_SP => SEL_ADD_SP,
-    SEL_PM_ADR_WESP => SEL_PM_ADR_WESP
+    SEL_DM_ADR => SEL_DM_ADR,
+    WE_SP => WE_SP,
+    CD_PC => CD_PC,
+    W_E_SM => W_E_SM,
+    STATE_OUT => STATE_DEC_TO_SM
+  );
+
+  STATE_MACHINE_1 : State_Machine
+  PORT MAP(
+    clk => clk,
+    State_in => STATE_DEC_TO_SM,
+    W_E => W_E_SM,
+    State_Out => STATE_SM_TO_DEC
   );
 
   -- instance "Reg_File_1"
@@ -231,7 +267,7 @@ BEGIN
   PORT MAP(
     clk => clk,
     SEL_ADD_SP => SEL_ADD_SP,
-    SEL_PM_ADR_WESP => SEL_PM_ADR_WESP,
+    WE_SP => WE_SP,
     Addr => SP_Addr
   );
 
@@ -265,7 +301,7 @@ BEGIN
   REG_DI <= data_res WHEN SEL_MUX_RES = '0' ELSE
     RAM_DO;
   PM_Data <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
-  Z_SP_Addr <= Z_A WHEN SEL_PM_ADR_WESP = '0' ELSE
+  Z_SP_Addr <= Z_A WHEN SEL_DM_ADR = '0' ELSE
     SP_Addr;
 
 END Behavioral;
