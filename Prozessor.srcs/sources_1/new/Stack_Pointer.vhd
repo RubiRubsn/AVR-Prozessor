@@ -56,5 +56,6 @@ BEGIN
             END IF;
         END IF;
     END PROCESS; -- FF
-    Addr <= FF_O;
+    Addr <= FF_O WHEN SEL_ADD_SP = '1' ELSE
+        RES;
 END Behavioral;

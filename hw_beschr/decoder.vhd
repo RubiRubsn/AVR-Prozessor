@@ -149,22 +149,24 @@ BEGIN -- Behavioral
       WHEN "100100" =>
         --PUSH,POP
         IF Instr(9) = '0' THEN
-          --POP in 2 takten
-          IF STATE_IN = "00" THEN
-            CD_PC <= '1'; -- program counter anhalten
-            State_Out <= "01";
-            W_E_SM <= '1';
-            SEL_ADD_SP <= '0'; --SP +
-            WE_SP <= '1';
-          ELSIF STATE_IN = "01" THEN
-            CD_PC <= '0';
-            State_Out <= "00";
-            W_E_SM <= '1';
-            SEL_MUX_RES <= '1';
-            SEL_DM_ADR <= '1';
-            w_e_regfile <= '1';
-            addr_opa <= Instr(8 DOWNTO 4);
-          END IF;
+          --POP in 1 takten
+          --IF STATE_IN = "00" THEN
+          --CD_PC <= '1'; -- program counter anhalten
+          --State_Out <= "01";
+          --W_E_SM <= '1';
+          SEL_ADD_SP <= '0'; --SP +
+          WE_SP <= '1';
+          w_e_regfile <= '1';
+          addr_opa <= Instr(8 DOWNTO 4);
+          -- ELSIF STATE_IN = "01" THEN
+          --   CD_PC <= '0';
+          --   State_Out <= "00";
+          --   --W_E_SM <= '1';
+          --   SEL_MUX_RES <= '1';
+          --   SEL_DM_ADR <= '1';
+          --   w_e_regfile <= '1';
+          --   addr_opa <= Instr(8 DOWNTO 4);
+          --END IF;
         ELSE
           --PUSH
           addr_opa <= Instr(8 DOWNTO 4);
