@@ -37,8 +37,9 @@ ENTITY toplevel IS
 
     -- global ports
     reset : IN STD_LOGIC;
-    clk : IN STD_LOGIC--;
-
+    clk : IN STD_LOGIC;
+    PIN : IN STD_LOGIC_VECTOR (20 DOWNTO 0);
+    PORT_SEG : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
     -- ports to "decoder_1"
     --w_e_SREG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
 
@@ -98,6 +99,11 @@ ARCHITECTURE Behavioral OF toplevel IS
   SIGNAL WE_SP : STD_LOGIC;
   SIGNAL Z_SP_Addr : STD_LOGIC_VECTOR(9 DOWNTO 0);
   SIGNAL SP_Addr : STD_LOGIC_VECTOR(9 DOWNTO 0);
+
+  SIGNAL PIN_intern : STD_LOGIC_VECTOR (20 DOWNTO 0);
+  SIGNAL PORT_SEG_intern : STD_LOGIC_VECTOR(15 DOWNTO 0);
+  SIGNAL DOUT_IO : STD_LOGIC_VECTOR(7 DOWNTO 0);
+  SIGNAL SW_MUX_IO_DM_HIGH : STD_LOGIC;
   -----------------------------------------------------------------------------
   -- Component declarations
   -----------------------------------------------------------------------------
@@ -187,6 +193,19 @@ ARCHITECTURE Behavioral OF toplevel IS
       A : IN STD_LOGIC_VECTOR(9 DOWNTO 0);
       DI : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       DO : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
+    );
+  END COMPONENT;
+
+  COMPONENT Ports
+    PORT (
+      clk : IN STD_LOGIC;
+      WE : IN STD_LOGIC;
+      Addr_in : IN STD_LOGIC_VECTOR (9 DOWNTO 0);
+      Din : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+      PIN : IN STD_LOGIC_VECTOR (20 DOWNTO 0);
+      PORT_SEG : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+      Dout : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
+      SW_Mux : OUT STD_LOGIC
     );
   END COMPONENT;
 
@@ -280,6 +299,18 @@ BEGIN
     DO => RAM_DO
   );
 
+  Ports_1 : Ports
+  PORT MAP(
+    clk => clk,
+    WE => DM_W_E,
+    Addr_in => Z_SP_Addr,
+    Din => data_opa,
+    PIN => PIN_intern,
+    PORT_SEG => PORT_SEG_intern,
+    Dout => DOUT_IO,
+    SW_MUX => SW_MUX_IO_DM_HIGH
+  );
+
   -- instance "ALU_1"
   ALU_1 : ALU
   PORT MAP(
@@ -298,10 +329,26 @@ BEGIN
     w_e_SREG => w_e_SREG,
     Status_out => SREG_OUT
   );
-  REG_DI <= data_res WHEN SEL_MUX_RES = '0' ELSE
-    RAM_DO;
+  Din_Reg_file_MUX : PROCESS (SW_MUX_IO_DM_HIGH, SEL_MUX_RES, data_res, RAM_DO, DOUT_IO)
+  BEGIN
+    REG_DI <= "00000000";
+    IF SW_MUX_IO_DM_HIGH = '0' THEN
+      IF SEL_MUX_RES = '0' THEN
+        REG_DI <= data_res;
+      ELSE
+        REG_DI <= RAM_DO;
+      END IF;
+    ELSE
+      REG_DI <= DOUT_IO;
+    END IF;
+  END PROCESS; -- Din_Reg_file_MUX
+
   PM_Data <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
   Z_SP_Addr <= Z_A WHEN SEL_DM_ADR = '0' ELSE
     SP_Addr;
+
+  PIN_intern <= PIN;
+
+  PORT_SEG <= PORT_SEG_intern;
 
 END Behavioral;

@@ -33,10 +33,10 @@ ENTITY Ports IS
     PORT (
         clk : IN STD_LOGIC;
         WE : IN STD_LOGIC;
-        Addr : IN STD_LOGIC_VECTOR (9 DOWNTO 0);
+        Addr_in : IN STD_LOGIC_VECTOR (9 DOWNTO 0);
         Din : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
         PIN : IN STD_LOGIC_VECTOR (20 DOWNTO 0);
-        PORT_SEG : OUT STD_LOGIC_VECTOR(51 DOWNTO 0);
+        PORT_SEG : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
         Dout : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
         SW_Mux : OUT STD_LOGIC);
 END Ports;
@@ -49,18 +49,43 @@ ARCHITECTURE Behavioral OF Ports IS
     SIGNAL PORTB : STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL SER : STD_LOGIC_VECTOR(3 DOWNTO 0);
     SIGNAL seg0_N : STD_LOGIC_VECTOR(7 DOWNTO 0);
-    SIGNAL seg1_n : STD_LOGIC_VECTOR(7 DOWNTO 0);
-    SIGNAL seg2_n : STD_LOGIC_VECTOR(7 DOWNTO 0);
-    SIGNAL seg3_n : STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL seg1_N : STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL seg2_N : STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL seg3_N : STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL i2c_SCR : STD_LOGIC_VECTOR(6 DOWNTO 0);
     SIGNAL i2c_DaTR : STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL i2c_DaRR : STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL Dout_int : STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL Addr_to_dec : STD_LOGIC_VECTOR(9 DOWNTO 0);
+    SIGNAL Addr : STD_LOGIC_VECTOR (3 DOWNTO 0);
+    SIGNAL is_PORT : STD_LOGIC;
+
+    -------------------------------------------------------------------------
+    --                  components
+    -------------------------------------------------------------------------
+
+    COMPONENT Ports_decoder
+        PORT (
+            Addr_in : IN STD_LOGIC_VECTOR (9 DOWNTO 0);
+            new_addr_out : OUT STD_LOGIC_VECTOR (3 DOWNTO 0);
+            is_PORT : OUT STD_LOGIC
+        );
+    END COMPONENT;
+
 BEGIN
 
-    Dout_erz : PROCESS (addr)
+    Addr_to_dec <= Addr_in;
+
+    Ports_decoder_1 : Ports_decoder
+    PORT MAP(
+        Addr_in => Addr_to_dec,
+        new_addr_out => Addr,
+        is_PORT => is_PORT
+    );
+
+    Dout_erz : PROCESS (addr, PIND, PINC, PINB, PORTC, PORTB, SER, seg0_N, seg1_N, seg2_N, seg3_N, i2c_SCR, i2c_DaTR, i2c_DaRR)
     BEGIN
-        Dout_int <= "0000";
+        Dout_int <= "00000000";
         CASE (Addr) IS
             WHEN "0000" =>
                 --PIND
@@ -91,10 +116,10 @@ BEGIN
                 Dout_int <= seg2_N;
             WHEN "1001" =>
                 --seg3_N
-                Dout_int <= seg2_N;
+                Dout_int <= seg3_N;
             WHEN "1010" =>
                 --i2c_SCR
-                Dout_int <= i2c_SCR;
+                Dout_int <= '0' & i2c_SCR;
             WHEN "1011" =>
                 --i2c_DaTR
                 Dout_int <= i2c_DaTR;
@@ -105,16 +130,20 @@ BEGIN
         END CASE;
     END PROCESS; -- Dout_erz
 
-    FF_PIN : PROCESS (CLK)
+    FF_PIN : PROCESS (CLK, PIN)
     BEGIN
         IF (CLK'event AND CLK = '1') THEN
-            PIND <= PIN(4 DOWNTO 0);
-            PINC <= PIN(12 DOWNTO 5);
-            PINB <= PIN(20 DOWNTO 13);
+            -- PIND <= PIN(4 DOWNTO 0);
+            -- PINC <= PIN(12 DOWNTO 5);
+            -- PINB <= PIN(20 DOWNTO 13);
+            PIND <= PIN(20 DOWNTO 16);
+            PINC <= PIN(15 DOWNTO 8);
+            PINB <= PIN(7 DOWNTO 0);
+
         END IF;
     END PROCESS;
 
-    FF_1 : PROCESS (CLK)
+    FF_1 : PROCESS (CLK, Din)
     BEGIN
         IF (CLK'event AND CLK = '1') THEN
             IF (WE = '1') THEN
@@ -157,6 +186,7 @@ BEGIN
             END IF;
         END IF;
     END PROCESS;
-
+    SW_Mux <= is_PORT;
     Dout <= Dout_int;
+    PORT_SEG <= (PORTB & PORTC);
 END Behavioral;

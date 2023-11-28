@@ -71,7 +71,8 @@ proc create_report { reportName command } {
 }
 OPTRACE "synth_1" START { ROLLUP_AUTO }
 set_param checkpoint.writeSynthRtdsInDcp 1
-set_param synth.incrementalSynthesisCache C:/Users/Rubsen/AppData/Roaming/Xilinx/Vivado/.Xil/Vivado-1632-LAPTOP-KAHI4GGT/incrSyn
+set_param chipscope.maxJobs 2
+set_param synth.incrementalSynthesisCache C:/Users/Rubsen/AppData/Roaming/Xilinx/Vivado/.Xil/Vivado-10156-LAPTOP-KAHI4GGT/incrSyn
 set_msg_config -id {Synth 8-256} -limit 10000
 set_msg_config -id {Synth 8-638} -limit 10000
 OPTRACE "Creating in-memory project" START { }
@@ -92,10 +93,13 @@ read_vhdl -library xil_defaultlib {
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/pkg_processor.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/ALU.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/Prozessor.srcs/sources_1/new/Data_Memory.vhd
+  C:/Users/Rubsen/Documents/Vivado/Prozessor/Prozessor.srcs/sources_1/new/Ports.vhd
+  C:/Users/Rubsen/Documents/Vivado/Prozessor/Prozessor.srcs/sources_1/new/Ports_decoder.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Program_Counter.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Reg_File.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/SREG.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/Prozessor.srcs/sources_1/new/Stack_Pointer.vhd
+  C:/Users/Rubsen/Documents/Vivado/Prozessor/Prozessor.srcs/sources_1/new/State_Machine.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/decoder.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/pkg_instrmem.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/prog_mem.vhd
@@ -110,6 +114,9 @@ OPTRACE "Adding files" END { }
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
+read_xdc C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Basys3_Master.xdc
+set_property used_in_implementation false [get_files C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Basys3_Master.xdc]
+
 set_param ips.enableIPCacheLiteLoad 1
 
 read_checkpoint -auto_incremental -incremental C:/Users/Rubsen/Documents/Vivado/Prozessor/Prozessor.srcs/utils_1/imports/synth_1/toplevel.dcp
