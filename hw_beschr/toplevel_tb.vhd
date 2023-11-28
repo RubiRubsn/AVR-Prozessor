@@ -35,7 +35,11 @@ ARCHITECTURE behaviour OF toplevel_tb IS
   COMPONENT toplevel
     PORT (
       reset : IN STD_LOGIC;
-      clk : IN STD_LOGIC--;
+      clk : IN STD_LOGIC;
+      PIN : IN STD_LOGIC_VECTOR (20 DOWNTO 0);
+      PORT_SEG : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+      SEG_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+      SEG_AN : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
       --w_e_SREG : out std_logic_vector(7 downto 0);
       --Status   : out STD_LOGIC_VECTOR (7 downto 0)
     );
@@ -44,6 +48,7 @@ ARCHITECTURE behaviour OF toplevel_tb IS
   -- component ports
   SIGNAL reset : STD_LOGIC;
   SIGNAL clk : STD_LOGIC := '0';
+  SIGNAL PIN : STD_LOGIC_VECTOR(20 DOWNTO 0);
   --  signal w_e_SREG : std_logic_vector(7 downto 0);
   -- signal Status   : STD_LOGIC_VECTOR (7 downto 0);
 BEGIN -- behaviour
@@ -52,11 +57,13 @@ BEGIN -- behaviour
   DUT : toplevel
   PORT MAP(
     reset => reset,
-    clk => clk--,
+    clk => clk,
+    PIN => PIN--,
     --w_e_SREG => w_e_SREG,
     --Status => Status
   );
 
+  PIN <= (OTHERS => '0');
   -- clock generation
   clk <= NOT clk AFTER 10 ns;
 

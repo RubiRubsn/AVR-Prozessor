@@ -21,8 +21,11 @@ Compiling architecture behavioral of entity xil_defaultlib.State_Machine [state_
 Compiling architecture behavioral of entity xil_defaultlib.Reg_File [reg_file_default]
 Compiling architecture behavioral of entity xil_defaultlib.Stack_Pointer [stack_pointer_default]
 Compiling architecture behavioral of entity xil_defaultlib.Data_Memory [data_memory_default]
+Compiling architecture behavioral of entity xil_defaultlib.Ports_decoder [ports_decoder_default]
+Compiling architecture behavioral of entity xil_defaultlib.Ports [ports_default]
 Compiling architecture behavioral of entity xil_defaultlib.ALU [alu_default]
 Compiling architecture behavioral of entity xil_defaultlib.SREG [sreg_default]
+Compiling architecture behavioral of entity xil_defaultlib.puls_seg [puls_seg_default]
 Compiling architecture behavioral of entity xil_defaultlib.toplevel [toplevel_default]
 Compiling architecture behaviour of entity xil_defaultlib.toplevel_tb [toplevel_tb]
 Built simulation snapshot toplevel_tb_behaviour_cfg_behav

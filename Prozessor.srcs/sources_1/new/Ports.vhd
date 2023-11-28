@@ -38,7 +38,9 @@ ENTITY Ports IS
         PIN : IN STD_LOGIC_VECTOR (20 DOWNTO 0);
         PORT_SEG : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
         Dout : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
-        SW_Mux : OUT STD_LOGIC);
+        SW_Mux : OUT STD_LOGIC;
+        SEG : OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+        SEG_EN : OUT STD_LOGIC_VECTOR (3 DOWNTO 0));
 END Ports;
 
 ARCHITECTURE Behavioral OF Ports IS
@@ -188,5 +190,7 @@ BEGIN
     END PROCESS;
     SW_Mux <= is_PORT;
     Dout <= Dout_int;
-    PORT_SEG <= (PORTB & PORTC);
+    PORT_SEG <= (PORTC & PORTB);
+    SEG <= (seg3_N & seg2_N & seg1_N & seg0_N);
+    SEG_EN <= SER;
 END Behavioral;

@@ -39,7 +39,9 @@ ENTITY toplevel IS
     reset : IN STD_LOGIC;
     clk : IN STD_LOGIC;
     PIN : IN STD_LOGIC_VECTOR (20 DOWNTO 0);
-    PORT_SEG : OUT STD_LOGIC_VECTOR(15 DOWNTO 0)
+    PORT_SEG : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SEG_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SEG_AN : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
     -- ports to "decoder_1"
     --w_e_SREG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
 
@@ -104,6 +106,11 @@ ARCHITECTURE Behavioral OF toplevel IS
   SIGNAL PORT_SEG_intern : STD_LOGIC_VECTOR(15 DOWNTO 0);
   SIGNAL DOUT_IO : STD_LOGIC_VECTOR(7 DOWNTO 0);
   SIGNAL SW_MUX_IO_DM_HIGH : STD_LOGIC;
+
+  SIGNAL SEG : STD_LOGIC_VECTOR (31 DOWNTO 0);
+  SIGNAL SEG_EN : STD_LOGIC_VECTOR (3 DOWNTO 0);
+  SIGNAL SEG_out_intern : STD_LOGIC_VECTOR (7 DOWNTO 0);
+  SIGNAL SEG_AN_intern : STD_LOGIC_VECTOR(3 DOWNTO 0);
   -----------------------------------------------------------------------------
   -- Component declarations
   -----------------------------------------------------------------------------
@@ -205,8 +212,9 @@ ARCHITECTURE Behavioral OF toplevel IS
       PIN : IN STD_LOGIC_VECTOR (20 DOWNTO 0);
       PORT_SEG : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
       Dout : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
-      SW_Mux : OUT STD_LOGIC
-    );
+      SW_Mux : OUT STD_LOGIC;
+      SEG : OUT STD_LOGIC_VECTOR (31 DOWNTO 0);
+      SEG_EN : OUT STD_LOGIC_VECTOR (3 DOWNTO 0));
   END COMPONENT;
 
   COMPONENT ALU
@@ -218,6 +226,15 @@ ARCHITECTURE Behavioral OF toplevel IS
       SREG_IN : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
       RES : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
       Status : OUT STD_LOGIC_VECTOR (7 DOWNTO 0));
+  END COMPONENT;
+
+  COMPONENT puls_seg
+    PORT (
+      clk : IN STD_LOGIC;
+      en_seg_in : IN STD_LOGIC_VECTOR (3 DOWNTO 0);
+      SEG_in : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+      SEG_out : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
+      en_seg_out : OUT STD_LOGIC_VECTOR (3 DOWNTO 0));
   END COMPONENT;
 
 BEGIN
@@ -308,7 +325,9 @@ BEGIN
     PIN => PIN_intern,
     PORT_SEG => PORT_SEG_intern,
     Dout => DOUT_IO,
-    SW_MUX => SW_MUX_IO_DM_HIGH
+    SW_MUX => SW_MUX_IO_DM_HIGH,
+    SEG => SEG,
+    SEG_EN => SEG_EN
   );
 
   -- instance "ALU_1"
@@ -329,17 +348,26 @@ BEGIN
     w_e_SREG => w_e_SREG,
     Status_out => SREG_OUT
   );
+  puls_seg_1 : puls_seg
+  PORT MAP(
+    clk => clk,
+    en_seg_in => SEG_EN,
+    SEG_in => SEG,
+    SEG_out => SEG_out_intern,
+    en_seg_out => SEG_AN_intern);
+
   Din_Reg_file_MUX : PROCESS (SW_MUX_IO_DM_HIGH, SEL_MUX_RES, data_res, RAM_DO, DOUT_IO)
   BEGIN
     REG_DI <= "00000000";
-    IF SW_MUX_IO_DM_HIGH = '0' THEN
-      IF SEL_MUX_RES = '0' THEN
-        REG_DI <= data_res;
-      ELSE
-        REG_DI <= RAM_DO;
-      END IF;
+
+    IF SEL_MUX_RES = '0' THEN
+      REG_DI <= data_res;
     ELSE
-      REG_DI <= DOUT_IO;
+      IF SW_MUX_IO_DM_HIGH = '0' THEN
+        REG_DI <= RAM_DO;
+      ELSE
+        REG_DI <= DOUT_IO;
+      END IF;
     END IF;
   END PROCESS; -- Din_Reg_file_MUX
 
@@ -350,5 +378,7 @@ BEGIN
   PIN_intern <= PIN;
 
   PORT_SEG <= PORT_SEG_intern;
+  SEG_out <= SEG_out_intern;
+  SEG_AN <= SEG_AN_intern;
 
 END Behavioral;

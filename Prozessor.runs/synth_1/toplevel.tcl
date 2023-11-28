@@ -103,6 +103,7 @@ read_vhdl -library xil_defaultlib {
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/decoder.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/pkg_instrmem.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/prog_mem.vhd
+  C:/Users/Rubsen/Documents/Vivado/Prozessor/Prozessor.srcs/sources_1/new/puls_seg.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/toplevel.vhd
 }
 OPTRACE "Adding files" END { }
