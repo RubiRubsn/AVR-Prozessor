@@ -192,20 +192,13 @@ BEGIN -- Behavioral
               OPCODE <= op_ASR;
               WE_RegFile <= '1';
               WE_SREG <= "00011111";
-            WHEN "010" =>
-              --dec
-              K <= "0000000" & '1';
-              addr_opa <= Instr(8 DOWNTO 4);
-              OPCODE <= op_DEC;
-              WE_SREG <= "00011110";
-              WE_RegFile <= '1';
             WHEN "011" =>
               --inc
               addr_opa <= Instr(8 DOWNTO 4);
               OPCODE <= op_INC;
               K <= "0000000" & '1';
               WE_RegFile <= '1';
-              WE_SREG <= "00011111";
+              WE_SREG <= "00011110";
             WHEN "110" =>
               --lsr
               addr_opa <= Instr(8 DOWNTO 4);
@@ -215,22 +208,31 @@ BEGIN -- Behavioral
             WHEN OTHERS => NULL;
           END CASE;
         ELSE
-          CASE(SEL_SCR) IS
+          SEL_SCR <= Instr(11) & Instr(7);
+          IF instr(11) = '0' THEN
+          ELSE
+            --ret or dec
+            IF instr(7) = '0' THEN
+              --sec
+              OPCODE <= op_COM;
+              WE_SREG <= "00000001";
+            ELSE
+              -- clc
+              OPCODE <= op_CLC;
+              WE_SREG <= "00000001";
+            END IF;
+            IF instr(1) = '0' THEN
+              --ret
+            ELSE
+              --dec
+              K <= "0000000" & '1';
+              addr_opa <= Instr(8 DOWNTO 4);
+              OPCODE <= op_DEC;
+              WE_SREG <= "00011110";
+              WE_RegFile <= '1';
+            END IF;
+          END IF;
 
-          WHEN "00" =>
-            --sec
-            OPCODE <= op_COM;
-            WE_SREG <= "00000001";
-          WHEN "01" =>
-            -- clc
-            OPCODE <= op_CLC;
-            WE_SREG <= "00000001";
-          WHEN "10" =>
-            --ret
-
-          WHEN OTHERS => NULL;
-
-          END CASE;
         END IF;
       WHEN OTHERS =>
         CASE Instr(15 DOWNTO 12) IS
