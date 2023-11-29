@@ -30,7 +30,7 @@ ENTITY Program_Counter IS
   PORT (
     reset : IN STD_LOGIC;
     clk : IN STD_LOGIC;
-    CD_PC : IN STD_LOGIC;
+    CLK_Disable_ProgCntr : IN STD_LOGIC;
     Addr : OUT STD_LOGIC_VECTOR (8 DOWNTO 0));
 END Program_Counter;
 
@@ -45,7 +45,7 @@ BEGIN
       IF reset = '1' THEN -- synchronous reset (active high)
         PC_reg <= "000000000";
       ELSE
-        IF CD_PC = '0' THEN
+        IF CLK_Disable_ProgCntr = '0' THEN
           PC_reg <= STD_LOGIC_VECTOR(unsigned(PC_reg) + 1);
         END IF;
       END IF;

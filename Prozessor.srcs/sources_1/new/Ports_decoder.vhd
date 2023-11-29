@@ -39,7 +39,6 @@ END Ports_decoder;
 ARCHITECTURE Behavioral OF Ports_decoder IS
     SIGNAL new_addr : STD_LOGIC_VECTOR(3 DOWNTO 0);
     SIGNAL is_port_intern : STD_LOGIC;
-    SIGNAL w_mask_intern : STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL Addr_in_intern : STD_LOGIC_VECTOR (9 DOWNTO 0);
 BEGIN
     Addr_in_intern <= Addr_in;
@@ -47,22 +46,19 @@ BEGIN
     BEGIN
         is_port_intern <= '0';
         new_addr <= "0000";
-        w_mask_intern <= "00000000";
+
         CASE (Addr_in_intern) IS
             WHEN "0000110000" =>
                 --PIND
                 new_addr <= "0000";
-                w_mask_intern <= "00000000";
                 is_port_intern <= '1';
             WHEN "0000110011" =>
                 --PINC    
                 new_addr <= "0001";
-                w_mask_intern <= "00000000";
                 is_port_intern <= '1';
             WHEN "0000110110" =>
                 --PINB
                 new_addr <= "0010";
-                w_mask_intern <= "00000000";
                 is_port_intern <= '1';
             WHEN "0000110101" =>
                 --PORTC
@@ -84,7 +80,6 @@ BEGIN
                 --seg1_n
                 new_addr <= "0111";
                 is_port_intern <= '1';
-
             WHEN "0001000011" =>
                 --seg2_n
                 new_addr <= "1000";

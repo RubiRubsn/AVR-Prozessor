@@ -40,7 +40,7 @@ ARCHITECTURE behaviour OF toplevel_tb IS
       PORT_SEG : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
       SEG_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
       SEG_AN : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
-      --w_e_SREG : out std_logic_vector(7 downto 0);
+      --WE_SREG : out std_logic_vector(7 downto 0);
       --Status   : out STD_LOGIC_VECTOR (7 downto 0)
     );
   END COMPONENT;
@@ -49,7 +49,7 @@ ARCHITECTURE behaviour OF toplevel_tb IS
   SIGNAL reset : STD_LOGIC;
   SIGNAL clk : STD_LOGIC := '0';
   SIGNAL PIN : STD_LOGIC_VECTOR(20 DOWNTO 0);
-  --  signal w_e_SREG : std_logic_vector(7 downto 0);
+  --  signal WE_SREG : std_logic_vector(7 downto 0);
   -- signal Status   : STD_LOGIC_VECTOR (7 downto 0);
 BEGIN -- behaviour
 
@@ -59,7 +59,7 @@ BEGIN -- behaviour
     reset => reset,
     clk => clk,
     PIN => PIN--,
-    --w_e_SREG => w_e_SREG,
+    --WE_SREG => WE_SREG,
     --Status => Status
   );
 

@@ -43,7 +43,7 @@ ENTITY toplevel IS
     SEG_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
     SEG_AN : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
     -- ports to "decoder_1"
-    --w_e_SREG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    --WE_SREG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
 
     -- ports to "ALU_1"
     --Status : OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
@@ -66,13 +66,13 @@ ARCHITECTURE Behavioral OF toplevel IS
   SIGNAL addr_opa : STD_LOGIC_VECTOR(4 DOWNTO 0);
   SIGNAL addr_opb : STD_LOGIC_VECTOR(4 DOWNTO 0);
   SIGNAL OPCODE : STD_LOGIC_VECTOR(3 DOWNTO 0);
-  SIGNAL w_e_regfile : STD_LOGIC;
+  SIGNAL WE_RegFile : STD_LOGIC;
   SIGNAL sel_immediate : STD_LOGIC;
   SIGNAL K : STD_LOGIC_VECTOR (7 DOWNTO 0);
-  SIGNAL DM_W_E : STD_LOGIC;
+  SIGNAL WE_DataMemory : STD_LOGIC;
   SIGNAL SEL_MUX_RES : STD_LOGIC;
-  SIGNAL CD_PC : STD_LOGIC;
-  SIGNAL W_E_SM : STD_LOGIC;
+  SIGNAL CLK_Disable_ProgCntr : STD_LOGIC;
+  SIGNAL WE_StateMachine : STD_LOGIC;
   SIGNAL STATE_DEC_TO_SM : STD_LOGIC_VECTOR(1 DOWNTO 0);
 
   -- outputs of State Machine
@@ -81,7 +81,7 @@ ARCHITECTURE Behavioral OF toplevel IS
   -- outputs of Regfile
   SIGNAL data_opa : STD_LOGIC_VECTOR (7 DOWNTO 0);
   SIGNAL data_opb : STD_LOGIC_VECTOR (7 DOWNTO 0);
-  SIGNAL Z_A : STD_LOGIC_VECTOR (9 DOWNTO 0);
+  SIGNAL Z_addr : STD_LOGIC_VECTOR (9 DOWNTO 0);
   --output of MUX
   SIGNAL REG_DI : STD_LOGIC_VECTOR (7 DOWNTO 0);
 
@@ -94,7 +94,7 @@ ARCHITECTURE Behavioral OF toplevel IS
 
   SIGNAL Status : STD_LOGIC_VECTOR(7 DOWNTO 0);
   SIGNAL SREG_out : STD_LOGIC_VECTOR(7 DOWNTO 0);
-  SIGNAL w_e_SREG : STD_LOGIC_VECTOR(7 DOWNTO 0);
+  SIGNAL WE_SREG : STD_LOGIC_VECTOR(7 DOWNTO 0);
 
   SIGNAL SEL_ADD_SP : STD_LOGIC;
   SIGNAL SEL_DM_ADR : STD_LOGIC;
@@ -105,7 +105,7 @@ ARCHITECTURE Behavioral OF toplevel IS
   SIGNAL PIN_intern : STD_LOGIC_VECTOR (20 DOWNTO 0);
   SIGNAL PORT_SEG_intern : STD_LOGIC_VECTOR(15 DOWNTO 0);
   SIGNAL DOUT_IO : STD_LOGIC_VECTOR(7 DOWNTO 0);
-  SIGNAL SW_MUX_IO_DM_HIGH : STD_LOGIC;
+  SIGNAL SW_IO_DM : STD_LOGIC;
 
   SIGNAL SEG : STD_LOGIC_VECTOR (31 DOWNTO 0);
   SIGNAL SEG_EN : STD_LOGIC_VECTOR (3 DOWNTO 0);
@@ -119,7 +119,7 @@ ARCHITECTURE Behavioral OF toplevel IS
     PORT (
       reset : IN STD_LOGIC;
       clk : IN STD_LOGIC;
-      CD_PC : IN STD_LOGIC;
+      CLK_Disable_ProgCntr : IN STD_LOGIC;
       Addr : OUT STD_LOGIC_VECTOR (8 DOWNTO 0));
   END COMPONENT;
 
@@ -136,16 +136,16 @@ ARCHITECTURE Behavioral OF toplevel IS
       addr_opa : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
       addr_opb : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
       OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-      w_e_regfile : OUT STD_LOGIC;
-      w_e_SREG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+      WE_RegFile : OUT STD_LOGIC;
+      WE_SREG : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
       K : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
-      DM_W_E : OUT STD_LOGIC;
+      WE_DataMemory : OUT STD_LOGIC;
       SEL_MUX_RES : OUT STD_LOGIC;
       SEL_ADD_SP : OUT STD_LOGIC;
       SEL_DM_ADR : OUT STD_LOGIC;
       WE_SP : OUT STD_LOGIC;
-      CD_PC : OUT STD_LOGIC;
-      W_E_SM : OUT STD_LOGIC;
+      CLK_Disable_ProgCntr : OUT STD_LOGIC; --clock deactivate Program counter
+      WE_StateMachine : OUT STD_LOGIC;
       STATE_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
       --hier fehlt etwas
     );
@@ -165,7 +165,7 @@ ARCHITECTURE Behavioral OF toplevel IS
     PORT (
       clk : IN STD_LOGIC;
       Status : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
-      w_e_SREG : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+      WE_SREG : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
       Status_out : OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
     );
   END COMPONENT;
@@ -175,7 +175,7 @@ ARCHITECTURE Behavioral OF toplevel IS
       clk : IN STD_LOGIC;
       addr_opa : IN STD_LOGIC_VECTOR (4 DOWNTO 0);
       addr_opb : IN STD_LOGIC_VECTOR (4 DOWNTO 0);
-      w_e_regfile : IN STD_LOGIC;
+      WE_RegFile : IN STD_LOGIC;
       data_opa : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
       data_opb : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
       data_in : IN STD_LOGIC_VECTOR (7 DOWNTO 0); -- muss ich noch einsortieren sieht ja unmöglich aus hier...
@@ -248,7 +248,7 @@ BEGIN
   PORT MAP(
     reset => reset,
     clk => clk,
-    CD_PC => CD_PC,
+    CLK_Disable_ProgCntr => CLK_Disable_ProgCntr,
     Addr => Addr);
 
   -- instance "prog_mem_1"
@@ -265,16 +265,16 @@ BEGIN
     addr_opa => addr_opa,
     addr_opb => addr_opb,
     OPCODE => OPCODE,
-    w_e_regfile => w_e_regfile,
-    w_e_SREG => w_e_SREG,
+    WE_RegFile => WE_RegFile,
+    WE_SREG => WE_SREG,
     K => K,
-    DM_W_E => DM_W_E,
+    WE_DataMemory => WE_DataMemory,
     SEL_MUX_RES => SEL_MUX_RES,
     SEL_ADD_SP => SEL_ADD_SP,
     SEL_DM_ADR => SEL_DM_ADR,
     WE_SP => WE_SP,
-    CD_PC => CD_PC,
-    W_E_SM => W_E_SM,
+    CLK_Disable_ProgCntr => CLK_Disable_ProgCntr,
+    WE_StateMachine => WE_StateMachine,
     STATE_OUT => STATE_DEC_TO_SM
   );
 
@@ -282,7 +282,7 @@ BEGIN
   PORT MAP(
     clk => clk,
     State_in => STATE_DEC_TO_SM,
-    W_E => W_E_SM,
+    W_E => WE_StateMachine,
     State_Out => STATE_SM_TO_DEC
   );
 
@@ -293,11 +293,11 @@ BEGIN
     clk => clk,
     addr_opa => addr_opa,
     addr_opb => addr_opb,
-    w_e_regfile => w_e_regfile,
+    WE_RegFile => WE_RegFile,
     data_opa => data_opa,
     data_opb => data_opb,
     data_in => REG_DI,
-    Z => Z_A);
+    Z => Z_addr);
 
   Stack_Pointer_1 : Stack_Pointer
   PORT MAP(
@@ -310,7 +310,7 @@ BEGIN
   Data_Memory_1 : Data_Memory
   PORT MAP(
     CLK => clk,
-    WE => DM_W_E,
+    WE => WE_DataMemory,
     A => Z_SP_Addr,
     DI => data_opa,
     DO => RAM_DO
@@ -319,13 +319,13 @@ BEGIN
   Ports_1 : Ports
   PORT MAP(
     clk => clk,
-    WE => DM_W_E,
+    WE => WE_DataMemory,
     Addr_in => Z_SP_Addr,
     Din => data_opa,
     PIN => PIN_intern,
     PORT_SEG => PORT_SEG_intern,
     Dout => DOUT_IO,
-    SW_MUX => SW_MUX_IO_DM_HIGH,
+    SW_MUX => SW_IO_DM,
     SEG => SEG,
     SEG_EN => SEG_EN
   );
@@ -345,7 +345,7 @@ BEGIN
   PORT MAP(
     clk => clk,
     Status => Status,
-    w_e_SREG => w_e_SREG,
+    WE_SREG => WE_SREG,
     Status_out => SREG_OUT
   );
   puls_seg_1 : puls_seg
@@ -356,14 +356,14 @@ BEGIN
     SEG_out => SEG_out_intern,
     en_seg_out => SEG_AN_intern);
 
-  Din_Reg_file_MUX : PROCESS (SW_MUX_IO_DM_HIGH, SEL_MUX_RES, data_res, RAM_DO, DOUT_IO)
+  Din_Reg_file_MUX : PROCESS (SW_IO_DM, SEL_MUX_RES, data_res, RAM_DO, DOUT_IO)
   BEGIN
     REG_DI <= "00000000";
 
     IF SEL_MUX_RES = '0' THEN
       REG_DI <= data_res;
     ELSE
-      IF SW_MUX_IO_DM_HIGH = '0' THEN
+      IF SW_IO_DM = '0' THEN
         REG_DI <= RAM_DO;
       ELSE
         REG_DI <= DOUT_IO;
@@ -372,7 +372,7 @@ BEGIN
   END PROCESS; -- Din_Reg_file_MUX
 
   PM_Data <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
-  Z_SP_Addr <= Z_A WHEN SEL_DM_ADR = '0' ELSE
+  Z_SP_Addr <= Z_addr WHEN SEL_DM_ADR = '0' ELSE
     SP_Addr;
 
   PIN_intern <= PIN;

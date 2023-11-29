@@ -25,7 +25,7 @@ ENTITY Reg_File IS
     clk : IN STD_LOGIC;
     addr_opa : IN STD_LOGIC_VECTOR (4 DOWNTO 0);
     addr_opb : IN STD_LOGIC_VECTOR (4 DOWNTO 0);
-    w_e_regfile : IN STD_LOGIC;
+    WE_RegFile : IN STD_LOGIC;
     data_opa : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
     data_opb : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
     data_in : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
@@ -42,12 +42,12 @@ BEGIN
 
   -- purpose: einfacher Schreibprozess für rudimentaeres Registerfile
   -- type   : sequential
-  -- inputs : clk, addr_opa, w_e_regfile, data_res
+  -- inputs : clk, addr_opa, WE_RegFile, data_res
   -- outputs: register_speicher
   registerfile : PROCESS (clk)
   BEGIN -- process registerfile
     IF clk'event AND clk = '1' THEN -- rising clock edge
-      IF w_e_regfile = '1' THEN
+      IF WE_RegFile = '1' THEN
         register_speicher(to_integer(unsigned(addr_opa))) <= data_in;
       END IF;
     END IF;

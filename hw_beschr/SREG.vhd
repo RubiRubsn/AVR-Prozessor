@@ -33,7 +33,7 @@ ENTITY SREG IS
     PORT (
         clk : IN STD_LOGIC;
         Status : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
-        w_e_SREG : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+        WE_SREG : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
         Status_out : OUT STD_LOGIC_VECTOR (7 DOWNTO 0)
     );
 END SREG;
@@ -49,7 +49,7 @@ ARCHITECTURE Behavioral OF SREG IS
     SIGNAL c : STD_LOGIC := '0';
     SIGNAL WE : STD_LOGIC_VECTOR (7 DOWNTO 0);
 BEGIN
-    WE <= w_e_SREG;
+    WE <= WE_SREG;
     Status_out <= i & t & h & s & v & n & z & c;
 
     ff : PROCESS (clk)
