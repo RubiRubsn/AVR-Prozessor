@@ -1,2 +1,4 @@
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/ALU.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'ALU'
 INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/decoder.vhd" into library xil_defaultlib
 INFO: [VRFC 10-3107] analyzing entity 'decoder'

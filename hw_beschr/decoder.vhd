@@ -209,30 +209,28 @@ BEGIN -- Behavioral
           END CASE;
         ELSE
           SEL_SCR <= Instr(11) & Instr(7);
-          IF instr(11) = '0' THEN
+          IF instr(1) = '1' THEN
+            --dec
+            K <= "0000000" & '1';
+            addr_opa <= Instr(8 DOWNTO 4);
+            OPCODE <= op_DEC;
+            WE_SREG <= "00011110";
+            WE_RegFile <= '1';
           ELSE
-            --ret or dec
-            IF instr(7) = '0' THEN
-              --sec
-              OPCODE <= op_COM;
-              WE_SREG <= "00000001";
-            ELSE
-              -- clc
-              OPCODE <= op_CLC;
-              WE_SREG <= "00000001";
-            END IF;
-            IF instr(1) = '0' THEN
+            IF instr(8) = '1' THEN
               --ret
             ELSE
-              --dec
-              K <= "0000000" & '1';
-              addr_opa <= Instr(8 DOWNTO 4);
-              OPCODE <= op_DEC;
-              WE_SREG <= "00011110";
-              WE_RegFile <= '1';
+              IF instr(7) = '1' THEN
+                --clc
+                OPCODE <= op_CLC;
+                WE_SREG <= "00000001";
+              ELSE
+                --sec
+                OPCODE <= op_COM;
+                WE_SREG <= "00000001";
+              END IF;
             END IF;
           END IF;
-
         END IF;
       WHEN OTHERS =>
         CASE Instr(15 DOWNTO 12) IS

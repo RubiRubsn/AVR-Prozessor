@@ -127,8 +127,13 @@ BEGIN
         --SUB,cp,SUBI,CPI,DEC
         c <= (NOT OPA(7) AND MUX_OUT_OPB_K(7)) OR (MUX_OUT_OPB_K(7) AND erg(7)) OR (NOT OPA(7) AND erg(7));
       WHEN "10" =>
-        --COM
-        c <= '1';
+        IF OPCODE_SLICE_U(0) = '0' THEN
+          --COM
+          c <= '1';
+        ELSE
+          --clc
+          c <= '0';
+        END IF;
       WHEN "11" =>
         c <= OPA(0);
       WHEN OTHERS => NULL;
