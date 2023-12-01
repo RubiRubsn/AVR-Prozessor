@@ -70,6 +70,10 @@ proc create_report { reportName command } {
   }
 }
 OPTRACE "synth_1" START { ROLLUP_AUTO }
+set_param checkpoint.writeSynthRtdsInDcp 1
+set_param synth.incrementalSynthesisCache C:/Users/Rubsen/AppData/Roaming/Xilinx/Vivado/.Xil/Vivado-6048-LAPTOP-KAHI4GGT/incrSyn
+set_msg_config -id {Synth 8-256} -limit 10000
+set_msg_config -id {Synth 8-638} -limit 10000
 OPTRACE "Creating in-memory project" START { }
 create_project -in_memory -part xc7a35tcpg236-1
 
@@ -87,7 +91,12 @@ OPTRACE "Adding files" START { }
 read_vhdl -library xil_defaultlib {
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/pkg_processor.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/ALU.vhd
+  C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/DEC.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/Prozessor.srcs/sources_1/new/Data_Memory.vhd
+  C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Execute.vhd
+  C:/Users/Rubsen/Documents/Vivado/Prozessor/Prozessor.srcs/sources_1/new/Instruction_Fetch.vhd
+  C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Pipeline_Register_one.vhd
+  C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Pipeline_Register_two.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/Prozessor.srcs/sources_1/new/Ports.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/Prozessor.srcs/sources_1/new/Ports_decoder.vhd
   C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Program_Counter.vhd

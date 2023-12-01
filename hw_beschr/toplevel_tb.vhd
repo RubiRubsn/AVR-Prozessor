@@ -40,8 +40,6 @@ ARCHITECTURE behaviour OF toplevel_tb IS
       PORT_SEG : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
       SEG_out : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
       SEG_AN : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
-      --WE_SREG : out std_logic_vector(7 downto 0);
-      --Status   : out STD_LOGIC_VECTOR (7 downto 0)
     );
   END COMPONENT;
 

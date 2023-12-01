@@ -53,17 +53,9 @@ ARCHITECTURE Behavioral OF decoder IS
   SIGNAL SEL_SCR : STD_LOGIC_VECTOR(1 DOWNTO 0);
 BEGIN -- Behavioral
   SEL_SCR <= Instr(11) & Instr(7);
-  -- purpose: Decodierprozess
-  -- type   : combinational
-  -- inputs : Instr
-  -- outputs: addr_opa, addr_opb, OPCODE, WE_RegFile, WE_SREG, ...
-  dec_mux : PROCESS (Instr, SEL_SCR, STATE_IN)
-  BEGIN -- process dec_mux
-    -- ACHTUNG!!!
-    -- So einfach wie hier unten ist das Ganze nicht! Es soll nur den Anfang erleichtern!
-    -- Etwas muss man hier schon nachdenken und sich die Operationen genau ansehen...
 
-    -- Vorzuweisung der Signale, um Latches zu verhindern
+  dec_mux : PROCESS (Instr, SEL_SCR, STATE_IN)
+  BEGIN
     K <= "00000000";
     addr_opa <= "00000";
     addr_opb <= "00000";
@@ -149,24 +141,13 @@ BEGIN -- Behavioral
       WHEN "100100" =>
         --PUSH,POP
         IF Instr(9) = '0' THEN
-          --POP in 1 takten
-          --IF STATE_IN = "00" THEN
-          --CLK_Disable_ProgCntr <= '1'; -- program counter anhalten
-          --State_Out <= "01";
-          --WE_StateMachine <= '1';
+
           SEL_ADD_SP <= '0'; --SP +
           WE_SP <= '1';
           WE_RegFile <= '1';
           addr_opa <= Instr(8 DOWNTO 4);
           SEL_MUX_RES <= '1';
           SEL_DM_ADR <= '1';
-          -- ELSIF STATE_IN = "01" THEN
-          --   CLK_Disable_ProgCntr <= '0';
-          --   State_Out <= "00";
-          --   --WE_StateMachine <= '1';
-          --   WE_RegFile <= '1';
-          --   addr_opa <= Instr(8 DOWNTO 4);
-          --END IF;
         ELSE
           --PUSH
           addr_opa <= Instr(8 DOWNTO 4);

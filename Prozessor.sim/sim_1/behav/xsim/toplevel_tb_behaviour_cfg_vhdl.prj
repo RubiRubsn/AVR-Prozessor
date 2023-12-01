@@ -2,7 +2,12 @@
 vhdl xil_defaultlib  \
 "../../../../hw_beschr/pkg_processor.vhd" \
 "../../../../hw_beschr/ALU.vhd" \
+"../../../../hw_beschr/DEC.vhd" \
 "../../../../Prozessor.srcs/sources_1/new/Data_Memory.vhd" \
+"../../../../hw_beschr/Execute.vhd" \
+"../../../../Prozessor.srcs/sources_1/new/Instruction_Fetch.vhd" \
+"../../../../hw_beschr/Pipeline_Register_one.vhd" \
+"../../../../hw_beschr/Pipeline_Register_two.vhd" \
 "../../../../Prozessor.srcs/sources_1/new/Ports.vhd" \
 "../../../../Prozessor.srcs/sources_1/new/Ports_decoder.vhd" \
 "../../../../hw_beschr/Program_Counter.vhd" \
