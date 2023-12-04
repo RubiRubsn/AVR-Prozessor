@@ -25,6 +25,7 @@ ENTITY Reg_File IS
     clk : IN STD_LOGIC;
     addr_opa : IN STD_LOGIC_VECTOR (4 DOWNTO 0);
     addr_opb : IN STD_LOGIC_VECTOR (4 DOWNTO 0);
+    Write_addr : IN STD_LOGIC_VECTOR (4 DOWNTO 0);
     WE_RegFile : IN STD_LOGIC;
     data_in : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
     data_opa : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
@@ -42,7 +43,7 @@ BEGIN
   BEGIN
     IF clk'event AND clk = '1' THEN
       IF WE_RegFile = '1' THEN
-        register_speicher(to_integer(unsigned(addr_opa))) <= data_in;
+        register_speicher(to_integer(unsigned(Write_addr))) <= data_in;
       END IF;
     END IF;
   END PROCESS registerfile;

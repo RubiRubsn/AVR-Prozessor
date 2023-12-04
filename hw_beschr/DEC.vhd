@@ -25,6 +25,10 @@ ENTITY DEC IS
         Instr_in : IN STD_LOGIC_VECTOR (15 DOWNTO 0);
         Status_IN : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
         REG_DI : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+        Write_addr_in : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
+        WE_Regfile_IN : IN STD_LOGIC;
+        WE_Regfile_OUT : OUT STD_LOGIC;
+        Write_addr_out : OUT STD_LOGIC_VECTOR (4 DOWNTO 0);
         Data_opa : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
         Data_opb : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
         SEL_result : OUT STD_LOGIC;
@@ -43,7 +47,7 @@ ARCHITECTURE Behavioral OF DEC IS
     SIGNAL addr_opa : STD_LOGIC_VECTOR(4 DOWNTO 0);
     SIGNAL addr_opb : STD_LOGIC_VECTOR(4 DOWNTO 0);
     SIGNAL OPCODE_intern : STD_LOGIC_VECTOR(3 DOWNTO 0);
-    SIGNAL WE_RegFile : STD_LOGIC;
+    SIGNAL WE_RegFile_intern : STD_LOGIC;
     SIGNAL sel_immediate : STD_LOGIC;
     SIGNAL K_intern : STD_LOGIC_VECTOR (7 DOWNTO 0);
     SIGNAL WE_DataMemory_intern : STD_LOGIC;
@@ -55,11 +59,16 @@ ARCHITECTURE Behavioral OF DEC IS
     SIGNAL STATE_SM_TO_DEC : STD_LOGIC_VECTOR (1 DOWNTO 0);
     SIGNAL data_opa_intern : STD_LOGIC_VECTOR (7 DOWNTO 0);
     SIGNAL data_opb_intern : STD_LOGIC_VECTOR (7 DOWNTO 0);
+    SIGNAL Z_addr_out : STD_LOGIC_VECTOR (9 DOWNTO 0);
     SIGNAL Z_addr : STD_LOGIC_VECTOR (9 DOWNTO 0);
     SIGNAL SEL_ADD_SP_intern : STD_LOGIC;
     SIGNAL SEL_DM_ADR_intern : STD_LOGIC;
     SIGNAL WE_SP_intern : STD_LOGIC;
     SIGNAL SP_Addr : STD_LOGIC_VECTOR(9 DOWNTO 0);
+    SIGNAL WE_Regfile_IN_intern : STD_LOGIC;
+
+    SIGNAL Forwarding_mux_addr_a_out : STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL Forwarding_mux_addr_b_out : STD_LOGIC_VECTOR(7 DOWNTO 0);
 
     COMPONENT decoder
         PORT (
@@ -96,6 +105,7 @@ ARCHITECTURE Behavioral OF DEC IS
             clk : IN STD_LOGIC;
             addr_opa : IN STD_LOGIC_VECTOR (4 DOWNTO 0);
             addr_opb : IN STD_LOGIC_VECTOR (4 DOWNTO 0);
+            Write_addr : IN STD_LOGIC_VECTOR (4 DOWNTO 0);
             WE_RegFile : IN STD_LOGIC;
             data_in : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
             data_opa : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
@@ -104,6 +114,7 @@ ARCHITECTURE Behavioral OF DEC IS
         );
     END COMPONENT;
 BEGIN
+    WE_Regfile_IN_intern <= WE_RegFile_IN;
     decoder_1 : decoder
     PORT MAP(
         Instr => Instr_in,
@@ -111,7 +122,7 @@ BEGIN
         addr_opa => addr_opa,
         addr_opb => addr_opb,
         OPCODE => OPCODE_intern,
-        WE_RegFile => WE_RegFile,
+        WE_RegFile => WE_RegFile_intern,
         WE_SREG => WE_SREG_intern,
         K => K_intern,
         WE_DataMemory => WE_DataMemory_intern,
@@ -139,14 +150,53 @@ BEGIN
         clk => clk,
         addr_opa => addr_opa,
         addr_opb => addr_opb,
-        WE_RegFile => WE_RegFile,
+        Write_addr => Write_addr_in,
+        WE_RegFile => WE_Regfile_IN_intern,
         data_in => REG_DI,
         data_opa => data_opa_intern,
         data_opb => data_opb_intern,
         Z => Z_addr);
 
-    data_opa <= data_opa_intern;
-    data_opb <= data_opb_intern;
+    Forwarding_mux_addr_a : PROCESS (clk, REG_DI, data_opa_intern, addr_opa, Write_addr_in, WE_RegFile_IN, REG_DI, WE_Regfile_IN_intern)
+    BEGIN
+        Forwarding_mux_addr_a_out <= data_opa_intern;
+        IF addr_opa = Write_addr_in AND WE_Regfile_IN_intern = '1' THEN
+            Forwarding_mux_addr_a_out <= REG_DI;
+        END IF;
+    END PROCESS Forwarding_mux_addr_a;
+
+    Forwarding_mux_addr_b : PROCESS (clk, REG_DI, data_opb_intern, addr_opb, Write_addr_in, WE_RegFile_IN, REG_DI, WE_Regfile_IN_intern)
+    BEGIN
+        Forwarding_mux_addr_b_out <= data_opb_intern;
+        IF addr_opb = Write_addr_in AND WE_Regfile_IN_intern = '1'THEN
+            Forwarding_mux_addr_b_out <= REG_DI;
+        END IF;
+    END PROCESS Forwarding_mux_addr_b;
+
+    Forwarding_mux_addr_Z_Oben : PROCESS (clk, REG_DI, data_opb_intern, addr_opb, Write_addr_in, WE_RegFile_IN, REG_DI, WE_Regfile_IN_intern)
+    BEGIN
+        -- Forwarding_mux_addr_b_out <= data_opb_intern;
+        IF Write_addr_in = "11111" AND WE_Regfile_IN_intern = '1'THEN
+            Z_addr_out(9 DOWNTO 8) <= REG_DI(1 DOWNTO 0);
+            ELSE
+            Z_addr_out(9 DOWNTO 8) <= Z_addr(9 DOWNTO 8);
+            --     Forwarding_mux_addr_b_out <= REG_DI;
+        END IF;
+    END PROCESS Forwarding_mux_addr_Z_Oben;
+
+    Forwarding_mux_addr_Z_Unten : PROCESS (clk, REG_DI, data_opb_intern, addr_opb, Write_addr_in, WE_RegFile_IN, REG_DI)
+    BEGIN
+        -- Forwarding_mux_addr_b_out <= data_opb_intern;
+        IF Write_addr_in = "11110" AND WE_Regfile_IN_intern = '1'THEN
+            Z_addr_out(7 DOWNTO 0) <= REG_DI;
+            ELSE
+            Z_addr_out(7 DOWNTO 0) <= Z_addr(7 DOWNTO 0);
+            --     Forwarding_mux_addr_b_out <= REG_DI;
+        END IF;
+    END PROCESS Forwarding_mux_addr_Z_Unten;
+
+    data_opa <= Forwarding_mux_addr_a_out;
+    data_opb <= Forwarding_mux_addr_b_out;
     WE_SREG <= WE_SREG_intern;
     K <= K_intern;
     WE_DataMemory <= WE_DataMemory_intern;
@@ -155,6 +205,8 @@ BEGIN
     SEL_DM_ADR <= SEL_DM_ADR_intern;
     WE_SP <= WE_SP_intern;
     CLK_Disable_ProgCntr <= CLK_Disable_ProgCntr_intern;
-    Z <= Z_addr;
+    Z <= Z_addr_out;
     OPCODE <= OPCODE_intern;
+    Write_addr_out <= addr_opa;
+    WE_Regfile_OUT <= WE_RegFile_intern;
 END Behavioral;

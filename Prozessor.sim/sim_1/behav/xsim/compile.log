@@ -1,12 +1,2 @@
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/DEC.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'DEC'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Execute.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'Execute'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/Prozessor.srcs/sources_1/new/Instruction_Fetch.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'Instruction_Fetch'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Pipeline_Register_one.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'Pipeline_Register_one'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Pipeline_Register_two.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'Pipeline_Register_two'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/toplevel.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'toplevel'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Reg_File.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'Reg_File'

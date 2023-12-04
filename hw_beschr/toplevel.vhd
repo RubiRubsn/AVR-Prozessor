@@ -83,6 +83,12 @@ ARCHITECTURE Behavioral OF toplevel IS
   SIGNAL PORT_SEG_intern : STD_LOGIC_VECTOR(15 DOWNTO 0);
   SIGNAL SEG_out_intern : STD_LOGIC_VECTOR (7 DOWNTO 0);
   SIGNAL SEG_AN_intern : STD_LOGIC_VECTOR(3 DOWNTO 0);
+
+  SIGNAL Write_addr_PR2_IN : STD_LOGIC_VECTOR(4 DOWNTO 0);
+  SIGNAL Write_addr_PR2_OUT : STD_LOGIC_VECTOR (4 DOWNTO 0);
+
+  SIGNAL WE_Regfile_PR2_IN : STD_LOGIC;
+  SIGNAL WE_Regfile_PR2_OUT : STD_LOGIC;
   -----------------------------------------------------------------------------
   -- Component declarations
   -----------------------------------------------------------------------------
@@ -107,6 +113,10 @@ ARCHITECTURE Behavioral OF toplevel IS
       Instr_in : IN STD_LOGIC_VECTOR (15 DOWNTO 0);
       Status_IN : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
       REG_DI : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+      Write_addr_in : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
+      WE_Regfile_IN : IN STD_LOGIC;
+      WE_Regfile_out : OUT STD_LOGIC;
+      Write_addr_out : OUT STD_LOGIC_VECTOR (4 DOWNTO 0);
       Data_opa : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
       Data_opb : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
       SEL_result : OUT STD_LOGIC;
@@ -135,7 +145,10 @@ ARCHITECTURE Behavioral OF toplevel IS
       Z_PR2_IN : IN STD_LOGIC_VECTOR (9 DOWNTO 0);
       K_PR2_IN : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
       OPCODE_PR2_IN : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+      Write_addr_PR2_IN : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
+      WE_Regfile_PR2_IN : IN STD_LOGIC;
 
+      WE_Regfile_PR2_OUT : OUT STD_LOGIC;
       Data_opa_PR2_OUT : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
       Data_opb_PR2_OUT : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
       SEL_result_PR2_OUT : OUT STD_LOGIC;
@@ -146,7 +159,8 @@ ARCHITECTURE Behavioral OF toplevel IS
       SEL_DM_ADR_PR2_OUT : OUT STD_LOGIC;
       Z_PR2_OUT : OUT STD_LOGIC_VECTOR (9 DOWNTO 0);
       K_PR2_OUT : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
-      OPCODE_PR2_OUT : OUT STD_LOGIC_VECTOR(3 DOWNTO 0));
+      OPCODE_PR2_OUT : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+      Write_addr_PR2_OUT : OUT STD_LOGIC_VECTOR(4 DOWNTO 0));
   END COMPONENT;
 
   COMPONENT Execute
@@ -200,6 +214,10 @@ BEGIN
     Instr_in => Instr_PR1_OUT,
     Status_IN => Status,
     REG_DI => REG_DI_intern,
+    Write_addr_in => Write_addr_PR2_OUT,
+    WE_Regfile_IN => WE_Regfile_PR2_OUT,
+    WE_Regfile_OUT => WE_Regfile_PR2_IN,
+    Write_addr_out => Write_addr_PR2_IN,
     Data_opa => Data_opa_PR2_IN,
     Data_opb => Data_opb_PR2_IN,
     SEL_result => SEL_result_PR2_IN,
@@ -227,6 +245,9 @@ BEGIN
     Z_PR2_IN => Z_PR2_IN,
     K_PR2_IN => K_PR2_IN,
     OPCODE_PR2_IN => OPCODE_PR2_IN,
+    Write_addr_PR2_IN => Write_addr_PR2_IN,
+    WE_Regfile_PR2_IN => WE_Regfile_PR2_IN,
+    WE_Regfile_PR2_OUT => WE_Regfile_PR2_OUT,
     Data_opa_PR2_OUT => Data_opa_PR2_OUT,
     Data_opb_PR2_OUT => Data_opb_PR2_OUT,
     SEL_result_PR2_OUT => SEL_result_PR2_OUT,
@@ -237,7 +258,8 @@ BEGIN
     SEL_DM_ADR_PR2_OUT => SEL_DM_ADR_PR2_OUT,
     Z_PR2_OUT => Z_PR2_OUT,
     K_PR2_OUT => K_PR2_OUT,
-    OPCODE_PR2_OUT => OPCODE_PR2_OUT);
+    OPCODE_PR2_OUT => OPCODE_PR2_OUT,
+    Write_addr_PR2_OUT => Write_addr_PR2_OUT);
 
   Execute_1 : Execute
   PORT MAP(

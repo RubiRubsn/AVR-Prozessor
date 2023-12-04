@@ -37,8 +37,13 @@ ENTITY Pipeline_Register_one IS
 END Pipeline_Register_one;
 
 ARCHITECTURE Behavioral OF Pipeline_Register_one IS
-
+    SIGNAL P_Register_instr : STD_LOGIC_VECTOR(15 DOWNTO 0);
 BEGIN
-
-    Instr_out <= Instr_in;
+    P_reg : PROCESS (clk)
+    BEGIN
+        IF clk'event AND clk = '1' THEN
+            P_Register_instr <= Instr_in;
+        END IF;
+    END PROCESS P_reg;
+    Instr_out <= P_Register_instr;
 END Behavioral;
