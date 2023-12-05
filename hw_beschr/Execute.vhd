@@ -61,6 +61,8 @@ ARCHITECTURE Behavioral OF Execute IS
     SIGNAL data_opa : STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL data_opb : STD_LOGIC_VECTOR(7 DOWNTO 0);
 
+    SIGNAL WE_io : STD_LOGIC;
+
     --------------------------------------------------------------------------
     --              Component declaration
     --------------------------------------------------------------------------
@@ -150,8 +152,8 @@ BEGIN
     Ports_1 : Ports
     PORT MAP(
         clk => clk,
-        WE => WE_DataMemory,
-        Addr_in => Z_SP_Addr,
+        WE => WE_io,
+        Addr_in => Z,
         Din => data_opa,
         PIN => PIN_intern,
         PORT_SEG => PORT_SEG_intern,
@@ -187,14 +189,14 @@ BEGIN
         SEG_out => SEG_out_intern,
         en_seg_out => SEG_AN_intern);
 
-    Din_Reg_file_MUX : PROCESS (SW_IO_DM, SEL_result, data_res, RAM_DO, DOUT_IO)
+    Din_Reg_file_MUX : PROCESS (SW_IO_DM, SEL_result, data_res, RAM_DO, DOUT_IO, SEL_DM_ADR)
     BEGIN
         REG_DI <= "00000000";
 
         IF SEL_result = '0' THEN
             REG_DI <= data_res;
             ELSE
-            IF SW_IO_DM = '0' THEN
+            IF SW_IO_DM = '0' AND SEL_DM_ADR = '0' THEN
                 REG_DI <= RAM_DO;
                 ELSE
                 REG_DI <= DOUT_IO;
@@ -211,4 +213,5 @@ BEGIN
     SEG_out <= SEG_out_intern;
     SEG_AN <= SEG_AN_intern;
     Status_out <= SREG_out;
+    WE_io <= WE_DataMemory AND NOT SEL_DM_ADR;
 END Behavioral;

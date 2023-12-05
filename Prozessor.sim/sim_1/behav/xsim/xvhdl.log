@@ -1,7 +1,7 @@
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Execute.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'Execute'
 INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/Program_Counter.vhd" into library xil_defaultlib
 INFO: [VRFC 10-3107] analyzing entity 'Program_Counter'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/decoder.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'decoder'
 INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/pkg_instrmem.vhd" into library xil_defaultlib
 INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Rubsen/Documents/Vivado/Prozessor/hw_beschr/toplevel.vhd" into library xil_defaultlib
 INFO: [VRFC 10-3107] analyzing entity 'toplevel'

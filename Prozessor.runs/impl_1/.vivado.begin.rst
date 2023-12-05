@@ -18,3 +18,18 @@
     <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="5804" HostCore="8" HostMemory="016802533376">
     </Process>
 </ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="21484" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="21528" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="28160" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>

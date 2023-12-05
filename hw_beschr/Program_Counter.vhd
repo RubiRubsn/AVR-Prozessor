@@ -75,7 +75,7 @@ BEGIN
   BEGIN
     ADD_out <= STD_LOGIC_VECTOR(unsigned(PC_reg) + unsigned(MUX_ADD_Addr_out));
   END PROCESS ADDer;
-  ADD_Val : PROCESS (clk, PC_reg, ld_PC_val)
+  ADD_Val : PROCESS (clk, PC_reg, ld_PC_val, one)
   BEGIN
     ld_PC_val_inc <= STD_LOGIC_VECTOR(unsigned(ld_PC_val) + unsigned(one));
   END PROCESS ADD_Val;
