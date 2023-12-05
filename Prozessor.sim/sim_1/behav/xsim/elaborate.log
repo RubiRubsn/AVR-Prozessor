@@ -5,4 +5,32 @@ Running: C:/Xilinx/Vivado/2023.2/bin/unwrapped/win64.o/xelab.exe --incr --debug 
 Using 2 slave threads.
 Starting static elaboration
 Completed static elaboration
-INFO: [XSIM 43-4323] No Change in HDL. Linking previously generated obj files to create kernel
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package xil_defaultlib.pkg_processor
+Compiling package xil_defaultlib.pkg_instrmem
+Compiling architecture behavioral of entity xil_defaultlib.Program_Counter [program_counter_default]
+Compiling architecture behavioral of entity xil_defaultlib.prog_mem [prog_mem_default]
+Compiling architecture behavioral of entity xil_defaultlib.Instruction_Fetch [instruction_fetch_default]
+Compiling architecture behavioral of entity xil_defaultlib.Pipeline_Register_one [pipeline_register_one_default]
+Compiling architecture behavioral of entity xil_defaultlib.decoder [decoder_default]
+Compiling architecture behavioral of entity xil_defaultlib.State_Machine [state_machine_default]
+Compiling architecture behavioral of entity xil_defaultlib.Reg_File [reg_file_default]
+Compiling architecture behavioral of entity xil_defaultlib.DEC [dec_default]
+Compiling architecture behavioral of entity xil_defaultlib.Pipeline_Register_two [pipeline_register_two_default]
+Compiling architecture behavioral of entity xil_defaultlib.Stack_Pointer [stack_pointer_default]
+Compiling architecture behavioral of entity xil_defaultlib.Data_Memory [data_memory_default]
+Compiling architecture behavioral of entity xil_defaultlib.Ports_decoder [ports_decoder_default]
+Compiling architecture behavioral of entity xil_defaultlib.Ports [ports_default]
+Compiling architecture behavioral of entity xil_defaultlib.ALU [alu_default]
+Compiling architecture behavioral of entity xil_defaultlib.SREG [sreg_default]
+Compiling architecture behavioral of entity xil_defaultlib.puls_seg [puls_seg_default]
+Compiling architecture behavioral of entity xil_defaultlib.Execute [execute_default]
+Compiling architecture behavioral of entity xil_defaultlib.toplevel [toplevel_default]
+Compiling architecture behaviour of entity xil_defaultlib.toplevel_tb [toplevel_tb]
+Built simulation snapshot toplevel_tb_behaviour_cfg_behav

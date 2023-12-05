@@ -43,7 +43,11 @@ ENTITY decoder IS
     WE_SP : OUT STD_LOGIC;
     CLK_Disable_ProgCntr : OUT STD_LOGIC;
     WE_StateMachine : OUT STD_LOGIC;
-    STATE_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
+    STATE_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+    Write_disable_PR1 : OUT STD_LOGIC;
+    ld_PC_val : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
+    sel_PC_LDI_VAL : OUT STD_LOGIC;
+    sel_PC_ADD_VAL : OUT STD_LOGIC
     -- hier kommen noch die ganzen Steuersignale der Multiplexer...
 
   );
@@ -70,6 +74,10 @@ BEGIN -- Behavioral
     CLK_Disable_ProgCntr <= '0';
     WE_StateMachine <= '0';
     STATE_OUT <= "00";
+    Write_disable_PR1 <= '0';
+    ld_PC_val <= "000000000";
+    sel_PC_LDI_VAL <= '0';
+    sel_PC_ADD_VAL <= '0';
 
     CASE Instr(15 DOWNTO 10) IS
       WHEN "000011" =>
@@ -242,10 +250,10 @@ BEGIN -- Behavioral
             OPCODE <= op_ANDI;
             WE_SREG <= "00011110";
             WE_RegFile <= '1';
-
-            --ASR, lsr, com, dec, inc
-          WHEN "1001" =>
-
+          WHEN "1100" =>
+            --rjmp
+            ld_PC_val <= Instr (8 DOWNTO 0);
+            sel_PC_ADD_VAL <= '1';
           WHEN "1110" =>
             --LDI  
             K <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);

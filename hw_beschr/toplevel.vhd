@@ -89,6 +89,12 @@ ARCHITECTURE Behavioral OF toplevel IS
 
   SIGNAL WE_Regfile_PR2_IN : STD_LOGIC;
   SIGNAL WE_Regfile_PR2_OUT : STD_LOGIC;
+
+  SIGNAL Write_disable_PR1 : STD_LOGIC;
+
+  SIGNAL ld_PC_val_intern : STD_LOGIC_VECTOR(8 DOWNTO 0);
+  SIGNAL sel_PC_LDI_VAL_intern : STD_LOGIC;
+  SIGNAL sel_PC_ADD_VAL_intern : STD_LOGIC;
   -----------------------------------------------------------------------------
   -- Component declarations
   -----------------------------------------------------------------------------
@@ -97,12 +103,16 @@ ARCHITECTURE Behavioral OF toplevel IS
       reset : IN STD_LOGIC;
       clk : IN STD_LOGIC;
       CLK_Disable_ProgCntr : IN STD_LOGIC;
+      ld_PC_val : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
+      sel_PC_LDI_VAL : IN STD_LOGIC;
+      sel_PC_ADD_VAL : IN STD_LOGIC;
       instr : OUT STD_LOGIC_VECTOR (15 DOWNTO 0));
   END COMPONENT;
 
   COMPONENT Pipeline_Register_one
     PORT (
       clk : IN STD_LOGIC;
+      Write_disable_PR1 : IN STD_LOGIC;
       Instr_in : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
       Instr_out : OUT STD_LOGIC_VECTOR(15 DOWNTO 0));
   END COMPONENT;
@@ -115,6 +125,7 @@ ARCHITECTURE Behavioral OF toplevel IS
       REG_DI : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
       Write_addr_in : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
       WE_Regfile_IN : IN STD_LOGIC;
+      Write_disable_PR1 : OUT STD_LOGIC;
       WE_Regfile_out : OUT STD_LOGIC;
       Write_addr_out : OUT STD_LOGIC_VECTOR (4 DOWNTO 0);
       Data_opa : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
@@ -128,7 +139,10 @@ ARCHITECTURE Behavioral OF toplevel IS
       SEL_DM_ADR : OUT STD_LOGIC;
       Z : OUT STD_LOGIC_VECTOR (9 DOWNTO 0);
       K : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
-      OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0));
+      OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+      ld_PC_val : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
+      sel_PC_LDI_VAL : OUT STD_LOGIC;
+      sel_PC_ADD_VAL : OUT STD_LOGIC);
   END COMPONENT;
 
   COMPONENT Pipeline_Register_two
@@ -198,12 +212,16 @@ BEGIN
     reset => reset,
     clk => clk,
     CLK_Disable_ProgCntr => CLK_Disable_ProgCntr,
+    ld_PC_val => ld_PC_val_intern,
+    sel_PC_LDI_VAL => sel_PC_LDI_VAL_intern,
+    sel_PC_ADD_VAL => sel_PC_ADD_VAL_intern,
     Instr => Instr_PR1_IN);
 
   -- instance "Instruction_Fetch"
   Pipeline_Register_one_1 : Pipeline_Register_one
   PORT MAP(
     clk => clk,
+    Write_disable_PR1 => Write_disable_PR1,
     Instr_in => Instr_PR1_IN,
     Instr_out => Instr_PR1_OUT);
 
@@ -216,6 +234,7 @@ BEGIN
     REG_DI => REG_DI_intern,
     Write_addr_in => Write_addr_PR2_OUT,
     WE_Regfile_IN => WE_Regfile_PR2_OUT,
+    Write_disable_PR1 => Write_disable_PR1,
     WE_Regfile_OUT => WE_Regfile_PR2_IN,
     Write_addr_out => Write_addr_PR2_IN,
     Data_opa => Data_opa_PR2_IN,
@@ -229,7 +248,10 @@ BEGIN
     SEL_DM_ADR => SEL_DM_ADR_PR2_IN,
     Z => Z_PR2_IN,
     K => K_PR2_IN,
-    OPCODE => OPCODE_PR2_IN);
+    OPCODE => OPCODE_PR2_IN,
+    ld_PC_val => ld_PC_val_intern,
+    sel_PC_LDI_VAL => sel_PC_LDI_VAL_intern,
+    sel_PC_ADD_VAL => sel_PC_ADD_VAL_intern);
 
   Pipeline_Register_two_1 : Pipeline_Register_two
   PORT MAP(

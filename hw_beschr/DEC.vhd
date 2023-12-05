@@ -27,6 +27,7 @@ ENTITY DEC IS
         REG_DI : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
         Write_addr_in : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
         WE_Regfile_IN : IN STD_LOGIC;
+        Write_disable_PR1 : OUT STD_LOGIC;
         WE_Regfile_OUT : OUT STD_LOGIC;
         Write_addr_out : OUT STD_LOGIC_VECTOR (4 DOWNTO 0);
         Data_opa : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
@@ -40,7 +41,10 @@ ENTITY DEC IS
         SEL_DM_ADR : OUT STD_LOGIC;
         Z : OUT STD_LOGIC_VECTOR (9 DOWNTO 0);
         K : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
-        OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0));
+        OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        ld_PC_val : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
+        sel_PC_LDI_VAL : OUT STD_LOGIC;
+        sel_PC_ADD_VAL : OUT STD_LOGIC);
 END DEC;
 
 ARCHITECTURE Behavioral OF DEC IS
@@ -70,6 +74,12 @@ ARCHITECTURE Behavioral OF DEC IS
     SIGNAL Forwarding_mux_addr_a_out : STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL Forwarding_mux_addr_b_out : STD_LOGIC_VECTOR(7 DOWNTO 0);
 
+    SIGNAL Write_disable_PR1_intern : STD_LOGIC;
+
+    SIGNAL ld_PC_val_intern : STD_LOGIC_VECTOR(8 DOWNTO 0);
+    SIGNAL sel_PC_LDI_VAL_intern : STD_LOGIC;
+    SIGNAL sel_PC_ADD_VAL_intern : STD_LOGIC;
+
     COMPONENT decoder
         PORT (
             Instr : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
@@ -87,7 +97,11 @@ ARCHITECTURE Behavioral OF DEC IS
             WE_SP : OUT STD_LOGIC;
             CLK_Disable_ProgCntr : OUT STD_LOGIC;
             WE_StateMachine : OUT STD_LOGIC;
-            STATE_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
+            STATE_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+            Write_disable_PR1 : OUT STD_LOGIC;
+            ld_PC_val : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
+            sel_PC_LDI_VAL : OUT STD_LOGIC;
+            sel_PC_ADD_VAL : OUT STD_LOGIC
         );
     END COMPONENT;
 
@@ -132,7 +146,11 @@ BEGIN
         WE_SP => WE_SP_intern,
         CLK_Disable_ProgCntr => CLK_Disable_ProgCntr_intern,
         WE_StateMachine => WE_StateMachine,
-        STATE_OUT => STATE_DEC_TO_SM
+        STATE_OUT => STATE_DEC_TO_SM,
+        Write_disable_PR1 => Write_disable_PR1_intern,
+        ld_PC_val => ld_PC_val_intern,
+        sel_PC_LDI_VAL => sel_PC_LDI_VAL_intern,
+        sel_PC_ADD_VAL => sel_PC_ADD_VAL_intern
     );
 
     STATE_MACHINE_1 : State_Machine
@@ -157,7 +175,7 @@ BEGIN
         data_opb => data_opb_intern,
         Z => Z_addr);
 
-    Forwarding_mux_addr_a : PROCESS (clk, REG_DI, data_opa_intern, addr_opa, Write_addr_in, WE_RegFile_IN, REG_DI, WE_Regfile_IN_intern)
+    Forwarding_mux_addr_a : PROCESS (clk, data_opa_intern, addr_opa, Write_addr_in, WE_Regfile_IN_intern, REG_DI)
     BEGIN
         Forwarding_mux_addr_a_out <= data_opa_intern;
         IF addr_opa = Write_addr_in AND WE_Regfile_IN_intern = '1' THEN
@@ -165,7 +183,7 @@ BEGIN
         END IF;
     END PROCESS Forwarding_mux_addr_a;
 
-    Forwarding_mux_addr_b : PROCESS (clk, REG_DI, data_opb_intern, addr_opb, Write_addr_in, WE_RegFile_IN, REG_DI, WE_Regfile_IN_intern)
+    Forwarding_mux_addr_b : PROCESS (clk, data_opb_intern, addr_opb, Write_addr_in, WE_Regfile_IN_intern, REG_DI)
     BEGIN
         Forwarding_mux_addr_b_out <= data_opb_intern;
         IF addr_opb = Write_addr_in AND WE_Regfile_IN_intern = '1'THEN
@@ -173,7 +191,7 @@ BEGIN
         END IF;
     END PROCESS Forwarding_mux_addr_b;
 
-    Forwarding_mux_addr_Z_Oben : PROCESS (clk, REG_DI, data_opb_intern, addr_opb, Write_addr_in, WE_RegFile_IN, REG_DI, WE_Regfile_IN_intern)
+    Forwarding_mux_addr_Z_Oben : PROCESS (clk, Write_addr_in, WE_Regfile_IN_intern, REG_DI, Z_addr)
     BEGIN
         -- Forwarding_mux_addr_b_out <= data_opb_intern;
         IF Write_addr_in = "11111" AND WE_Regfile_IN_intern = '1'THEN
@@ -184,7 +202,7 @@ BEGIN
         END IF;
     END PROCESS Forwarding_mux_addr_Z_Oben;
 
-    Forwarding_mux_addr_Z_Unten : PROCESS (clk, REG_DI, data_opb_intern, addr_opb, Write_addr_in, WE_RegFile_IN, REG_DI)
+    Forwarding_mux_addr_Z_Unten : PROCESS (clk, Write_addr_in, WE_Regfile_IN_intern, REG_DI, Z_addr)
     BEGIN
         -- Forwarding_mux_addr_b_out <= data_opb_intern;
         IF Write_addr_in = "11110" AND WE_Regfile_IN_intern = '1'THEN
@@ -209,4 +227,8 @@ BEGIN
     OPCODE <= OPCODE_intern;
     Write_addr_out <= addr_opa;
     WE_Regfile_OUT <= WE_RegFile_intern;
+    Write_disable_PR1 <= Write_disable_PR1_intern;
+    ld_PC_val <= ld_PC_val_intern;
+    sel_PC_LDI_VAL <= sel_PC_LDI_VAL_intern;
+    sel_PC_ADD_VAL <= sel_PC_ADD_VAL_intern;
 END Behavioral;

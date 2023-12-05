@@ -34,6 +34,9 @@ ENTITY Instruction_Fetch IS
         reset : IN STD_LOGIC;
         clk : IN STD_LOGIC;
         CLK_Disable_ProgCntr : IN STD_LOGIC;
+        ld_PC_val : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
+        sel_PC_LDI_VAL : IN STD_LOGIC;
+        sel_PC_ADD_VAL : IN STD_LOGIC;
         instr : OUT STD_LOGIC_VECTOR (15 DOWNTO 0));
 END Instruction_Fetch;
 
@@ -44,12 +47,18 @@ ARCHITECTURE Behavioral OF Instruction_Fetch IS
 
     -- outputs of "prog_mem_1"
     SIGNAL Instr_intern : STD_LOGIC_VECTOR (15 DOWNTO 0);
+    SIGNAL ld_PC_val_intern : STD_LOGIC_VECTOR(8 DOWNTO 0);
+    SIGNAL sel_PC_LDI_VAL_intern : STD_LOGIC;
+    SIGNAL sel_PC_ADD_VAL_intern : STD_LOGIC;
 
     COMPONENT Program_Counter
         PORT (
             reset : IN STD_LOGIC;
             clk : IN STD_LOGIC;
             CLK_Disable_ProgCntr : IN STD_LOGIC;
+            ld_PC_val : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
+            sel_PC_LDI_VAL : IN STD_LOGIC;
+            sel_PC_ADD_VAL : IN STD_LOGIC;
             Addr : OUT STD_LOGIC_VECTOR (8 DOWNTO 0));
     END COMPONENT;
     COMPONENT prog_mem
@@ -64,6 +73,9 @@ BEGIN
         reset => reset,
         clk => clk,
         CLK_Disable_ProgCntr => CLK_Disable_ProgCntr,
+        ld_PC_val => ld_PC_val_intern,
+        sel_PC_LDI_VAL => sel_PC_LDI_VAL_intern,
+        sel_PC_ADD_VAL => sel_PC_ADD_VAL_intern,
         Addr => Addr);
 
     -- instance "prog_mem_1"
@@ -73,4 +85,7 @@ BEGIN
         Instr => Instr_intern);
 
     instr <= Instr_intern;
+    ld_PC_val_intern <= ld_PC_val;
+    sel_PC_LDI_VAL_intern <= sel_PC_LDI_VAL;
+    sel_PC_ADD_VAL_intern <= sel_PC_ADD_VAL;
 END Behavioral;
