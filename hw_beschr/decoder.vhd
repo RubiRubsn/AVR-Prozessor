@@ -21,6 +21,7 @@
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
 LIBRARY work;
 USE work.pkg_processor.ALL;
 
@@ -28,8 +29,11 @@ USE work.pkg_processor.ALL;
 
 ENTITY decoder IS
   PORT (
+    clk : IN STD_LOGIC;
     Instr : IN STD_LOGIC_VECTOR(15 DOWNTO 0); -- Eingang vom Programmspeicher
     STATE_IN : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+    WE_SREG_IN : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SREG_IN : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
     addr_opa : OUT STD_LOGIC_VECTOR(4 DOWNTO 0); -- Adresse von 1. Operand
     addr_opb : OUT STD_LOGIC_VECTOR(4 DOWNTO 0); -- Adresse von 2. Operand
     OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0); -- Opcode für ALU
@@ -45,20 +49,26 @@ ENTITY decoder IS
     WE_StateMachine : OUT STD_LOGIC;
     STATE_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
     Write_disable_PR1 : OUT STD_LOGIC;
-    ld_PC_val : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
+    add_PC_val : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
     sel_PC_LDI_VAL : OUT STD_LOGIC;
-    sel_PC_ADD_VAL : OUT STD_LOGIC
+    sel_PC_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+    PC_save_val : OUT STD_LOGIC;
+    PC_reverse_Add : OUT STD_LOGIC -- löschen
     -- hier kommen noch die ganzen Steuersignale der Multiplexer...
 
   );
 END decoder;
 
 ARCHITECTURE Behavioral OF decoder IS
-  SIGNAL SEL_SCR : STD_LOGIC_VECTOR(1 DOWNTO 0);
-BEGIN -- Behavioral
-  SEL_SCR <= Instr(11) & Instr(7);
+  SIGNAL saved_branche_flag : STD_LOGIC_VECTOR(2 DOWNTO 0);
+  SIGNAL saved_branche_flag_FF : STD_LOGIC_VECTOR(2 DOWNTO 0);
+  SIGNAL Branched : STD_LOGIC;
+  SIGNAL Branched_FF : STD_LOGIC;
+  SIGNAL Branch_set_or_cleard : STD_LOGIC;
+  SIGNAL Branch_set_or_cleard_FF : STD_LOGIC;
 
-  dec_mux : PROCESS (Instr, SEL_SCR, STATE_IN)
+BEGIN -- Behavioral
+  dec_mux : PROCESS (Instr, STATE_IN, Branched_FF, SREG_IN, saved_branche_flag_FF, Branch_set_or_cleard_FF)
   BEGIN
     K <= "00000000";
     addr_opa <= "00000";
@@ -75,10 +85,16 @@ BEGIN -- Behavioral
     WE_StateMachine <= '0';
     STATE_OUT <= "00";
     Write_disable_PR1 <= '0';
-    ld_PC_val <= "000000000";
+    add_PC_val <= "000000000";
     sel_PC_LDI_VAL <= '0';
-    sel_PC_ADD_VAL <= '0';
+    sel_PC_OUT <= "00";
+    PC_save_val <= '0';
+    -- PC_reverse_Add <= '0';
 
+    saved_branche_flag <= "000";
+    Branched <= '0';
+    Branch_set_or_cleard <= '0';
+    --IF Branched_FF = '1' AND SREG_IN(to_integer(unsigned(saved_branche_flag_FF))) = NOT Branch_set_or_cleard_FF THEN
     CASE Instr(15 DOWNTO 10) IS
       WHEN "000011" =>
         addr_opa <= Instr(8 DOWNTO 4);
@@ -197,7 +213,6 @@ BEGIN -- Behavioral
             WHEN OTHERS => NULL;
           END CASE;
         ELSE
-          SEL_SCR <= Instr(11) & Instr(7);
           IF instr(1) = '1' THEN
             --dec
             K <= "0000000" & '1';
@@ -221,6 +236,7 @@ BEGIN -- Behavioral
             END IF;
           END IF;
         END IF;
+
       WHEN OTHERS =>
         CASE Instr(15 DOWNTO 12) IS
           WHEN "0011" =>
@@ -252,17 +268,49 @@ BEGIN -- Behavioral
             WE_RegFile <= '1';
           WHEN "1100" =>
             --rjmp
-            ld_PC_val <= Instr (8 DOWNTO 0);
-            sel_PC_ADD_VAL <= '1';
+            add_PC_val <= Instr (8 DOWNTO 0);
+            sel_PC_OUT <= "01";
           WHEN "1110" =>
             --LDI  
             K <= Instr(11 DOWNTO 8) & Instr(3 DOWNTO 0);
             OPCODE <= op_LDI;
             addr_opa <= '1' & Instr(7 DOWNTO 4);
             WE_RegFile <= '1';
+          WHEN "1111" =>
+            --BRBS/BRBC
+
+            saved_branche_flag <= Instr(2 DOWNTO 0);
+            Branched <= '1';
+            Branch_set_or_cleard <= Instr(10);
+            PC_save_val <= '1';
+
+            add_PC_val <= Instr(9) & Instr(9) & Instr (9 DOWNTO 3);
+            sel_PC_OUT <= "01";
+            -- END IF;
           WHEN OTHERS => NULL;
         END CASE;
     END CASE;
+    IF Branched_FF = '1' AND SREG_IN(to_integer(unsigned(saved_branche_flag_FF))) = Branch_set_or_cleard_FF THEN
+      -- branch bedingung nicht eingetreten
+      sel_PC_OUT <= "10";
+      --alle we deaktivieren:
+      WE_SREG <= "00000000";
+      WE_RegFile <= '0';
+      WE_DataMemory <= '0';
+      WE_StateMachine <= '0';
+      PC_save_val <= '0';
+      WE_SP <= '0';
+    END IF;
   END PROCESS dec_mux;
 
+  FF_branch_data : PROCESS (clk, saved_branche_flag, Branched, Branch_set_or_cleard)
+  BEGIN
+    IF clk'event AND clk = '1' THEN -- rising clock edge
+
+      saved_branche_flag_FF <= saved_branche_flag;
+      Branched_FF <= Branched;
+      Branch_set_or_cleard_FF <= Branch_set_or_cleard;
+
+    END IF;
+  END PROCESS FF_branch_data;
 END Behavioral;

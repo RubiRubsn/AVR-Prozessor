@@ -31,9 +31,11 @@ ENTITY Program_Counter IS
     reset : IN STD_LOGIC;
     clk : IN STD_LOGIC;
     CLK_Disable_ProgCntr : IN STD_LOGIC;
-    ld_PC_val : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
-    sel_PC_LDI_VAL : IN STD_LOGIC;
-    sel_PC_ADD_VAL : IN STD_LOGIC;
+    add_PC_val : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
+    sel_PC_LDI_VAL : IN STD_LOGIC; -- entfernen
+    sel_PC_OUT : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+    PC_save_val : IN STD_LOGIC;
+    PC_reverse_Add : IN STD_LOGIC; -- entfernen
     Addr : OUT STD_LOGIC_VECTOR (8 DOWNTO 0));
 END Program_Counter;
 
@@ -41,54 +43,72 @@ END Program_Counter;
 
 ARCHITECTURE Behavioral OF Program_Counter IS
   SIGNAL PC_reg : STD_LOGIC_VECTOR(8 DOWNTO 0);
+  SIGNAL OUT_MUX : STD_LOGIC_VECTOR (8 DOWNTO 0);
+
   SIGNAL one : STD_LOGIC_VECTOR (8 DOWNTO 0);
   SIGNAL MUX_ADD_Addr_out : STD_LOGIC_VECTOR(8 DOWNTO 0);
   SIGNAL MUX_LDI_Addr_out : STD_LOGIC_VECTOR(8 DOWNTO 0);
   SIGNAL ADD_out : STD_LOGIC_VECTOR(8 DOWNTO 0);
-  SIGNAL ld_PC_val_inc : STD_LOGIC_VECTOR(8 DOWNTO 0);
+  SIGNAL add_PC_val_inc : STD_LOGIC_VECTOR(8 DOWNTO 0);
+  SIGNAL STR_cntr_val : STD_LOGIC_VECTOR(8 DOWNTO 0);
 
 BEGIN
   one <= "000000001";
-  count : PROCESS (clk)
+  count : PROCESS (clk, ADD_out, CLK_Disable_ProgCntr, reset)
   BEGIN -- process count
     IF clk'event AND clk = '1' THEN -- rising clock edge
       IF reset = '1' THEN -- synchronous reset (active high)
-        PC_reg <= "111111111"; -- schneller machen vielleicht
+        PC_reg <= "000000000"; -- schneller machen vielleicht
         ELSE
         IF CLK_Disable_ProgCntr = '0' THEN
-          PC_reg <= MUX_LDI_Addr_out;
+          PC_reg <= ADD_out;
         END IF;
       END IF;
     END IF;
   END PROCESS count;
 
-  MUX_ADD : PROCESS (clk, sel_PC_ADD_VAL, ld_PC_val_inc, one)
-  BEGIN
-    IF sel_PC_ADD_VAL = '0' THEN
-      MUX_ADD_Addr_out <= one;
-      ELSE
-      MUX_ADD_Addr_out <= ld_PC_val_inc;
-    END IF;
-  END PROCESS MUX_ADD;
+  -- MUX_ADD : PROCESS (clk, sel_PC_OUT, add_PC_val, one)
+  -- BEGIN
+  --   IF sel_PC_OUT = '0' THEN
+  --     MUX_ADD_Addr_out <= one;
+  --     ELSE
+  --     MUX_ADD_Addr_out <= add_PC_val;
+  --   END IF;
+  -- END PROCESS MUX_ADD;
 
-  ADDer : PROCESS (clk, PC_reg, MUX_ADD_Addr_out)
+  MUX_OUT : PROCESS (clk, PC_reg, add_PC_val, STR_cntr_val, sel_PC_OUT)
   BEGIN
-    ADD_out <= STD_LOGIC_VECTOR(unsigned(PC_reg) + unsigned(MUX_ADD_Addr_out));
+    OUT_MUX <= PC_reg;
+    CASE (sel_PC_OUT) IS
+      WHEN "00" =>
+        -- normal
+        OUT_MUX <= PC_reg;
+      WHEN "01" =>
+        -- add_addr
+        OUT_MUX <= STD_LOGIC_VECTOR(unsigned(PC_reg) + unsigned(add_PC_val));
+      WHEN "10" =>
+        -- load back branch
+        OUT_MUX <= STR_cntr_val;
+      WHEN "11" =>
+        --ret
+      WHEN OTHERS => NULL;
+    END CASE;
+  END PROCESS MUX_OUT;
+
+  ADDer : PROCESS (clk, OUT_MUX)
+  BEGIN
+    ADD_out <= STD_LOGIC_VECTOR(unsigned(OUT_MUX) + 1);
   END PROCESS ADDer;
-  ADD_Val : PROCESS (clk, PC_reg, ld_PC_val, one)
-  BEGIN
-    ld_PC_val_inc <= STD_LOGIC_VECTOR(unsigned(ld_PC_val) + unsigned(one));
-  END PROCESS ADD_Val;
 
-  MUX_LD : PROCESS (clk, sel_PC_LDI_VAL, ADD_out, ld_PC_val)
+  save_old_val : PROCESS (clk, PC_reg, PC_save_val)
   BEGIN
-    IF sel_PC_LDI_VAL = '0' THEN
-      MUX_LDI_Addr_out <= ADD_out;
-      ELSE
-      MUX_LDI_Addr_out <= ld_PC_val;
+    IF clk'event AND clk = '1' THEN
+      IF PC_save_val = '1' THEN
+        STR_cntr_val <= PC_reg;
+      END IF;
     END IF;
-  END PROCESS MUX_LD;
+  END PROCESS save_old_val;
 
-  Addr <= MUX_LDI_Addr_out;--PC_reg;
+  Addr <= OUT_MUX;-- MUX_LDI_Addr_out;--PC_reg;
 
 END Behavioral;

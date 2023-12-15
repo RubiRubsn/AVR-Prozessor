@@ -27,6 +27,7 @@ ENTITY DEC IS
         REG_DI : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
         Write_addr_in : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
         WE_Regfile_IN : IN STD_LOGIC;
+        WE_SREG_IN : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
         Write_disable_PR1 : OUT STD_LOGIC;
         WE_Regfile_OUT : OUT STD_LOGIC;
         Write_addr_out : OUT STD_LOGIC_VECTOR (4 DOWNTO 0);
@@ -42,9 +43,11 @@ ENTITY DEC IS
         Z : OUT STD_LOGIC_VECTOR (9 DOWNTO 0);
         K : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
         OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        ld_PC_val : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
+        add_PC_val : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
         sel_PC_LDI_VAL : OUT STD_LOGIC;
-        sel_PC_ADD_VAL : OUT STD_LOGIC);
+        sel_PC_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+        PC_save_val : OUT STD_LOGIC;
+        PC_reverse_Add : OUT STD_LOGIC);
 END DEC;
 
 ARCHITECTURE Behavioral OF DEC IS
@@ -76,14 +79,17 @@ ARCHITECTURE Behavioral OF DEC IS
 
     SIGNAL Write_disable_PR1_intern : STD_LOGIC;
 
-    SIGNAL ld_PC_val_intern : STD_LOGIC_VECTOR(8 DOWNTO 0);
+    SIGNAL add_PC_val_intern : STD_LOGIC_VECTOR(8 DOWNTO 0);
     SIGNAL sel_PC_LDI_VAL_intern : STD_LOGIC;
-    SIGNAL sel_PC_ADD_VAL_intern : STD_LOGIC;
+    SIGNAL sel_PC_OUT_intern : STD_LOGIC_VECTOR(1 DOWNTO 0);
 
     COMPONENT decoder
         PORT (
+            clk : IN STD_LOGIC;
             Instr : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
             STATE_IN : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+            WE_SREG_IN : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+            SREG_IN : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
             addr_opa : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
             addr_opb : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
             OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
@@ -99,9 +105,11 @@ ARCHITECTURE Behavioral OF DEC IS
             WE_StateMachine : OUT STD_LOGIC;
             STATE_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
             Write_disable_PR1 : OUT STD_LOGIC;
-            ld_PC_val : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
+            add_PC_val : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
             sel_PC_LDI_VAL : OUT STD_LOGIC;
-            sel_PC_ADD_VAL : OUT STD_LOGIC
+            sel_PC_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+            PC_save_val : OUT STD_LOGIC;
+            PC_reverse_Add : OUT STD_LOGIC
         );
     END COMPONENT;
 
@@ -131,8 +139,11 @@ BEGIN
     WE_Regfile_IN_intern <= WE_RegFile_IN;
     decoder_1 : decoder
     PORT MAP(
+        clk => clk,
         Instr => Instr_in,
         STATE_IN => STATE_SM_TO_DEC,
+        WE_SREG_IN => WE_SREG_IN,
+        SREG_IN => Status_IN,
         addr_opa => addr_opa,
         addr_opb => addr_opb,
         OPCODE => OPCODE_intern,
@@ -148,9 +159,11 @@ BEGIN
         WE_StateMachine => WE_StateMachine,
         STATE_OUT => STATE_DEC_TO_SM,
         Write_disable_PR1 => Write_disable_PR1_intern,
-        ld_PC_val => ld_PC_val_intern,
+        add_PC_val => add_PC_val_intern,
         sel_PC_LDI_VAL => sel_PC_LDI_VAL_intern,
-        sel_PC_ADD_VAL => sel_PC_ADD_VAL_intern
+        sel_PC_OUT => sel_PC_OUT_intern,
+        PC_save_val => PC_save_val,
+        PC_reverse_Add => PC_reverse_Add
     );
 
     STATE_MACHINE_1 : State_Machine
@@ -228,7 +241,7 @@ BEGIN
     Write_addr_out <= addr_opa;
     WE_Regfile_OUT <= WE_RegFile_intern;
     Write_disable_PR1 <= Write_disable_PR1_intern;
-    ld_PC_val <= ld_PC_val_intern;
+    add_PC_val <= add_PC_val_intern;
     sel_PC_LDI_VAL <= sel_PC_LDI_VAL_intern;
-    sel_PC_ADD_VAL <= sel_PC_ADD_VAL_intern;
+    sel_PC_OUT <= sel_PC_OUT_intern;
 END Behavioral;

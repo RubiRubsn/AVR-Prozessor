@@ -41,5 +41,4 @@ ARCHITECTURE Behavioral OF prog_mem IS
 
 BEGIN
   Instr <= PROGMEM(to_integer(unsigned(Addr)));
-
 END Behavioral;
