@@ -44,10 +44,8 @@ ENTITY DEC IS
         K : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
         OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
         add_PC_val : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
-        sel_PC_LDI_VAL : OUT STD_LOGIC;
         sel_PC_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-        PC_save_val : OUT STD_LOGIC;
-        PC_reverse_Add : OUT STD_LOGIC);
+        PC_save_val : OUT STD_LOGIC);
 END DEC;
 
 ARCHITECTURE Behavioral OF DEC IS
@@ -80,7 +78,6 @@ ARCHITECTURE Behavioral OF DEC IS
     SIGNAL Write_disable_PR1_intern : STD_LOGIC;
 
     SIGNAL add_PC_val_intern : STD_LOGIC_VECTOR(8 DOWNTO 0);
-    SIGNAL sel_PC_LDI_VAL_intern : STD_LOGIC;
     SIGNAL sel_PC_OUT_intern : STD_LOGIC_VECTOR(1 DOWNTO 0);
 
     COMPONENT decoder
@@ -106,10 +103,8 @@ ARCHITECTURE Behavioral OF DEC IS
             STATE_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
             Write_disable_PR1 : OUT STD_LOGIC;
             add_PC_val : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
-            sel_PC_LDI_VAL : OUT STD_LOGIC;
             sel_PC_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-            PC_save_val : OUT STD_LOGIC;
-            PC_reverse_Add : OUT STD_LOGIC
+            PC_save_val : OUT STD_LOGIC
         );
     END COMPONENT;
 
@@ -160,10 +155,8 @@ BEGIN
         STATE_OUT => STATE_DEC_TO_SM,
         Write_disable_PR1 => Write_disable_PR1_intern,
         add_PC_val => add_PC_val_intern,
-        sel_PC_LDI_VAL => sel_PC_LDI_VAL_intern,
         sel_PC_OUT => sel_PC_OUT_intern,
-        PC_save_val => PC_save_val,
-        PC_reverse_Add => PC_reverse_Add
+        PC_save_val => PC_save_val
     );
 
     STATE_MACHINE_1 : State_Machine
@@ -242,6 +235,5 @@ BEGIN
     WE_Regfile_OUT <= WE_RegFile_intern;
     Write_disable_PR1 <= Write_disable_PR1_intern;
     add_PC_val <= add_PC_val_intern;
-    sel_PC_LDI_VAL <= sel_PC_LDI_VAL_intern;
     sel_PC_OUT <= sel_PC_OUT_intern;
 END Behavioral;

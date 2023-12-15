@@ -59,8 +59,6 @@ ARCHITECTURE Behavioral OF toplevel IS
   SIGNAL K_PR2_IN : STD_LOGIC_VECTOR (7 DOWNTO 0);
   SIGNAL OPCODE_PR2_IN : STD_LOGIC_VECTOR(3 DOWNTO 0);
   SIGNAL PC_save_val_IF_IN : STD_LOGIC;
-  SIGNAL PC_reverse_Add_IF_IN : STD_LOGIC;
-
   --------------------------------------------------------------------------
   --              Pipeline Register OUTS
   --------------------------------------------------------------------------
@@ -95,7 +93,7 @@ ARCHITECTURE Behavioral OF toplevel IS
   SIGNAL Write_disable_PR1 : STD_LOGIC;
 
   SIGNAL add_PC_val_intern : STD_LOGIC_VECTOR(8 DOWNTO 0);
-  SIGNAL sel_PC_LDI_VAL_intern : STD_LOGIC;
+
   SIGNAL sel_PC_OUT_intern : STD_LOGIC_VECTOR(1 DOWNTO 0);
   -----------------------------------------------------------------------------
   -- Component declarations
@@ -106,10 +104,8 @@ ARCHITECTURE Behavioral OF toplevel IS
       clk : IN STD_LOGIC;
       CLK_Disable_ProgCntr : IN STD_LOGIC;
       add_PC_val : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
-      sel_PC_LDI_VAL : IN STD_LOGIC;
       sel_PC_OUT : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
       PC_save_val : IN STD_LOGIC;
-      PC_reverse_Add : IN STD_LOGIC;
       instr : OUT STD_LOGIC_VECTOR (15 DOWNTO 0));
   END COMPONENT;
 
@@ -146,10 +142,8 @@ ARCHITECTURE Behavioral OF toplevel IS
       K : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
       OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
       add_PC_val : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
-      sel_PC_LDI_VAL : OUT STD_LOGIC;
       sel_PC_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-      PC_save_val : OUT STD_LOGIC;
-      PC_reverse_Add : OUT STD_LOGIC);
+      PC_save_val : OUT STD_LOGIC);
   END COMPONENT;
 
   COMPONENT Pipeline_Register_two
@@ -220,10 +214,8 @@ BEGIN
     clk => clk,
     CLK_Disable_ProgCntr => CLK_Disable_ProgCntr,
     add_PC_val => add_PC_val_intern,
-    sel_PC_LDI_VAL => sel_PC_LDI_VAL_intern,
     sel_PC_OUT => sel_PC_OUT_intern,
     PC_save_val => PC_save_val_IF_IN,
-    PC_reverse_Add => PC_reverse_Add_IF_IN,
     Instr => Instr_PR1_IN);
 
   -- instance "Instruction_Fetch"
@@ -260,10 +252,8 @@ BEGIN
     K => K_PR2_IN,
     OPCODE => OPCODE_PR2_IN,
     add_PC_val => add_PC_val_intern,
-    sel_PC_LDI_VAL => sel_PC_LDI_VAL_intern,
     sel_PC_OUT => sel_PC_OUT_intern,
-    PC_save_val => PC_save_val_IF_IN,
-    PC_reverse_Add => PC_reverse_Add_IF_IN);
+    PC_save_val => PC_save_val_IF_IN);
 
   Pipeline_Register_two_1 : Pipeline_Register_two
   PORT MAP(

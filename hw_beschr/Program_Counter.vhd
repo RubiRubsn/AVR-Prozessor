@@ -32,10 +32,9 @@ ENTITY Program_Counter IS
     clk : IN STD_LOGIC;
     CLK_Disable_ProgCntr : IN STD_LOGIC;
     add_PC_val : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
-    sel_PC_LDI_VAL : IN STD_LOGIC; -- entfernen
     sel_PC_OUT : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
     PC_save_val : IN STD_LOGIC;
-    PC_reverse_Add : IN STD_LOGIC; -- entfernen
+
     Addr : OUT STD_LOGIC_VECTOR (8 DOWNTO 0));
 END Program_Counter;
 

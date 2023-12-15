@@ -50,10 +50,8 @@ ENTITY decoder IS
     STATE_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
     Write_disable_PR1 : OUT STD_LOGIC;
     add_PC_val : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
-    sel_PC_LDI_VAL : OUT STD_LOGIC;
     sel_PC_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-    PC_save_val : OUT STD_LOGIC;
-    PC_reverse_Add : OUT STD_LOGIC -- löschen
+    PC_save_val : OUT STD_LOGIC
     -- hier kommen noch die ganzen Steuersignale der Multiplexer...
 
   );
@@ -86,7 +84,6 @@ BEGIN -- Behavioral
     STATE_OUT <= "00";
     Write_disable_PR1 <= '0';
     add_PC_val <= "000000000";
-    sel_PC_LDI_VAL <= '0';
     sel_PC_OUT <= "00";
     PC_save_val <= '0';
     -- PC_reverse_Add <= '0';
