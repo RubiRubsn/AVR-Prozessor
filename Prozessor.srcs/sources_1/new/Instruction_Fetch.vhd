@@ -37,7 +37,9 @@ ENTITY Instruction_Fetch IS
         add_PC_val : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
         sel_PC_OUT : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
         PC_save_val : IN STD_LOGIC;
-
+        PC_DISABLE_SAVE_FOR_RCAL : IN STD_LOGIC;
+        PULL_ERG : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+        save_addr_rcal : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
         instr : OUT STD_LOGIC_VECTOR (15 DOWNTO 0));
 END Instruction_Fetch;
 
@@ -59,7 +61,9 @@ ARCHITECTURE Behavioral OF Instruction_Fetch IS
             add_PC_val : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
             sel_PC_OUT : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
             PC_save_val : IN STD_LOGIC;
-
+            PC_DISABLE_SAVE_FOR_RCAL : IN STD_LOGIC;
+            PULL_ERG : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+            save_addr_rcal : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
             Addr : OUT STD_LOGIC_VECTOR (8 DOWNTO 0));
     END COMPONENT;
     COMPONENT prog_mem
@@ -77,7 +81,9 @@ BEGIN
         add_PC_val => add_PC_val_intern,
         sel_PC_OUT => sel_PC_OUT_intern,
         PC_save_val => PC_save_val,
-
+        PC_DISABLE_SAVE_FOR_RCAL => PC_DISABLE_SAVE_FOR_RCAL,
+        PULL_ERG => PULL_ERG,
+        save_addr_rcal => save_addr_rcal,
         Addr => Addr);
 
     -- instance "prog_mem_1"

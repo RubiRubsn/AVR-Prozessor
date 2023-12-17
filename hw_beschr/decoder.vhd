@@ -34,6 +34,7 @@ ENTITY decoder IS
     STATE_IN : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
     WE_SREG_IN : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     SREG_IN : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+    PC_DISABLE_SAVE_FOR_RCAL : OUT STD_LOGIC;
     addr_opa : OUT STD_LOGIC_VECTOR(4 DOWNTO 0); -- Adresse von 1. Operand
     addr_opb : OUT STD_LOGIC_VECTOR(4 DOWNTO 0); -- Adresse von 2. Operand
     OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0); -- Opcode für ALU
@@ -51,7 +52,8 @@ ENTITY decoder IS
     Write_disable_PR1 : OUT STD_LOGIC;
     add_PC_val : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
     sel_PC_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-    PC_save_val : OUT STD_LOGIC
+    PC_save_val : OUT STD_LOGIC;
+    SEL_PUSH_PC_NORM : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
     -- hier kommen noch die ganzen Steuersignale der Multiplexer...
 
   );
@@ -86,11 +88,12 @@ BEGIN -- Behavioral
     add_PC_val <= "000000000";
     sel_PC_OUT <= "00";
     PC_save_val <= '0';
-    -- PC_reverse_Add <= '0';
+    PC_DISABLE_SAVE_FOR_RCAL <= '0';
 
     saved_branche_flag <= "000";
     Branched <= '0';
     Branch_set_or_cleard <= '0';
+    SEL_PUSH_PC_NORM <= "00";
     --IF Branched_FF = '1' AND SREG_IN(to_integer(unsigned(saved_branche_flag_FF))) = NOT Branch_set_or_cleard_FF THEN
     CASE Instr(15 DOWNTO 10) IS
       WHEN "000011" =>
@@ -220,6 +223,39 @@ BEGIN -- Behavioral
           ELSE
             IF instr(8) = '1' THEN
               --ret
+              CASE STATE_IN IS
+                WHEN "00" =>
+                  STATE_OUT <= "01";
+                  WE_StateMachine <= '1';
+                  CLK_Disable_ProgCntr <= '1';
+                  Write_disable_PR1 <= '1';
+                  SEL_ADD_SP <= '0'; --SP +
+                  WE_SP <= '1';
+                  --WE_RegFile <= '1';
+                  SEL_MUX_RES <= '1';
+                  SEL_DM_ADR <= '1';
+
+                WHEN "01" =>
+                  STATE_OUT <= "10";
+                  WE_StateMachine <= '1';
+                  CLK_Disable_ProgCntr <= '1';
+                  Write_disable_PR1 <= '1';
+                  SEL_ADD_SP <= '0'; --SP +
+                  WE_SP <= '1';
+                  --WE_RegFile <= '1';
+                  SEL_MUX_RES <= '1';
+                  SEL_DM_ADR <= '1';
+                WHEN "10" =>
+                  STATE_OUT <= "11";
+                  WE_StateMachine <= '1';
+                  CLK_Disable_ProgCntr <= '1';
+                  Write_disable_PR1 <= '1';
+                WHEN "11" =>
+                  STATE_OUT <= "00";
+                  WE_StateMachine <= '1';
+                  sel_PC_OUT <= "11";
+                WHEN OTHERS => NULL;
+              END CASE;
             ELSE
               IF instr(7) = '1' THEN
                 --clc
@@ -273,6 +309,33 @@ BEGIN -- Behavioral
             OPCODE <= op_LDI;
             addr_opa <= '1' & Instr(7 DOWNTO 4);
             WE_RegFile <= '1';
+          WHEN "1101" =>
+            --RCAL
+            CASE STATE_IN IS
+              WHEN "00" =>
+
+                STATE_OUT <= "01";
+                WE_StateMachine <= '1';
+                CLK_Disable_ProgCntr <= '1';
+                Write_disable_PR1 <= '1';
+                PC_DISABLE_SAVE_FOR_RCAL <= '1';
+                SEL_PUSH_PC_NORM <= "01";
+                WE_DataMemory <= '1';
+                SEL_ADD_SP <= '1';
+                WE_SP <= '1';
+                SEL_DM_ADR <= '1';
+              WHEN "01" =>
+                STATE_OUT <= "00";
+                WE_StateMachine <= '1';
+                SEL_PUSH_PC_NORM <= "10";
+                WE_DataMemory <= '1';
+                SEL_ADD_SP <= '1';
+                WE_SP <= '1';
+                SEL_DM_ADR <= '1';
+                add_PC_val <= Instr (8 DOWNTO 0);
+                sel_PC_OUT <= "01";
+              WHEN OTHERS => NULL;
+            END CASE;
           WHEN "1111" =>
             --BRBS/BRBC
 

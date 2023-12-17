@@ -38,6 +38,12 @@ END toplevel;
 
 ARCHITECTURE Behavioral OF toplevel IS
   -----------------------------------------------------------------------------
+  -- Instruction Fetch 
+  -----------------------------------------------------------------------------
+  SIGNAL PC_DISABLE_SAVE_FOR_RCAL_intern : STD_LOGIC;
+  SIGNAL save_addr_rcal_intern : STD_LOGIC_VECTOR(8 DOWNTO 0);
+
+  -----------------------------------------------------------------------------
   -- Internal signal declarations
   -----------------------------------------------------------------------------
   SIGNAL Instr_PR1_IN : STD_LOGIC_VECTOR (15 DOWNTO 0);
@@ -106,6 +112,9 @@ ARCHITECTURE Behavioral OF toplevel IS
       add_PC_val : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
       sel_PC_OUT : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
       PC_save_val : IN STD_LOGIC;
+      PC_DISABLE_SAVE_FOR_RCAL : IN STD_LOGIC;
+      PULL_ERG : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      save_addr_rcal : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
       instr : OUT STD_LOGIC_VECTOR (15 DOWNTO 0));
   END COMPONENT;
 
@@ -126,6 +135,8 @@ ARCHITECTURE Behavioral OF toplevel IS
       Write_addr_in : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
       WE_Regfile_IN : IN STD_LOGIC;
       WE_SREG_IN : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+      save_addr_rcal : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
+      PC_DISABLE_SAVE_FOR_RCAL : OUT STD_LOGIC;
       Write_disable_PR1 : OUT STD_LOGIC;
       WE_Regfile_out : OUT STD_LOGIC;
       Write_addr_out : OUT STD_LOGIC_VECTOR (4 DOWNTO 0);
@@ -216,6 +227,9 @@ BEGIN
     add_PC_val => add_PC_val_intern,
     sel_PC_OUT => sel_PC_OUT_intern,
     PC_save_val => PC_save_val_IF_IN,
+    PC_DISABLE_SAVE_FOR_RCAL => PC_DISABLE_SAVE_FOR_RCAL_intern,
+    PULL_ERG => REG_DI_intern,
+    save_addr_rcal => save_addr_rcal_intern,
     Instr => Instr_PR1_IN);
 
   -- instance "Instruction_Fetch"
@@ -236,6 +250,8 @@ BEGIN
     Write_addr_in => Write_addr_PR2_OUT,
     WE_Regfile_IN => WE_Regfile_PR2_OUT,
     WE_SREG_IN => WE_SREG_PR2_OUT,
+    save_addr_rcal => save_addr_rcal_intern,
+    PC_DISABLE_SAVE_FOR_RCAL => PC_DISABLE_SAVE_FOR_RCAL_intern,
     Write_disable_PR1 => Write_disable_PR1,
     WE_Regfile_OUT => WE_Regfile_PR2_IN,
     Write_addr_out => Write_addr_PR2_IN,

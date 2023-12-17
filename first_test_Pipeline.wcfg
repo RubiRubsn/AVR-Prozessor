@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
-      <ZoomEndTime time="3,000.001 ns"></ZoomEndTime>
-      <Cursor1Time time="4,000.000 ns"></Cursor1Time>
+      <ZoomStartTime time="345.640 ns"></ZoomStartTime>
+      <ZoomEndTime time="723.641 ns"></ZoomEndTime>
+      <Cursor1Time time="570.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="141"></NameColumnWidth>
-      <ValueColumnWidth column_width="138"></ValueColumnWidth>
+      <ValueColumnWidth column_width="134"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="5" />
+   <WVObjectSize size="11" />
    <wvobject fp_name="/toplevel_tb/reset" type="logic">
       <obj_property name="ElementShortName">reset</obj_property>
       <obj_property name="ObjectShortName">reset</obj_property>
@@ -40,6 +40,29 @@
    <wvobject fp_name="/toplevel_tb/DUT/DEC_1/Reg_File_1/register_speicher" type="array">
       <obj_property name="ElementShortName">register_speicher[31:0][7:0]</obj_property>
       <obj_property name="ObjectShortName">register_speicher[31:0][7:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject fp_name="/toplevel_tb/DUT/Instruction_Fetch_1/Program_Counter_1/Addr" type="array">
+      <obj_property name="ElementShortName">Addr[8:0]</obj_property>
+      <obj_property name="ObjectShortName">Addr[8:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/toplevel_tb/DUT/Execute_1/Data_Memory_1/RAM[1023]" type="array">
+      <obj_property name="ElementShortName">[1023][7:0]</obj_property>
+      <obj_property name="ObjectShortName">[1023][7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/toplevel_tb/DUT/Execute_1/Data_Memory_1/RAM[1022]" type="array">
+      <obj_property name="ElementShortName">[1022][7:0]</obj_property>
+      <obj_property name="ObjectShortName">[1022][7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/toplevel_tb/DUT/Execute_1/Data_Memory_1/DO" type="array">
+      <obj_property name="ElementShortName">DO[7:0]</obj_property>
+      <obj_property name="ObjectShortName">DO[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/toplevel_tb/DUT/Execute_1/REG_DI" type="array">
+      <obj_property name="ElementShortName">REG_DI[7:0]</obj_property>
+      <obj_property name="ObjectShortName">REG_DI[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/toplevel_tb/DUT/Instruction_Fetch_1/Program_Counter_1/save_addr_ret" type="array">
+      <obj_property name="ElementShortName">save_addr_ret[7:0]</obj_property>
+      <obj_property name="ObjectShortName">save_addr_ret[7:0]</obj_property>
    </wvobject>
 </wave_config>

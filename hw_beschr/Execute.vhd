@@ -196,10 +196,13 @@ BEGIN
         IF SEL_result = '0' THEN
             REG_DI <= data_res;
             ELSE
-            IF SW_IO_DM = '0' AND SEL_DM_ADR = '0' THEN
+            IF SEL_DM_ADR = '1' THEN
+                REG_DI <= RAM_DO;
+                ELSIF SW_IO_DM = '0' THEN
                 REG_DI <= RAM_DO;
                 ELSE
                 REG_DI <= DOUT_IO;
+
             END IF;
         END IF;
     END PROCESS; -- Din_Reg_file_MUX

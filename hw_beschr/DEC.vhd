@@ -28,6 +28,8 @@ ENTITY DEC IS
         Write_addr_in : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
         WE_Regfile_IN : IN STD_LOGIC;
         WE_SREG_IN : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+        save_addr_rcal : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
+        PC_DISABLE_SAVE_FOR_RCAL : OUT STD_LOGIC;
         Write_disable_PR1 : OUT STD_LOGIC;
         WE_Regfile_OUT : OUT STD_LOGIC;
         Write_addr_out : OUT STD_LOGIC_VECTOR (4 DOWNTO 0);
@@ -79,6 +81,8 @@ ARCHITECTURE Behavioral OF DEC IS
 
     SIGNAL add_PC_val_intern : STD_LOGIC_VECTOR(8 DOWNTO 0);
     SIGNAL sel_PC_OUT_intern : STD_LOGIC_VECTOR(1 DOWNTO 0);
+    SIGNAL SEL_PUSH_PC_NORM_intern : STD_LOGIC_VECTOR(1 DOWNTO 0);
+    SIGNAL PC_PUSH_NORM_MUX : STD_LOGIC_VECTOR (7 DOWNTO 0);
 
     COMPONENT decoder
         PORT (
@@ -87,6 +91,7 @@ ARCHITECTURE Behavioral OF DEC IS
             STATE_IN : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
             WE_SREG_IN : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
             SREG_IN : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+            PC_DISABLE_SAVE_FOR_RCAL : OUT STD_LOGIC;
             addr_opa : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
             addr_opb : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
             OPCODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
@@ -104,7 +109,8 @@ ARCHITECTURE Behavioral OF DEC IS
             Write_disable_PR1 : OUT STD_LOGIC;
             add_PC_val : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
             sel_PC_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-            PC_save_val : OUT STD_LOGIC
+            PC_save_val : OUT STD_LOGIC;
+            SEL_PUSH_PC_NORM : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
         );
     END COMPONENT;
 
@@ -139,6 +145,7 @@ BEGIN
         STATE_IN => STATE_SM_TO_DEC,
         WE_SREG_IN => WE_SREG_IN,
         SREG_IN => Status_IN,
+        PC_DISABLE_SAVE_FOR_RCAL => PC_DISABLE_SAVE_FOR_RCAL,
         addr_opa => addr_opa,
         addr_opb => addr_opb,
         OPCODE => OPCODE_intern,
@@ -156,7 +163,8 @@ BEGIN
         Write_disable_PR1 => Write_disable_PR1_intern,
         add_PC_val => add_PC_val_intern,
         sel_PC_OUT => sel_PC_OUT_intern,
-        PC_save_val => PC_save_val
+        PC_save_val => PC_save_val,
+        SEL_PUSH_PC_NORM => SEL_PUSH_PC_NORM_intern
     );
 
     STATE_MACHINE_1 : State_Machine
@@ -219,7 +227,22 @@ BEGIN
         END IF;
     END PROCESS Forwarding_mux_addr_Z_Unten;
 
-    data_opa <= Forwarding_mux_addr_a_out;
+    PC_PUSH_NORM_MUX_pro : PROCESS (clk, Forwarding_mux_addr_a_out, save_addr_rcal, SEL_PUSH_PC_NORM_intern)
+    BEGIN
+        PC_PUSH_NORM_MUX <= Forwarding_mux_addr_a_out;
+        CASE SEL_PUSH_PC_NORM_intern IS
+            WHEN "00" =>
+                PC_PUSH_NORM_MUX <= Forwarding_mux_addr_a_out;
+            WHEN "01" =>
+                PC_PUSH_NORM_MUX <= save_addr_rcal(7 DOWNTO 0);
+            WHEN "10" =>
+                PC_PUSH_NORM_MUX <= "0000000" & save_addr_rcal(8);
+
+            WHEN OTHERS => NULL;
+        END CASE;
+    END PROCESS PC_PUSH_NORM_MUX_pro;
+
+    data_opa <= PC_PUSH_NORM_MUX;
     data_opb <= Forwarding_mux_addr_b_out;
     WE_SREG <= WE_SREG_intern;
     K <= K_intern;
