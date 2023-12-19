@@ -34,7 +34,7 @@ ARCHITECTURE behaviour OF toplevel_tb IS
 
   COMPONENT toplevel
     PORT (
-      reset : IN STD_LOGIC;
+      -- reset : IN STD_LOGIC;
       clk : IN STD_LOGIC;
       PIN : IN STD_LOGIC_VECTOR (20 DOWNTO 0);
       PORT_SEG : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
@@ -44,7 +44,7 @@ ARCHITECTURE behaviour OF toplevel_tb IS
   END COMPONENT;
 
   -- component ports
-  SIGNAL reset : STD_LOGIC;
+  -- SIGNAL reset : STD_LOGIC;
   SIGNAL clk : STD_LOGIC := '0';
   SIGNAL PIN : STD_LOGIC_VECTOR(20 DOWNTO 0);
   --  signal WE_SREG : std_logic_vector(7 downto 0);
@@ -54,7 +54,7 @@ BEGIN -- behaviour
   -- component instantiation
   DUT : toplevel
   PORT MAP(
-    reset => reset,
+    -- reset => reset,
     clk => clk,
     PIN => PIN--,
     --WE_SREG => WE_SREG,
@@ -66,16 +66,16 @@ BEGIN -- behaviour
   clk <= NOT clk AFTER 10 ns;
 
   -- waveform generation
-  WaveGen_Proc : PROCESS
-  BEGIN
-    -- insert signal assignments here
-    WAIT FOR 20ns;
-    reset <= '1';
-    WAIT FOR 101ns;
-    reset <= '0';
-    WAIT;
+  -- WaveGen_Proc : PROCESS
+  -- BEGIN
+  --   -- insert signal assignments here
+  --   WAIT FOR 20ns;
+  --   reset <= '1';
+  --   WAIT FOR 101ns;
+  --   reset <= '0';
+  --   WAIT;
 
-  END PROCESS WaveGen_Proc;
+  -- END PROCESS WaveGen_Proc;
 
 END behaviour;
 

@@ -27,7 +27,6 @@ ENTITY DEC IS
         REG_DI : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
         Write_addr_in : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
         WE_Regfile_IN : IN STD_LOGIC;
-        WE_SREG_IN : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
         save_addr_rcal : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
         PC_DISABLE_SAVE_FOR_RCAL : OUT STD_LOGIC;
         Write_disable_PR1 : OUT STD_LOGIC;
@@ -89,7 +88,6 @@ ARCHITECTURE Behavioral OF DEC IS
             clk : IN STD_LOGIC;
             Instr : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
             STATE_IN : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
-            WE_SREG_IN : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
             SREG_IN : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
             PC_DISABLE_SAVE_FOR_RCAL : OUT STD_LOGIC;
             addr_opa : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
@@ -143,7 +141,6 @@ BEGIN
         clk => clk,
         Instr => Instr_in,
         STATE_IN => STATE_SM_TO_DEC,
-        WE_SREG_IN => WE_SREG_IN,
         SREG_IN => Status_IN,
         PC_DISABLE_SAVE_FOR_RCAL => PC_DISABLE_SAVE_FOR_RCAL,
         addr_opa => addr_opa,
@@ -210,7 +207,7 @@ BEGIN
         -- Forwarding_mux_addr_b_out <= data_opb_intern;
         IF Write_addr_in = "11111" AND WE_Regfile_IN_intern = '1'THEN
             Z_addr_out(9 DOWNTO 8) <= REG_DI(1 DOWNTO 0);
-            ELSE
+        ELSE
             Z_addr_out(9 DOWNTO 8) <= Z_addr(9 DOWNTO 8);
             --     Forwarding_mux_addr_b_out <= REG_DI;
         END IF;
@@ -221,7 +218,7 @@ BEGIN
         -- Forwarding_mux_addr_b_out <= data_opb_intern;
         IF Write_addr_in = "11110" AND WE_Regfile_IN_intern = '1'THEN
             Z_addr_out(7 DOWNTO 0) <= REG_DI;
-            ELSE
+        ELSE
             Z_addr_out(7 DOWNTO 0) <= Z_addr(7 DOWNTO 0);
             --     Forwarding_mux_addr_b_out <= REG_DI;
         END IF;

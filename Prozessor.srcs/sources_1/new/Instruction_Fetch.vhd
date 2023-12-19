@@ -31,7 +31,7 @@ USE IEEE.STD_LOGIC_1164.ALL;
 
 ENTITY Instruction_Fetch IS
     PORT (
-        reset : IN STD_LOGIC;
+        -- reset : IN STD_LOGIC;
         clk : IN STD_LOGIC;
         CLK_Disable_ProgCntr : IN STD_LOGIC;
         add_PC_val : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
@@ -55,7 +55,7 @@ ARCHITECTURE Behavioral OF Instruction_Fetch IS
 
     COMPONENT Program_Counter
         PORT (
-            reset : IN STD_LOGIC;
+            -- reset : IN STD_LOGIC;
             clk : IN STD_LOGIC;
             CLK_Disable_ProgCntr : IN STD_LOGIC;
             add_PC_val : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
@@ -75,7 +75,7 @@ BEGIN
     -- instance "Program_Counter_1"
     Program_Counter_1 : Program_Counter
     PORT MAP(
-        reset => reset,
+        -- reset => reset,
         clk => clk,
         CLK_Disable_ProgCntr => CLK_Disable_ProgCntr,
         add_PC_val => add_PC_val_intern,

@@ -42,6 +42,7 @@ ARCHITECTURE Behavioral OF Stack_Pointer IS
     SIGNAL Summand : STD_LOGIC_VECTOR(9 DOWNTO 0);
     SIGNAL RES : STD_LOGIC_VECTOR(9 DOWNTO 0);
     SIGNAL FF_O : STD_LOGIC_VECTOR (9 DOWNTO 0) := "1111111111";
+    SIGNAL FF_DEC_O : STD_LOGIC_VECTOR(9 DOWNTO 0) := "0000000000";
 
 BEGIN
     Summand <= "0000000001" WHEN SEL_ADD_SP = '0' ELSE
@@ -56,6 +57,14 @@ BEGIN
             END IF;
         END IF;
     END PROCESS; -- FF
+    FF_dec : PROCESS (clk, RES, WE_SP)
+    BEGIN
+        IF clk'event AND clk = '1' THEN
+            IF WE_SP = '1' THEN
+                FF_DEC_O <= STD_LOGIC_VECTOR(unsigned(RES) + 1);
+            END IF;
+        END IF;
+    END PROCESS; -- FFdec
     Addr <= FF_O WHEN SEL_ADD_SP = '1' ELSE
-        RES;
+        FF_DEC_O;
 END Behavioral;

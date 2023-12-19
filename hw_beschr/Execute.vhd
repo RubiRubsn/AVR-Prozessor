@@ -105,7 +105,7 @@ ARCHITECTURE Behavioral OF Execute IS
             OPA : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
             OPB : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
             K : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-            SREG_IN : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
+            C_IN : IN STD_LOGIC;
             RES : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
             Status : OUT STD_LOGIC_VECTOR (7 DOWNTO 0));
     END COMPONENT;
@@ -172,7 +172,7 @@ BEGIN
         RES => data_res,
         Status => Status,
         K => K,
-        SREG_IN => SREG_OUT);
+        C_IN => SREG_OUT(0));
 
     SREG_1 : SREG
     PORT MAP(
@@ -195,12 +195,12 @@ BEGIN
 
         IF SEL_result = '0' THEN
             REG_DI <= data_res;
-            ELSE
+        ELSE
             IF SEL_DM_ADR = '1' THEN
                 REG_DI <= RAM_DO;
-                ELSIF SW_IO_DM = '0' THEN
+            ELSIF SW_IO_DM = '0' THEN
                 REG_DI <= RAM_DO;
-                ELSE
+            ELSE
                 REG_DI <= DOUT_IO;
 
             END IF;
@@ -208,7 +208,7 @@ BEGIN
     END PROCESS; -- Din_Reg_file_MUX
 
     Z_SP_Addr <= Z WHEN SEL_DM_ADR = '0' ELSE
-    SP_Addr;
+        SP_Addr;
 
     PIN_intern <= PIN;
 

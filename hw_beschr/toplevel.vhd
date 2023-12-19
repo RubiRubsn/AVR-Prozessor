@@ -25,7 +25,7 @@ USE work.pkg_instrmem.ALL;
 
 ENTITY toplevel IS
   PORT (
-    reset : IN STD_LOGIC;
+    -- reset : IN STD_LOGIC;
     clk : IN STD_LOGIC;
     PIN : IN STD_LOGIC_VECTOR (20 DOWNTO 0);
     PORT_SEG : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
@@ -106,7 +106,7 @@ ARCHITECTURE Behavioral OF toplevel IS
   -----------------------------------------------------------------------------
   COMPONENT Instruction_Fetch
     PORT (
-      reset : IN STD_LOGIC;
+      -- reset : IN STD_LOGIC;
       clk : IN STD_LOGIC;
       CLK_Disable_ProgCntr : IN STD_LOGIC;
       add_PC_val : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
@@ -134,7 +134,6 @@ ARCHITECTURE Behavioral OF toplevel IS
       REG_DI : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
       Write_addr_in : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
       WE_Regfile_IN : IN STD_LOGIC;
-      WE_SREG_IN : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
       save_addr_rcal : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
       PC_DISABLE_SAVE_FOR_RCAL : OUT STD_LOGIC;
       Write_disable_PR1 : OUT STD_LOGIC;
@@ -221,7 +220,7 @@ BEGIN
   -- instance "prog_mem_1"
   Instruction_Fetch_1 : Instruction_Fetch
   PORT MAP(
-    reset => reset,
+    -- reset => reset,
     clk => clk,
     CLK_Disable_ProgCntr => CLK_Disable_ProgCntr,
     add_PC_val => add_PC_val_intern,
@@ -249,7 +248,6 @@ BEGIN
     REG_DI => REG_DI_intern,
     Write_addr_in => Write_addr_PR2_OUT,
     WE_Regfile_IN => WE_Regfile_PR2_OUT,
-    WE_SREG_IN => WE_SREG_PR2_OUT,
     save_addr_rcal => save_addr_rcal_intern,
     PC_DISABLE_SAVE_FOR_RCAL => PC_DISABLE_SAVE_FOR_RCAL_intern,
     Write_disable_PR1 => Write_disable_PR1,
@@ -322,7 +320,6 @@ BEGIN
     REG_DI => REG_DI_intern,
     Status_out => Status
   );
-
   PIN_intern <= PIN;
 
   PORT_SEG <= PORT_SEG_intern;

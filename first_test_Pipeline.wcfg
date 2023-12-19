@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="345.640 ns"></ZoomStartTime>
-      <ZoomEndTime time="723.641 ns"></ZoomEndTime>
-      <Cursor1Time time="570.000 ns"></Cursor1Time>
+      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
+      <ZoomEndTime time="4.000001 us"></ZoomEndTime>
+      <Cursor1Time time="0.121053 us"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="141"></NameColumnWidth>
-      <ValueColumnWidth column_width="134"></ValueColumnWidth>
+      <ValueColumnWidth column_width="130"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="11" />
+   <WVObjectSize size="16" />
    <wvobject fp_name="/toplevel_tb/reset" type="logic">
       <obj_property name="ElementShortName">reset</obj_property>
       <obj_property name="ObjectShortName">reset</obj_property>
@@ -64,5 +64,25 @@
    <wvobject fp_name="/toplevel_tb/DUT/Instruction_Fetch_1/Program_Counter_1/save_addr_ret" type="array">
       <obj_property name="ElementShortName">save_addr_ret[7:0]</obj_property>
       <obj_property name="ObjectShortName">save_addr_ret[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/toplevel_tb/DUT/Execute_1/Data_Memory_1/RAM[511]" type="array">
+      <obj_property name="ElementShortName">[511][7:0]</obj_property>
+      <obj_property name="ObjectShortName">[511][7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/toplevel_tb/DUT/Execute_1/Data_Memory_1/RAM[1]" type="array">
+      <obj_property name="ElementShortName">[1][7:0]</obj_property>
+      <obj_property name="ObjectShortName">[1][7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/toplevel_tb/DUT/Execute_1/Data_Memory_1/RAM[0]" type="array">
+      <obj_property name="ElementShortName">[0][7:0]</obj_property>
+      <obj_property name="ObjectShortName">[0][7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/toplevel_tb/DUT/Execute_1/Data_Memory_1/RAM[1023]" type="array">
+      <obj_property name="ElementShortName">[1023][7:0]</obj_property>
+      <obj_property name="ObjectShortName">[1023][7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/toplevel_tb/DUT/Execute_1/Data_Memory_1/RAM[1022]" type="array">
+      <obj_property name="ElementShortName">[1022][7:0]</obj_property>
+      <obj_property name="ObjectShortName">[1022][7:0]</obj_property>
    </wvobject>
 </wave_config>

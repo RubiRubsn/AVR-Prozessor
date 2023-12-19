@@ -38,3 +38,83 @@
     <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="14584" HostCore="8" HostMemory="016802533376">
     </Process>
 </ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="15724" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="4116" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="21020" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="13284" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="13468" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="9652" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="20408" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="1760" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="8084" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="11720" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="1176" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="8672" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="23156" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="22508" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="21212" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Rubsen" Host="LAPTOP-KAHI4GGT" Pid="9916" HostCore="8" HostMemory="016802533376">
+    </Process>
+</ProcessHandle>

@@ -32,7 +32,7 @@ ENTITY decoder IS
     clk : IN STD_LOGIC;
     Instr : IN STD_LOGIC_VECTOR(15 DOWNTO 0); -- Eingang vom Programmspeicher
     STATE_IN : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
-    WE_SREG_IN : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    -- WE_SREG_IN : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
     SREG_IN : IN STD_LOGIC_VECTOR (7 DOWNTO 0);
     PC_DISABLE_SAVE_FOR_RCAL : OUT STD_LOGIC;
     addr_opa : OUT STD_LOGIC_VECTOR(4 DOWNTO 0); -- Adresse von 1. Operand
@@ -360,6 +360,11 @@ BEGIN -- Behavioral
       WE_StateMachine <= '0';
       PC_save_val <= '0';
       WE_SP <= '0';
+      --added features
+      CLK_Disable_ProgCntr <= '0';
+      PC_DISABLE_SAVE_FOR_RCAL <= '0';
+      Write_disable_PR1 <= '0';
+
     END IF;
   END PROCESS dec_mux;
 

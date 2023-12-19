@@ -28,7 +28,7 @@ USE IEEE.NUMERIC_STD.ALL;
 
 ENTITY Program_Counter IS
   PORT (
-    reset : IN STD_LOGIC;
+    -- reset : IN STD_LOGIC;
     clk : IN STD_LOGIC;
     CLK_Disable_ProgCntr : IN STD_LOGIC;
     add_PC_val : IN STD_LOGIC_VECTOR(8 DOWNTO 0);
@@ -57,16 +57,16 @@ ARCHITECTURE Behavioral OF Program_Counter IS
 
 BEGIN
   one <= "000000001";
-  count : PROCESS (clk, ADD_out, CLK_Disable_ProgCntr, reset)
+  count : PROCESS (clk, ADD_out, CLK_Disable_ProgCntr) --reset)
   BEGIN -- process count
     IF clk'event AND clk = '1' THEN -- rising clock edge
-      IF reset = '1' THEN -- synchronous reset (active high)
-        PC_reg <= "000000000"; -- schneller machen vielleicht
-        ELSE
-        IF CLK_Disable_ProgCntr = '0' THEN
-          PC_reg <= ADD_out;
-        END IF;
+      -- IF reset = '1' THEN -- synchronous reset (active high)
+      --   PC_reg <= "000000000"; -- schneller machen vielleicht
+      -- ELSE
+      IF CLK_Disable_ProgCntr = '0' THEN
+        PC_reg <= ADD_out;
       END IF;
+      -- END IF;
     END IF;
   END PROCESS count;
 
