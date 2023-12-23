@@ -1,21 +1,10 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Engineer: Ruben Saitz
 -- 
 -- Create Date: 01.12.2023 12:32:28
--- Design Name: 
 -- Module Name: DEC - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
+-- Project Name: Processor
+-- Description: combination of all parts of the Decode section of the Processor
 ----------------------------------------------------------------------------------
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;

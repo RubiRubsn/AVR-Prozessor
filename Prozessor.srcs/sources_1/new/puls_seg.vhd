@@ -70,13 +70,14 @@ BEGIN
             SEG_MUXED_int_FF <= SEG_MUXED_int;
             CASE (cntr_disp) IS
                 WHEN "00" =>
-                    en_seg_out_ff <= "0001";
+
+                    en_seg_out_ff <= "111" & en_seg_in_intern(0);
                 WHEN "01" =>
-                    en_seg_out_ff <= "0010";
+                    en_seg_out_ff <= "11" & en_seg_in_intern(1) & '1';
                 WHEN "10" =>
-                    en_seg_out_ff <= "0100";
+                    en_seg_out_ff <= '1' & en_seg_in_intern(2) & "11";
                 WHEN "11" =>
-                    en_seg_out_ff <= "1000";
+                    en_seg_out_ff <= en_seg_in_intern(3) & "111";
                 WHEN OTHERS => NULL;
             END CASE;
         END IF;
@@ -107,11 +108,20 @@ BEGIN
 
     seg_mux : PROCESS (cntr_disp, SEG_N, en_seg_in_intern)
     BEGIN
-        IF en_seg_in_intern(to_integer(unsigned(cntr_disp))) = '1' THEN
-            SEG_MUXED_int <= SEG_N(to_integer(unsigned(cntr_disp)));
-        ELSE
-            SEG_MUXED_int <= "00000000";
-        END IF;
+        SEG_MUXED_int <= "11111111";
+        CASE cntr_disp IS
+            WHEN "00" =>
+                SEG_MUXED_int <= SEG_N(0);
+            WHEN "01" =>
+                SEG_MUXED_int <= SEG_N(1);
+            WHEN "10" =>
+                SEG_MUXED_int <= SEG_N(2);
+            WHEN "11" =>
+                SEG_MUXED_int <= SEG_N(3);
+            WHEN OTHERS => NULL;
+        END CASE;
+        -- SEG_MUXED_int <= SEG_N(to_integer(unsigned(cntr_disp)));
+        -- END IF;
 
     END PROCESS seg_mux;
 
