@@ -4,7 +4,7 @@
 -- Create Date: 01.12.2023 12:32:28
 -- Module Name: DEC - Behavioral
 -- Project Name: Processor
--- Description: combination of all parts of the Decode section of the Processor
+-- Description: combination of all parts of the Decode section of the Processor    
 ----------------------------------------------------------------------------------
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
