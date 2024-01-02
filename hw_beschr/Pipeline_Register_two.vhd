@@ -1,20 +1,10 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Engineer: B. Eng. Saitz, Ruben Herman Felix
 -- 
 -- Create Date: 01.12.2023 12:34:25
--- Design Name: 
 -- Module Name: Pipeline_Register_two - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
+-- Project Name: RISC CPU
+-- Target Devices: ARTIX 7
 -- 
 ----------------------------------------------------------------------------------
 LIBRARY IEEE;
@@ -36,7 +26,6 @@ ENTITY Pipeline_Register_two IS
         OPCODE_PR2_IN : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
         Write_addr_PR2_IN : IN STD_LOGIC_VECTOR(4 DOWNTO 0);
         WE_Regfile_PR2_IN : IN STD_LOGIC;
-
         WE_Regfile_PR2_OUT : OUT STD_LOGIC;
         Data_opa_PR2_OUT : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
         Data_opb_PR2_OUT : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);

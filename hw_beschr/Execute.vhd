@@ -1,20 +1,10 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Engineer: B. Eng. Saitz, Ruben Herman Felix
 -- 
--- Create Date: 01.12.2023 12:33:21
--- Design Name: 
+-- Create Date: 01.12.2023
 -- Module Name: Execute - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
+-- Project Name: RISC CPU
+-- Target Devices: ARTIX 7
 -- 
 ----------------------------------------------------------------------------------
 LIBRARY IEEE;
@@ -163,7 +153,6 @@ BEGIN
         SEG_EN => SEG_EN
     );
 
-    -- instance "ALU_1"
     ALU_1 : ALU
     PORT MAP(
         OPCODE => OPCODE,
@@ -192,7 +181,6 @@ BEGIN
     Din_Reg_file_MUX : PROCESS (SW_IO_DM, SEL_result, data_res, RAM_DO, DOUT_IO, SEL_DM_ADR)
     BEGIN
         REG_DI <= "00000000";
-
         IF SEL_result = '0' THEN
             REG_DI <= data_res;
         ELSE
@@ -202,16 +190,14 @@ BEGIN
                 REG_DI <= RAM_DO;
             ELSE
                 REG_DI <= DOUT_IO;
-
             END IF;
         END IF;
-    END PROCESS; -- Din_Reg_file_MUX
+    END PROCESS;
 
     Z_SP_Addr <= Z WHEN SEL_DM_ADR = '0' ELSE
         SP_Addr;
 
     PIN_intern <= PIN;
-
     PORT_SEG <= PORT_SEG_intern;
     SEG_out <= SEG_out_intern;
     SEG_AN <= SEG_AN_intern;

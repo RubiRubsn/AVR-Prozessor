@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------
--- Engineer: Ruben Saitz
+-- Engineer: B. Eng. Saitz, Ruben Herman Felix
 -- 
 -- Create Date: 01.12.2023 12:32:28
 -- Module Name: DEC - Behavioral
@@ -160,9 +160,6 @@ BEGIN
         W_E => WE_StateMachine,
         State_Out => STATE_SM_TO_DEC
     );
-
-    -- instance "Reg_File_1"
-
     Reg_File_1 : Reg_File
     PORT MAP(
         clk => clk,
@@ -193,23 +190,19 @@ BEGIN
 
     Forwarding_mux_addr_Z_Oben : PROCESS (clk, Write_addr_in, WE_Regfile_IN_intern, REG_DI, Z_addr)
     BEGIN
-        -- Forwarding_mux_addr_b_out <= data_opb_intern;
         IF Write_addr_in = "11111" AND WE_Regfile_IN_intern = '1'THEN
             Z_addr_out(9 DOWNTO 8) <= REG_DI(1 DOWNTO 0);
         ELSE
             Z_addr_out(9 DOWNTO 8) <= Z_addr(9 DOWNTO 8);
-            --     Forwarding_mux_addr_b_out <= REG_DI;
         END IF;
     END PROCESS Forwarding_mux_addr_Z_Oben;
 
     Forwarding_mux_addr_Z_Unten : PROCESS (clk, Write_addr_in, WE_Regfile_IN_intern, REG_DI, Z_addr)
     BEGIN
-        -- Forwarding_mux_addr_b_out <= data_opb_intern;
         IF Write_addr_in = "11110" AND WE_Regfile_IN_intern = '1'THEN
             Z_addr_out(7 DOWNTO 0) <= REG_DI;
         ELSE
             Z_addr_out(7 DOWNTO 0) <= Z_addr(7 DOWNTO 0);
-            --     Forwarding_mux_addr_b_out <= REG_DI;
         END IF;
     END PROCESS Forwarding_mux_addr_Z_Unten;
 

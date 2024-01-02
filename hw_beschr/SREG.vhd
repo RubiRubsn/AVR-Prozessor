@@ -1,20 +1,10 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Engineer: B. Eng. Saitz, Ruben Herman Felix
 -- 
 -- Create Date: 13.11.2023 13:58:15
--- Design Name: 
 -- Module Name: SREG - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
+-- Project Name: RISC CPU
+-- Target Devices: ARTIX 7
 -- 
 ----------------------------------------------------------------------------------
 LIBRARY IEEE;

@@ -1,23 +1,12 @@
--------------------------------------------------------------------------------
--- Title      : decoder
--- Project    : 
--------------------------------------------------------------------------------
--- File       : decoder.vhd
--- Author     : Burkart Voss  <bvoss@Troubadix>
--- Company    : 
--- Created    : 2015-06-23
--- Last update: 2015-06-25
--- Platform   : 
--- Standard   : VHDL'87
--------------------------------------------------------------------------------
--- Description: 
--------------------------------------------------------------------------------
--- Copyright (c) 2015 
--------------------------------------------------------------------------------
--- Revisions  :
--- Date        Version  Author  Description
--- 2015-06-23  1.0      bvoss	Created
--------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
+-- Engineer: B. Eng. Saitz, Ruben Herman Felix
+-- 
+-- Create Date: 01.12.2023 12:44:38
+-- Module Name: decoder - Behavioral
+-- Project Name: RISC CPU
+-- Target Devices: ARTIX 7
+-- 
+----------------------------------------------------------------------------------
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
@@ -54,8 +43,6 @@ ENTITY decoder IS
     sel_PC_OUT : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
     PC_save_val : OUT STD_LOGIC;
     SEL_PUSH_PC_NORM : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
-    -- hier kommen noch die ganzen Steuersignale der Multiplexer...
-
   );
 END decoder;
 
@@ -89,12 +76,11 @@ BEGIN -- Behavioral
     sel_PC_OUT <= "00";
     PC_save_val <= '0';
     PC_DISABLE_SAVE_FOR_RCAL <= '0';
-
     saved_branche_flag <= "000";
     Branched <= '0';
     Branch_set_or_cleard <= '0';
     SEL_PUSH_PC_NORM <= "00";
-    --IF Branched_FF = '1' AND SREG_IN(to_integer(unsigned(saved_branche_flag_FF))) = NOT Branch_set_or_cleard_FF THEN
+
     CASE Instr(15 DOWNTO 10) IS
       WHEN "000011" =>
         addr_opa <= Instr(8 DOWNTO 4);
@@ -121,7 +107,6 @@ BEGIN -- Behavioral
         addr_opa <= Instr(8 DOWNTO 4);
         addr_opb <= Instr(9) & Instr (3 DOWNTO 0);
         OPCODE <= op_ADC;
-
         WE_SREG <= "00111111";
         WE_RegFile <= '1';
       WHEN "001000" =>
@@ -158,6 +143,7 @@ BEGIN -- Behavioral
           addr_opa <= Instr(8 DOWNTO 4);
           WE_DataMemory <= '1';
         ELSE
+          --LD
           addr_opa <= Instr(8 DOWNTO 4);
           SEL_MUX_RES <= '1';
           WE_RegFile <= '1';
@@ -165,7 +151,6 @@ BEGIN -- Behavioral
       WHEN "100100" =>
         --PUSH,POP
         IF Instr(9) = '0' THEN
-
           SEL_ADD_SP <= '0'; --SP +
           WE_SP <= '1';
           WE_RegFile <= '1';
@@ -179,7 +164,6 @@ BEGIN -- Behavioral
           SEL_ADD_SP <= '1';
           WE_SP <= '1';
           SEL_DM_ADR <= '1';
-
         END IF;
       WHEN "100101" =>
         IF Instr(3) = '0' THEN
@@ -231,10 +215,8 @@ BEGIN -- Behavioral
                   Write_disable_PR1 <= '1';
                   SEL_ADD_SP <= '0'; --SP +
                   WE_SP <= '1';
-                  --WE_RegFile <= '1';
                   SEL_MUX_RES <= '1';
                   SEL_DM_ADR <= '1';
-
                 WHEN "01" =>
                   STATE_OUT <= "10";
                   WE_StateMachine <= '1';
@@ -242,7 +224,6 @@ BEGIN -- Behavioral
                   Write_disable_PR1 <= '1';
                   SEL_ADD_SP <= '0'; --SP +
                   WE_SP <= '1';
-                  --WE_RegFile <= '1';
                   SEL_MUX_RES <= '1';
                   SEL_DM_ADR <= '1';
                 WHEN "10" =>
@@ -313,7 +294,6 @@ BEGIN -- Behavioral
             --RCAL
             CASE STATE_IN IS
               WHEN "00" =>
-
                 STATE_OUT <= "01";
                 WE_StateMachine <= '1';
                 CLK_Disable_ProgCntr <= '1';
@@ -338,15 +318,12 @@ BEGIN -- Behavioral
             END CASE;
           WHEN "1111" =>
             --BRBS/BRBC
-
             saved_branche_flag <= Instr(2 DOWNTO 0);
             Branched <= '1';
             Branch_set_or_cleard <= Instr(10);
             PC_save_val <= '1';
-
             add_PC_val <= Instr(9) & Instr(9) & Instr (9 DOWNTO 3);
             sel_PC_OUT <= "01";
-            -- END IF;
           WHEN OTHERS => NULL;
         END CASE;
     END CASE;
@@ -360,7 +337,6 @@ BEGIN -- Behavioral
       WE_StateMachine <= '0';
       PC_save_val <= '0';
       WE_SP <= '0';
-      --added features
       CLK_Disable_ProgCntr <= '0';
       PC_DISABLE_SAVE_FOR_RCAL <= '0';
       Write_disable_PR1 <= '0';

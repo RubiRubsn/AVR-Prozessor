@@ -1,34 +1,15 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Engineer: B. Eng. Saitz, Ruben Herman Felix
 -- 
 -- Create Date: 28.11.2023 11:32:08
--- Design Name: 
 -- Module Name: puls_seg - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
+-- Project Name: RISC CPU
+-- Target Devices: ARTIX 7
 -- 
 ----------------------------------------------------------------------------------
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE ieee.numeric_std.ALL;
-
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
 
 --refresh seg 16ms-1ms
 -- bei 800.000 ticks und 50MHz clk -> 16ms refresh
@@ -120,9 +101,6 @@ BEGIN
                 SEG_MUXED_int <= SEG_N(3);
             WHEN OTHERS => NULL;
         END CASE;
-        -- SEG_MUXED_int <= SEG_N(to_integer(unsigned(cntr_disp)));
-        -- END IF;
-
     END PROCESS seg_mux;
 
     SEG_out <= SEG_MUXED_int_FF;

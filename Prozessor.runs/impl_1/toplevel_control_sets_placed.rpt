@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
-| Date         : Sat Dec 23 12:41:21 2023
+| Date         : Tue Jan  2 11:22:18 2024
 | Host         : LAPTOP-KAHI4GGT running 64-bit major release  (build 9200)
 | Command      : report_control_sets -verbose -file toplevel_control_sets_placed.rpt
 | Design       : toplevel
@@ -78,44 +78,44 @@ Table of Contents
 |  clk_IBUF_BUFG |                                                       | Pipeline_Register_one_1/P_Register_instr_reg[13]_1 |                2 |              5 |         2.50 |
 |  clk_IBUF_BUFG |                                                       | DEC_1/decoder_1/PC_DISABLE_SAVE_FOR_RCAL1__0       |                5 |              5 |         1.00 |
 |  clk_IBUF_BUFG | Pipeline_Register_two_1/SEL_DM_ADR_PR2_reg_2[0]       |                                                    |                2 |              7 |         3.50 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_13[0]          |                                                    |                2 |              8 |         4.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_12[0]          |                                                    |                2 |              8 |         4.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_10[0]          |                                                    |                1 |              8 |         8.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_26[0]          |                                                    |                5 |              8 |         1.60 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_2[0]           |                                                    |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_22[0]          |                                                    |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/SEL_DM_ADR_PR2_reg_3[0]       |                                                    |                4 |              8 |         2.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_21[0]          |                                                    |                6 |              8 |         1.33 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_6[0]           |                                                    |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_8[0]           |                                                    |                4 |              8 |         2.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_16[0]          |                                                    |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_19[0]          |                                                    |                2 |              8 |         4.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_5[0]           |                                                    |                2 |              8 |         4.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_14[0]          |                                                    |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_20[0]          |                                                    |                1 |              8 |         8.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/SEL_DM_ADR_PR2_reg_6[0]       |                                                    |                1 |              8 |         8.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_7[0]           |                                                    |                1 |              8 |         8.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_18[0]          |                                                    |                2 |              8 |         4.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_28[0]          |                                                    |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_31[0]          |                                                    |                2 |              8 |         4.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_4[0]           |                                                    |                1 |              8 |         8.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_24[0]          |                                                    |                4 |              8 |         2.00 |
 |  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_15[0]          |                                                    |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_14[0]          |                                                    |                3 |              8 |         2.67 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_19[0]          |                                                    |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/SEL_DM_ADR_PR2_reg_3[0]       |                                                    |                4 |              8 |         2.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_27[0]          |                                                    |                3 |              8 |         2.67 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_20[0]          |                                                    |                1 |              8 |         8.00 |
 |  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_23[0]          |                                                    |                5 |              8 |         1.60 |
 |  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_0[0]           |                                                    |                2 |              8 |         4.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/SEL_DM_ADR_PR2_reg_0[0]       |                                                    |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_1[0]           |                                                    |                2 |              8 |         4.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_30[0]          |                                                    |                1 |              8 |         8.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_17[0]          |                                                    |                1 |              8 |         8.00 |
 |  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_11[0]          |                                                    |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/SEL_DM_ADR_PR2_reg_5[0]       |                                                    |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_26[0]          |                                                    |                5 |              8 |         1.60 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_28[0]          |                                                    |                3 |              8 |         2.67 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_30[0]          |                                                    |                1 |              8 |         8.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_4[0]           |                                                    |                1 |              8 |         8.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_5[0]           |                                                    |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_7[0]           |                                                    |                1 |              8 |         8.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/SEL_DM_ADR_PR2_reg_4[0]       |                                                    |                1 |              8 |         8.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_13[0]          |                                                    |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_21[0]          |                                                    |                6 |              8 |         1.33 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_22[0]          |                                                    |                3 |              8 |         2.67 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_8[0]           |                                                    |                4 |              8 |         2.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_3[0]           |                                                    |                5 |              8 |         1.60 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/SEL_DM_ADR_PR2_reg_0[0]       |                                                    |                3 |              8 |         2.67 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/SEL_DM_ADR_PR2_reg_6[0]       |                                                    |                1 |              8 |         8.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_12[0]          |                                                    |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_1[0]           |                                                    |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_16[0]          |                                                    |                3 |              8 |         2.67 |
 |  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_25[0]          |                                                    |                2 |              8 |         4.00 |
 |  clk_IBUF_BUFG | Pipeline_Register_two_1/SEL_DM_ADR_PR2_reg_1[0]       |                                                    |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_3[0]           |                                                    |                5 |              8 |         1.60 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_6[0]           |                                                    |                3 |              8 |         2.67 |
 |  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_9[0]           |                                                    |                3 |              8 |         2.67 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/SEL_DM_ADR_PR2_reg_4[0]       |                                                    |                1 |              8 |         8.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_27[0]          |                                                    |                3 |              8 |         2.67 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_24[0]          |                                                    |                4 |              8 |         2.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_2[0]           |                                                    |                3 |              8 |         2.67 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/SEL_DM_ADR_PR2_reg_5[0]       |                                                    |                2 |              8 |         4.00 |
 |  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_29[0]          |                                                    |                3 |              8 |         2.67 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_31[0]          |                                                    |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_18[0]          |                                                    |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_17[0]          |                                                    |                1 |              8 |         8.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_Regfile_reg_10[0]          |                                                    |                1 |              8 |         8.00 |
 |  clk_IBUF_BUFG | Pipeline_Register_one_1/P_Register_instr_reg[15]_6[0] |                                                    |                3 |              9 |         3.00 |
 |  clk_IBUF_BUFG | DEC_1/decoder_1/E[0]                                  |                                                    |                3 |              9 |         3.00 |
 |  clk_IBUF_BUFG | Pipeline_Register_two_1/SEL_DM_ADR_PR2_reg_7[0]       |                                                    |                7 |             16 |         2.29 |
@@ -123,10 +123,10 @@ Table of Contents
 |  clk_IBUF_BUFG |                                                       | Execute_1/puls_seg_1/cnt_tics[17]_i_1_n_0          |                6 |             18 |         3.00 |
 |  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_SP_PR2_reg_0[0]            |                                                    |                6 |             20 |         3.33 |
 |  clk_IBUF_BUFG | Pipeline_Register_one_1/E[0]                          |                                                    |               18 |             25 |         1.39 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_DataMemory_PR2_reg_0       |                                                    |                8 |             32 |         4.00 |
 |  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_DataMemory_PR2_reg_3       |                                                    |                8 |             32 |         4.00 |
-|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_DataMemory_PR2_reg_2       |                                                    |                8 |             32 |         4.00 |
 |  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_DataMemory_PR2_reg_1       |                                                    |                8 |             32 |         4.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_DataMemory_PR2_reg_0       |                                                    |                8 |             32 |         4.00 |
+|  clk_IBUF_BUFG | Pipeline_Register_two_1/WE_DataMemory_PR2_reg_2       |                                                    |                8 |             32 |         4.00 |
 |  clk_IBUF_BUFG |                                                       |                                                    |               42 |            130 |         3.10 |
 +----------------+-------------------------------------------------------+----------------------------------------------------+------------------+----------------+--------------+
 

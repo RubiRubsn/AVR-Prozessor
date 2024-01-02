@@ -1,20 +1,10 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Engineer: B. Eng. Saitz, Ruben Herman Felix
 -- 
 -- Create Date: 06/23/2015 09:44:25 AM
--- Design Name: 
 -- Module Name: ALU - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
+-- Project Name: RISC CPU
+-- Target Devices: ARTIX 7
 -- 
 ----------------------------------------------------------------------------------
 LIBRARY IEEE;
@@ -105,11 +95,6 @@ BEGIN
       WHEN OTHERS => NULL;
     END CASE;
   END PROCESS; -- ERG_MUX
-
-  -- purpose: berechnet die Statusflags
-  -- type   : combinational
-  -- inputs : OPA, OPB, OPCODE, erg
-  -- outputs: z, c, v, n
   Berechnung_SREG : PROCESS (OPA, MUX_OUT_OPB_K, OPCODE_SLICE_U, erg, K, OPCODE_SLICE_E, MUX_V)
   BEGIN -- process Berechnung_SREG
     z <= NOT (erg(7) OR erg(6) OR erg(5) OR erg(4) OR erg(3) OR erg(2) OR erg(1) OR erg(0));

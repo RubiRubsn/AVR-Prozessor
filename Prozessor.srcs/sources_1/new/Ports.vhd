@@ -1,33 +1,14 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Engineer: B. Eng. Saitz, Ruben Herman Felix
 -- 
 -- Create Date: 26.11.2023 14:36:28
--- Design Name: 
 -- Module Name: Ports - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
+-- Project Name: RISC CPU
+-- Target Devices: ARTIX 7
 -- 
 ----------------------------------------------------------------------------------
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
-
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
 
 ENTITY Ports IS
     PORT (
@@ -135,9 +116,6 @@ BEGIN
     FF_PIN : PROCESS (CLK, PIN)
     BEGIN
         IF (CLK'event AND CLK = '1') THEN
-            -- PIND <= PIN(4 DOWNTO 0);
-            -- PINC <= PIN(12 DOWNTO 5);
-            -- PINB <= PIN(20 DOWNTO 13);
             PIND <= PIN(20 DOWNTO 16);
             PINC <= PIN(15 DOWNTO 8);
             PINB <= PIN(7 DOWNTO 0);
@@ -173,18 +151,15 @@ BEGIN
                         seg3_N <= Din;
                     WHEN "1010" =>
                         --i2c_SCR
-                        --hier fehlt noch viel in bezug auf auto reset von flags
                         i2c_SCR <= Din(6 DOWNTO 0);
                     WHEN "1011" =>
                         --i2c_DaTR
                         i2c_DaTR <= Din;
                     WHEN "1100" =>
                         --i2c_DaRR
-                        --eigentlich nur READ muss noch überarbeitet werden
                         i2c_DaRR <= Din;
                     WHEN OTHERS => NULL;
                 END CASE;
-                --RAM(to_integer(unsigned(A))) <= DI;
             END IF;
         END IF;
     END PROCESS;

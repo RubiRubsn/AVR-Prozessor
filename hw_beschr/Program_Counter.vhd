@@ -1,30 +1,14 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Engineer: B. Eng. Saitz, Ruben Herman Felix
 -- 
--- Create Date: 06/23/2015 08:30:37 PM
--- Design Name: 
 -- Module Name: Program_Counter - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
+-- Project Name: RISC CPU
+-- Target Devices: ARTIX 7
 -- 
 ----------------------------------------------------------------------------------
 LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
 
 ENTITY Program_Counter IS
   PORT (
@@ -39,8 +23,6 @@ ENTITY Program_Counter IS
     save_addr_rcal : OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
     Addr : OUT STD_LOGIC_VECTOR (8 DOWNTO 0));
 END Program_Counter;
-
--- Rudimentaerer Programmzaehler ohne Ruecksetzen und springen...
 
 ARCHITECTURE Behavioral OF Program_Counter IS
   SIGNAL PC_reg : STD_LOGIC_VECTOR(8 DOWNTO 0);
@@ -60,25 +42,11 @@ BEGIN
   count : PROCESS (clk, ADD_out, CLK_Disable_ProgCntr) --reset)
   BEGIN -- process count
     IF clk'event AND clk = '1' THEN -- rising clock edge
-      -- IF reset = '1' THEN -- synchronous reset (active high)
-      --   PC_reg <= "000000000"; -- schneller machen vielleicht
-      -- ELSE
       IF CLK_Disable_ProgCntr = '0' THEN
         PC_reg <= ADD_out;
       END IF;
-      -- END IF;
     END IF;
   END PROCESS count;
-
-  -- MUX_ADD : PROCESS (clk, sel_PC_OUT, add_PC_val, one)
-  -- BEGIN
-  --   IF sel_PC_OUT = '0' THEN
-  --     MUX_ADD_Addr_out <= one;
-  --     ELSE
-  --     MUX_ADD_Addr_out <= add_PC_val;
-  --   END IF;
-  -- END PROCESS MUX_ADD;
-
   MUX_OUT : PROCESS (clk, PC_reg, add_PC_val, STR_cntr_val, sel_PC_OUT, save_addr_ret, PULL_ERG, save_addr_ret_higher)
   BEGIN
     OUT_MUX <= PC_reg;
@@ -138,6 +106,6 @@ BEGIN
 
     END IF;
   END PROCESS save_PC_ret_higher;
-  Addr <= OUT_MUX;-- MUX_LDI_Addr_out;--PC_reg;
+  Addr <= OUT_MUX;
 
 END Behavioral;
