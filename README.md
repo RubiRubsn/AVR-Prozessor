@@ -75,13 +75,13 @@ Ernst-Abbe-Hochschule Jena
 
 [List of abbreviations](#list-of-abbreviations)
 
-1. [System description](#1-system-description)
+  1. [System description](#1-system-description)
 
-  1.1. [Instruction set](#11-instruction-set)
+    1.1. [Instruction set](#11-instruction-set)
 
-[1.2. Structure	10](#_toc155088099)
+    1.2. [Structure](#12-structure)
 
-[1.2.1 Pipelines	12](#_toc155088100)
+      1.2.1. [Pipelines	12](#_toc155088100)
 
 [1.2.1 Block diagram	14](#_toc155088101)
 
