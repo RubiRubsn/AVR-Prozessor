@@ -337,13 +337,13 @@ The computation of the IPC is detailed below.
 
 
 |**Instruction type**|**probability of occurring in %**|**used clock cycles**||
-| - | :- | :- | :- |
-|**LD**|15|1||
-|**ST**|5|1||
-|**Branch (taken)**|16|1||
-|**Branch (not taken)**|4|2||
-|**Arithmetic/logical**|60|1||
-||**IPC:**|1,04||
+| - | :- | :- |
+|**LD**|15|1|
+|**ST**|5|1|
+|**Branch (taken)**|16|1|
+|**Branch (not taken)**|4|2|
+|**Arithmetic/logical**|60|1|
+||**IPC:**|1,04|
 
 <a name="_toc155088120"></a>*Table 3: calculation of IPC*
 
