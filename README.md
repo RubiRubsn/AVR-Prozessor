@@ -44,29 +44,46 @@
 
 [List of Abbreviations](#list-of-abbreviations)
 
-1. [System Description](#system-description)
-    1. [Instruction Set](#11-instruction-set)
-    2. [Structure](#12-structure)
-        1. [Pipelines](#121-pipelines)
-        2. [Block Diagram](#121-block-diagram)
+<ol>
+    <li>
+        <a href="#system-description">System Description</a>
+        <ol>
+            <li><a href="#11-instruction-set">Instruction Set</a></li>
+            <li><a href="#12-structure">Structure</a>
+                <ol>
+                    <li><a href="#121-pipelines">Pipelines</a></li>
+                    <li><a href="#121-block-diagram">Block Diagram</a></li>
+                </ol>
+            </li>
+        </ol>
+    </li>
+    <li>
+        <a href="#2-special-features">Special Features</a>
+        <ol>
+            <li><a href="#21-program-counter">Program Counter</a></li>
+            <li><a href="#22-stack-pointer">Stack Pointer</a></li>
+            <li><a href="#23-data-memory">Data Memory</a></li>
+        </ol>
+    </li>
+    <li><a href="#3-performance-evaluation">Performance Evaluation</a></li>
+    <li>
+        <a href="#4-possible-performance-gains">Possible Performance Gains</a>
+        <ol>
+            <li><a href="#41-increasing-the-clock-speed">Increasing the Clock Speed</a></li>
+            <li><a href="#42-lowering-the-ipc">Lowering the IPC</a></li>
+            <li><a href="#43-summary-of-the-previous-suggestions-for-improvement">Summary of the Previous Suggestions for Improvement</a></li>
+            <li><a href="#_ref154830233">Crucial Changes to the Architecture of the Processor</a></li>
+        </ol>
+    </li>
+    <li>
+        <a href="#5-included-software">Included Software</a>
+        <ol>
+            <li><a href="#51-key-features">Key Features</a></li>
+        </ol>
+    </li>
+    <li><a href="#6-bibliography">Bibliography</a></li>
+</ol>
 
-2. [Special Features](#2-special-features)
-    1. [Program Counter](#21-program-counter)
-    2. [Stack Pointer](#22-stack-pointer)
-    3. [Data Memory](#23-data-memory)
-
-3. [Performance Evaluation](#3-performance-evaluation)
-
-4. [Possible Performance Gains](#4-possible-performance-gains)
-    1. [Increasing the Clock Speed](#41-increasing-the-clock-speed)
-    2. [Lowering the IPC](#42-lowering-the-ipc)
-    3. [Summary of the Previous Suggestions for Improvement](#43-summary-of-the-previous-suggestions-for-improvement)
-    4. [Crucial Changes to the Architecture of the Processor](#_ref154830233)
-
-5. [Included Software](#5-included-software)
-    1. [Key Features](#51-key-features)
-
-6. [Bibliography](#6-bibliography)
 
 
 
