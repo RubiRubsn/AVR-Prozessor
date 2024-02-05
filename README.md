@@ -67,17 +67,18 @@ Ernst-Abbe-Hochschule Jena
 
 
 ![](pictures/Aspose.Words.7963bbad-4a75-4673-9dd5-dcf76f495c96.003.png)
+<p align="center">
 
 # Table of contents
-[Datasheet	II****](#_toc155088094)**
+[Datasheet](#datasheet)
 
-[**List of figures and tables	IV****](#_toc155088095)
+[List of figures and tables](#list-of-figures-and-tables)
 
-[**List of abbreviations	V****](#_toc155088096)
+[List of abbreviations](#list-of-abbreviations)
 
-[**1. System description	6****](#_toc155088097)
+ 1. [System description](#1-system-description)
 
-[1.1. Instruction set	6](#_toc155088098)
+   1. [Instruction set](#11-instruction-set)
 
 [1.2. Structure	10](#_toc155088099)
 
@@ -110,7 +111,7 @@ Ernst-Abbe-Hochschule Jena
 [5.1. Key Features	27](#_toc155088113)
 
 [**6. Bibliography	29****](#_toc155088114)
-
+</p>
 
 
 
