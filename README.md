@@ -75,13 +75,13 @@ Ernst-Abbe-Hochschule Jena
 
 [List of abbreviations](#list-of-abbreviations)
 
-  1. [System description](#1-system-description)
+1. [System description](#1-system-description)
 
     1.1. [Instruction set](#11-instruction-set)
 
     1.2. [Structure](#12-structure)
 
-      1.2.1. [Pipelines	12](#_toc155088100)
+    1.2.1. [Pipelines](#121-pipelines)
 
 [1.2.1 Block diagram	14](#_toc155088101)
 
@@ -110,6 +110,36 @@ Ernst-Abbe-Hochschule Jena
 [5.1. Key Features	27](#_toc155088113)
 
 [**6. Bibliography	29****](#_toc155088114)
+
+# Inhaltsverzeichnis
+
+1. [Datasheet](#datasheet)
+    1.1. [List of Figures and Tables](#list-of-figures-and-tables)
+    1.2. [List of Abbreviations](#list-of-abbreviations)
+
+2. [System Description](#system-description)
+    1. [Instruction Set](#11-instruction-set)
+    2. [Structure](#12-structure)
+        1. [Pipelines](#121-pipelines)
+            - [Block Diagram 14](#121-block-diagram-14)
+
+3. [Special Features 15**](#special-features-15)
+    1. [Program Counter 16](#21-program-counter-16)
+    2. [Stack Pointer 20](#22-stack-pointer-20)
+    3. [Data Memory 21](#23-data-memory-21)
+
+4. [Performance Evaluation 22**](#performance-evaluation-22)
+
+5. [Possible Performance Gains 24**](#possible-performance-gains-24)
+    1. [Increasing the Clock Speed 24](#41-increasing-the-clock-speed-24)
+    2. [Lowering the IPC 24](#42-lowering-the-ipc-24)
+    3. [Summary of the Previous Suggestions for Improvement 25](#43-summary-of-the-previous-suggestions-for-improvement-25)
+    4. [Crucial Changes to the Architecture of the Processor 26](#44-crucial-changes-to-the-architecture-of-the-processor-26)
+
+6. [Included Software 27**](#included-software-27)
+    1. [Key Features 27](#51-key-features-27)
+
+7. [Bibliography 29**](#bibliography-29)
 
 
 
