@@ -1,47 +1,15 @@
-![](pictures/Aspose.Words.7963bbad-4a75-4673-9dd5-dcf76f495c96.001.png)![Ein Bild, das Text enthält.
 
-Automatisch generierte Beschreibung](pictures/Aspose.Words.7963bbad-4a75-4673-9dd5-dcf76f495c96.002.png)
-
-
+<h1 align="center">REIGHT 1</h1>
+<h3 align="center">RISC 8-BIT CPU - AVR instruction set - VHDL draft</h3>
 
 
+<div align= "center">
 
-
-
-
-
-**REIGHT 1**
-
-**RISC 8-BIT CPU**
-
-
-
-
-
-
-
-
-
-
-
-
-B. ENG. Saitz, Ruben Hermann Felix
-
-
-
-
-
-
-
-
-
-Ernst-Abbe-Hochschule Jena
-
-02\.01.2024
-
-
-|REIGHT 1|<p>8-bit RISC Microcontroller</p><p>with a clock speed of up to 130MHz</p>|
+|REIGHT 1|8-bit RISC Microcontroller<p>with a clock speed of up to 130MHz</p>|
 | :- | -: |
+
+</div>
+<br>
 
 # Datasheet
 
@@ -64,9 +32,9 @@ Ernst-Abbe-Hochschule Jena
     - 4 7-Segment-Displays
   - Support for adding an I<sup>2</sup>C interface[^1]
 
-
-
-![](pictures/Aspose.Words.7963bbad-4a75-4673-9dd5-dcf76f495c96.003.png)
+<br>
+<br>
+<br>
 
 # Table of contents
 
@@ -80,25 +48,25 @@ Ernst-Abbe-Hochschule Jena
     1. [Instruction Set](#11-instruction-set)
     2. [Structure](#12-structure)
         1. [Pipelines](#121-pipelines)
-        2. [Block Diagram](#121-block-diagram-14)
+        2. [Block Diagram](#121-block-diagram)
 
-2. [Special Features](#special-features-15)
-    1. [Program Counter](#21-program-counter-16)
-    2. [Stack Pointer](#22-stack-pointer-20)
-    3. [Data Memory](#23-data-memory-21)
+2. [Special Features](#2-special-features)
+    1. [Program Counter](#21-program-counter)
+    2. [Stack Pointer](#22-stack-pointer)
+    3. [Data Memory](#23-data-memory)
 
-3. [Performance Evaluation](#performance-evaluation-22)
+3. [Performance Evaluation](#3-performance-evaluation)
 
-4. [Possible Performance Gains](#possible-performance-gains-24)
-    1. [Increasing the Clock Speed](#41-increasing-the-clock-speed-24)
-    2. [Lowering the IPC](#42-lowering-the-ipc-24)
-    3. [Summary of the Previous Suggestions for Improvement](#43-summary-of-the-previous-suggestions-for-improvement-25)
-    4. [Crucial Changes to the Architecture of the Processor](#44-crucial-changes-to-the-architecture-of-the-processor-26)
+4. [Possible Performance Gains](#4-possible-performance-gains)
+    1. [Increasing the Clock Speed](#41-increasing-the-clock-speed)
+    2. [Lowering the IPC](#42-lowering-the-ipc)
+    3. [Summary of the Previous Suggestions for Improvement](#43-summary-of-the-previous-suggestions-for-improvement)
+    4. [Crucial Changes to the Architecture of the Processor](#_ref154830233)
 
-5. [Included Software](#included-software-27)
-    1. [Key Features](#51-key-features-27)
+5. [Included Software](#5-included-software)
+    1. [Key Features](#51-key-features)
 
-6. [Bibliography](#bibliography-29)
+6. [Bibliography](#6-bibliography)
 
 
 
@@ -107,7 +75,7 @@ Ernst-Abbe-Hochschule Jena
 # List of figures and tables
 [Figure 1: block diagram top level](#_reftoplevel)
 
-[Figure 2: block diagram Program Counter	16](#_toc155088116)
+[Figure 2: block diagram Program Counter](#_refPC)
 
 [Figure 3: block diagram Stack Pointer	20](#_toc155088117)
 
@@ -148,7 +116,7 @@ Ernst-Abbe-Hochschule Jena
 |PCB|Printed Circuit Board|
 
 
-
+-------------
 # 1. System description
 The 8-bit processor REIGHT 1 was developed with a subset of the AVR® instructions but offers all the functions to run full-fledged microcontroller programs.
 
@@ -158,56 +126,56 @@ With its two staged pipeline it is capable of running at 130Mhz clock speed. In 
 
 |**Instruction**|**operand**|**description**|**operation**|**FLAGS**|**clock cycles**|
 | - | - | - | - | - | - |
-|**ADD**|R<sub>d</sub>, R<sub>r</sub>|add without carry|R<sub>d</sub> ß R<sub>d</sub> + R<sub>r</sub> |Z,C,N,V,S|1|
-|**ADC**|R<sub>d</sub>, R<sub>r</sub>|add with carry|R<sub>d</sub> ß R<sub>d</sub> + R<sub>r</sub> +C|Z,C,N,V,S|1|
-|**SUB**|R<sub>d</sub>, R<sub>r</sub>|subtract without carry|R<sub>d</sub> ß R<sub>d</sub> - R<sub>r</sub>|Z,C,N,V,S|1|
-|**SUBI**|R<sub>d</sub>, K|subtract immediate|R<sub>d</sub> ß R<sub>d</sub> – K|Z,C,N,V,S|1|
-|**AND**|R<sub>d</sub>, R<sub>r</sub>|logical and|R<sub>d</sub> ß R<sub>d</sub> & R<sub>r</sub>|Z,N,V,S|1|
-|**ANDI**|R<sub>d</sub>, K|logical and with immediate|R<sub>d</sub> ß R<sub>d</sub> & K|Z,N,V,S|1|
-|**OR**|R<sub>d</sub>, R<sub>r</sub>|logical or|R<sub>d</sub> ß R<sub>d</sub> | R<sub>r</sub>|Z,N,V,S|1|
-|**ORI**|R<sub>d</sub>, K|logical or with immediate|R<sub>d</sub> ß R<sub>d</sub> | K|Z,N,V,S|1|
-|**EOR**|R<sub>d</sub>, R<sub>r</sub>|exclusive or|R<sub>d</sub> ß R<sub>d</sub> ^ R<sub>r</sub>|Z,N,V,S|1|
-|**COM**|R<sub>d</sub>|one´s complement|R<sub>d</sub> ß $FF -R<sub>d</sub>|Z,C,N,V,S|1|
-|**SBR**|R<sub>d</sub>, K|set bit(s) in register|R<sub>d</sub> ß R<sub>d</sub> | K|Z,N,V,S|1|
-|**INC**|R<sub>d</sub>|increment|R<sub>d</sub> ß R<sub>d</sub> + 1|Z,N,V,S|1|
-|**DEC**|R<sub>d</sub>|decrement|R<sub>d</sub> ß R<sub>d</sub> - 1|Z,N,V,S|1|
-|**TST**|R<sub>d</sub>|test for zero or minus|R<sub>d</sub> ß R<sub>d</sub> & R<sub>d</sub>|Z,N,V,S|1|
-|**CLR**|R<sub>d</sub>|clear register|R<sub>d</sub> ß R<sub>d</sub> ^ R<sub>d</sub>|Z,N,V,S|1|
-|**SER**|R<sub>d</sub>|set register|R<sub>d</sub> ß $FF|NONE|1|
+|**ADD**|R<sub>d</sub>, R<sub>r</sub>|add without carry|R<sub>d</sub>  &larr; R<sub>d</sub> + R<sub>r</sub> |Z,C,N,V,S|1|
+|**ADC**|R<sub>d</sub>, R<sub>r</sub>|add with carry|R<sub>d</sub> &larr; R<sub>d</sub> + R<sub>r</sub> +C|Z,C,N,V,S|1|
+|**SUB**|R<sub>d</sub>, R<sub>r</sub>|subtract without carry|R<sub>d</sub> &larr; R<sub>d</sub> - R<sub>r</sub>|Z,C,N,V,S|1|
+|**SUBI**|R<sub>d</sub>, K|subtract immediate|R<sub>d</sub> &larr; R<sub>d</sub> – K|Z,C,N,V,S|1|
+|**AND**|R<sub>d</sub>, R<sub>r</sub>|logical and|R<sub>d</sub> &larr; R<sub>d</sub> & R<sub>r</sub>|Z,N,V,S|1|
+|**ANDI**|R<sub>d</sub>, K|logical and with immediate|R<sub>d</sub> &larr; R<sub>d</sub> & K|Z,N,V,S|1|
+|**OR**|R<sub>d</sub>, R<sub>r</sub>|logical or|R<sub>d</sub> &larr; R<sub>d</sub> OR R<sub>r</sub>|Z,N,V,S|1|
+|**ORI**|R<sub>d</sub>, K|logical or with immediate|R<sub>d</sub> &larr; R<sub>d</sub> OR K|Z,N,V,S|1|
+|**EOR**|R<sub>d</sub>, R<sub>r</sub>|exclusive or|R<sub>d</sub> &larr; R<sub>d</sub> ^ R<sub>r</sub>|Z,N,V,S|1|
+|**COM**|R<sub>d</sub>|one´s complement|R<sub>d</sub> &larr; $FF -R<sub>d</sub>|Z,C,N,V,S|1|
+|**SBR**|R<sub>d</sub>, K|set bit(s) in register|R<sub>d</sub> &larr; R<sub>d</sub> OR K|Z,N,V,S|1|
+|**INC**|R<sub>d</sub>|increment|R<sub>d</sub> &larr; R<sub>d</sub> + 1|Z,N,V,S|1|
+|**DEC**|R<sub>d</sub>|decrement|R<sub>d</sub> &larr; R<sub>d</sub> - 1|Z,N,V,S|1|
+|**TST**|R<sub>d</sub>|test for zero or minus|R<sub>d</sub> &larr; R<sub>d</sub> & R<sub>d</sub>|Z,N,V,S|1|
+|**CLR**|R<sub>d</sub>|clear register|R<sub>d</sub> &larr; R<sub>d</sub> ^ R<sub>d</sub>|Z,N,V,S|1|
+|**SER**|R<sub>d</sub>|set register|R<sub>d</sub> &larr; $FF|NONE|1|
 |**branch instructions**||||||
-|**RJMP**|K|relative jump|PC ß PC + K + 1|NONE|1|
-|**RCALL**|K|relative call subroutine|PC ß PC + k + 1|NONE|2|
-|**RET**||subroutine return|PC ß Stack|None|4|
+|**RJMP**|K|relative jump|PC &larr; PC + K + 1|NONE|1|
+|**RCALL**|K|relative call subroutine|PC &larr; PC + k + 1|NONE|2|
+|**RET**||subroutine return|PC &larr; Stack|None|4|
 |**CP**|R<sub>d</sub>, R<sub>r</sub>|compare|R<sub>d</sub>- R<sub>r</sub>|Z,C,N,V,S|1|
 |**CPI**|R<sub>d</sub>, K|compare with immediate|R<sub>d</sub>- K|Z,C,N,V,S|1|
-|**BRBS**|s, K|branch if status flag set|If (SREG(s) = 1) then PCßPC+K+1|NONE|<p>taken / Not taken</p><p>1/2[^2]</p>|
-|**BRBC**|s, K|branch if status flag cleared|If (SREG(s) = 0) then PCßPC+K+1|NONE|1/2|
-|**BREQ**|K|branch if equal|If (Z = 1) then PCßPC+K+1|NONE|1/2|
-|**BRNE**|K|branch if not equal|If (Z = 0) then PCßPC+K+1|NONE|1/2|
-|**BRCS**|K|branch if carry set|If (C = 1) then PCßPC+K+1|NONE|1/2|
-|**BRCC**|K|branch if carry cleared|If (C = 0) then PCßPC+K+1|NONE|1/2|
-|**BRSH**|K|branch if same or higher|If (C = 0) then PCßPC+K+1|NONE|1/2|
-|**BRLO**|K|branch if lower|If (C = 1) then PCßPC+K+1|NONE|1/2|
-|**BRMI**|K|branch if minus|If (N = 1) then PCßPC+K+1|NONE|1/2|
-|**BRPL**|K|branch if plus|If (N = 0) then PCßPC+K+1|NONE|1/2|
-|**BRGE**|K|branch if greater or equal, signed|If (S = 0) then PCßPC+K+1|NONE|1/2|
-|**BRLT**|K|branch if less than, signed|If (S = 1) then PCßPC+K+1|NONE|1/2|
-|**BRVS**|K|branch if overflow flag is set|If (V = 1) then PCßPC+K+1|NONE|1/2|
-|**BRVC**|K|branch if overflow flag is cleared|If (V = 0) then PCßPC+K+1|NONE|1/2|
+|**BRBS**|s, K|branch if status flag set|If (SREG(s) = 1) then PC&larr;PC+K+1|NONE|<p>taken / Not taken</p><p>1/2</p>|
+|**BRBC**|s, K|branch if status flag cleared|If (SREG(s) = 0) then PC&larr;PC+K+1|NONE|1/2|
+|**BREQ**|K|branch if equal|If (Z = 1) then PC&larr;PC+K+1|NONE|1/2|
+|**BRNE**|K|branch if not equal|If (Z = 0) then PC&larr;PC+K+1|NONE|1/2|
+|**BRCS**|K|branch if carry set|If (C = 1) then PC&larr;PC+K+1|NONE|1/2|
+|**BRCC**|K|branch if carry cleared|If (C = 0) then PC&larr;PC+K+1|NONE|1/2|
+|**BRSH**|K|branch if same or higher|If (C = 0) then PC&larr;PC+K+1|NONE|1/2|
+|**BRLO**|K|branch if lower|If (C = 1) then PC&larr;PC+K+1|NONE|1/2|
+|**BRMI**|K|branch if minus|If (N = 1) then PC&larr;PC+K+1|NONE|1/2|
+|**BRPL**|K|branch if plus|If (N = 0) then PC&larr;PC+K+1|NONE|1/2|
+|**BRGE**|K|branch if greater or equal, signed|If (S = 0) then PC&larr;PC+K+1|NONE|1/2|
+|**BRLT**|K|branch if less than, signed|If (S = 1) then PC&larr;PC+K+1|NONE|1/2|
+|**BRVS**|K|branch if overflow flag is set|If (V = 1) then PC&larr;PC+K+1|NONE|1/2|
+|**BRVC**|K|branch if overflow flag is cleared|If (V = 0) then PC&larr;PC+K+1|NONE|1/2|
 |**data transfer instructions**||||||
-|**MOV**|R<sub>d</sub>, R<sub>r</sub>|copy register|R<sub>d</sub> ß R<sub>d</sub> |NONE|1|
-|**LDI**|R<sub>d</sub>, K|load immediate|R<sub>d</sub> ß K|NONE|1|
-|**LD**|R<sub>d</sub>|load indirect|R<sub>d</sub> ß (Z)|NONE|1|
-|**ST**|R<sub>d</sub>|store indirect|(Z) ß R<sub>d</sub> |NONE|1|
-|**PUSH**|R<sub>d</sub>|push register on stack|<sub>STACK</sub> ß R<sub>d</sub>|NONE|1|
-|**POP**|R<sub>d</sub>|pop register from stack|R<sub>d</sub> ß STACK|NONE|1|
+|**MOV**|R<sub>d</sub>, R<sub>r</sub>|copy register|R<sub>d</sub> &larr; R<sub>d</sub> |NONE|1|
+|**LDI**|R<sub>d</sub>, K|load immediate|R<sub>d</sub> &larr; K|NONE|1|
+|**LD**|R<sub>d</sub>|load indirect|R<sub>d</sub> &larr; (Z)|NONE|1|
+|**ST**|R<sub>d</sub>|store indirect|(Z) &larr; R<sub>d</sub> |NONE|1|
+|**PUSH**|R<sub>d</sub>|push register on stack|<sub>STACK</sub> &larr; R<sub>d</sub>|NONE|1|
+|**POP**|R<sub>d</sub>|pop register from stack|R<sub>d</sub> &larr; STACK|NONE|1|
 |**bit and bit-test instructions**||||||
-|**LSL**|R<sub>d</sub>|logical shift left|<p>R<sub>d</sub>(n+1)ßR<sub>d</sub>(n)</p><p>R<sub>d</sub>(0)ß0,</p><p>C ß R<sub>d</sub>(7)</p>|Z,C,N,V|1|
-|**LSR**|R<sub>d</sub>|logical shift right|<p>R<sub>d</sub>(n)ßR<sub>d</sub>(n+1)</p><p>R<sub>d</sub>(7)ß0,</p><p>C ß R<sub>d</sub>(0)</p>|Z,C,N,V|1|
-|**ROL**|R<sub>d</sub>|rotate left through carry|<p>R<sub>d</sub>(0)ßC</p><p>R<sub>d</sub>(n+1)ß R<sub>d</sub>(n)</p><p>C ß R<sub>d</sub>(0)</p>|Z,C,N,V|1|
-|**ASR**|R<sub>d</sub>||R<sub>d</sub>(n)ß R<sub>d</sub>(n+1)|Z,C,N,V|1|
-|**SEC**||set carry|C ß 1|C|1|
-|**CLC**||clear carry|C ß 0|C|1|
+|**LSL**|R<sub>d</sub>|logical shift left|<p>R<sub>d</sub>(n+1)&larr;R<sub>d</sub>(n)</p><p>R<sub>d</sub>(0)&larr;0,</p><p>C &larr; R<sub>d</sub>(7)</p>|Z,C,N,V|1|
+|**LSR**|R<sub>d</sub>|logical shift right|<p>R<sub>d</sub>(n)&larr;R<sub>d</sub>(n+1)</p><p>R<sub>d</sub>(7)&larr;0,</p><p>C &larr; R<sub>d</sub>(0)</p>|Z,C,N,V|1|
+|**ROL**|R<sub>d</sub>|rotate left through carry|<p>R<sub>d</sub>(0)&larr;C</p><p>R<sub>d</sub>(n+1)&larr; R<sub>d</sub>(n)</p><p>C &larr; R<sub>d</sub>(0)</p>|Z,C,N,V|1|
+|**ASR**|R<sub>d</sub>||R<sub>d</sub>(n)&larr; R<sub>d</sub>(n+1)|Z,C,N,V|1|
+|**SEC**||set carry|C &larr; 1|C|1|
+|**CLC**||clear carry|C &larr; 0|C|1|
 |**NOP**||no operation||NONE|1|
 
 *Table 1: instruction set*
@@ -279,11 +247,11 @@ This processor utilizes part of the AVR® instruction set. To emphasize its spec
 To achieve these speed improvements, optimizations were implemented on the PC, SP, and the RCALL/RET Process. These three optimizations constitute the main special features of this processor and are explained in more detail in the following subsections.
 
 ## 2.1. Program counter
-![](pictures/Aspose.Words.7963bbad-4a75-4673-9dd5-dcf76f495c96.012.png)
-
+<a name="_refPC"></a>![PC](./pictures/PC_dark.png#gh-dark-mode-only)
+<a name="_refPC"></a>![PC](./pictures/pc_light.png#gh-light-mode-only)
 <a name="_ref154730456"></a>*Figure 2: block diagram Program Counter*
 
-[Figure 2](#) describes the structure of the PC. The PC is a special feature of the REIGHT 1 because it enables the processor to execute instructions that are multi-cycle in the AVR® instruction set with fewer cycles. To delve deeper into its functionality, it is necessary to explore the various operation modes of the PC, with particular focus on the operations to be performed in relation to the clock and how these operations work.
+[Figure 2](#_ref154730456) describes the structure of the PC. The PC is a special feature of the REIGHT 1 because it enables the processor to execute instructions that are multi-cycle in the AVR® instruction set with fewer cycles. To delve deeper into its functionality, it is necessary to explore the various operation modes of the PC, with particular focus on the operations to be performed in relation to the clock and how these operations work.
 
 The Program counter needs to realize the following tasks:
 
@@ -322,24 +290,26 @@ The Program counter needs to realize the following tasks:
       - The decoder sets the select signal of the PC output MUX to port 3, which loads the saved PC value. This value resembles the address of the RCALL + 1.
 
 
-## <a name="_toc155088104"></a>2.2. Stack pointer
+## 2.2. Stack pointer
 The SP needs to have two main functions. First, a post-decrement of the SP value in case of a PUSH. This means the storing of a value at the stack address in the DM takes place, and afterward, the stack value is decreased by one, indicating the next free address for a PUSH. Second, a pre-increment of the SP value in the case of a POP. In this case, the SP value must be incremented before the load of a value in the SM at the stack address takes place. To gain a better understanding of the designed SP, [Figure 3](#_ref154738464) is shown.
 
-![](pictures/Aspose.Words.7963bbad-4a75-4673-9dd5-dcf76f495c96.013.png)
+
+<a name="_refSP"></a>![PC](./pictures/SP_dark.png#gh-dark-mode-only)
+<a name="_refSP"></a>![PC](./pictures/SP_light.png#gh-light-mode-only)
 
 <a name="_ref154738464"></a><a name="_toc155088117"></a>*Figure 3: block diagram Stack Pointer*
 
-Implementing a post-decrement within a single clock cycle is relatively straightforward utilizing the output of FF7. To ensure the post-decrement, the PC inc/dec MUX selects 1, while the decoder is setting a WE signal for FF7. Consequently, at the start of the subsequent cycle, FF7 decrements by 1. However, executing a pre-increment presents a challenge due to FF7 updating only at the next cycle's onset. This limitation restricts achieving a pre-increment and load within a single cycle while solely relying on FF7.
+Implementing a post-decrement within a single clock cycle is relatively straightforward utilizing the output of FF7. To ensure the post-decrement, the PC inc/dec MUX selects 1, while the decoder is setting a WE signal for FF7. Consequently, at the start of the subsequent cycle, FF7 decrements by 1. However, executing a pre-increment presents a challenge due to FF7 updating only at the next cycle's onset. This limitation restricts achieving a pre-increment and load within a single cycle while solely relying on FF7.
 
 To resolve this, the output of ADD3 could be used to create the output address of the SP in case of a pre increase. In that case, a PC output MUX is used which switches the FF7 output to the ADD3 output. This makes a pre-increment and a load in one cycle possible. However, this solution introduces challenges, primarily due to the extended signal pathways from the SP. Moreover, the use of an adder like ADD3 with comparatively long switching times, in relation to the length of a clock cycle, rekindles concerns regarding excessive signal transit times.
 
 Consequently, achieving the targeted 130MHz clock speed for the REIGHT 1 becomes unfeasible when solely relying on ADD3 for a post increment. To overcome this hurdle, REIGHT 1 incorporates a second flip flop (FF), FF8, which stores the current SP value incremented by 1. FF8 holds this incremented value ready in the event of a POP operation. Meanwhile, the actual Stack pointer, residing in FF7, undergoes a post-increment. The PC output MUX seamlessly toggles between FF7 and FF8 outputs, based on whether the instruction is a PUSH or POP.
 
-## <a name="_toc155088105"></a>2.3. Data memory
+## 2.3. Data memory
 The Data Memory is sleekly designed, so LD(Z) or ST(Z) is executed in 1 clock cycle without having problems with the signal transit times. This is probably due to the fact that the RAM used in the REIGHT 1 is faster than that of the AVR® processors and thus enables one-clock execution. However, this is just a guess, the exact reason why AVR® processors need 2 cycles for these instructions is not known to the creator of the REIGHT 1.
 
 
-# <a name="_toc155088106"></a>3. Performance evaluation
+# 3. Performance evaluation
 Relying solely on a processor's clock speed doesn't paint the full picture of its performance. The complexity arises from the processor's capability to execute multiple clock instructions. Thus, assuming that a high clock-speed processor, despite handling more clock cycles for multiple instructions, outperforms a slower clock-speed processor with fewer clock counts for these instructions is misleading. This realization led to the inclusion of the instruction per cycle (IPC) index in addition to the clock speed in performance evaluations.
 
 The IPC index factors in the efficiency of instruction execution. It involves multiplying the probability of an instruction occurring by its cycle count and summing these calculations. This resultant index represents the average instruction executed within a clock cycle.
@@ -378,30 +348,30 @@ The Artix-7ä FPGA[^4] on the Basys 3 board is utilized by the following amount.
 <a name="_toc155088121"></a>*Table 4: utilization of the Basys 3 board*
 
 
-# <a name="_toc155088107"></a>4. Possible performance gains
+# 4. Possible performance gains
 Performance could be gained in 3 ways:
 
 1. increasing the clock speed
 1. lowering the IPC
 1. make crucial changes to the architecture of the processor.
 
-## <a name="_toc155088108"></a>4.1. Increasing the clock speed
+## 4.1. Increasing the clock speed
 By increasing the clock speed, the slowest link in the processor becomes a problem in the signal transit times. In the case of the RIGHT 1, this slowest link is the ALU. To improve signal transit times in the execute stage, a third pipeline stage must be realized. This PS would be placed after the ALU and would buffer not only the output of the ALU but also the DM and the I/O.
 
 This would require changing the handling of some instructions. A secondary forwarding MUX set must be installed after the PS 2 to ensure that the ALU, I/O, and the DM can utilize results of the earlier clock cycle. The branch instruction could function as if there were no third pipeline register because the SREG is not fed through the PR3. But other instructions such as RCALL and RET would be slowed down significantly. It is also questionable whether a third pipeline register will bring the desired improvements because the instruction fetch and the decode stage are both very close to the maximum in terms of timing. To crank up the clock speed even more, more pipelines need to be installed in the processor design. This would push up the IPC and would slow down the processor in that way.
 
-## <a name="_toc155088109"></a>4.2. Lowering the IPC
+## 4.2. Lowering the IPC
 A perfect IPC, with this kind of processor architecture, would be a value of 1. to achieve this IPC the branch not taken cycle counts must be lowered from two to one. This would bring relatively more complexity to the design. In order to keep the pipeline structure of the processor, there are two ways to lower the clock count.
 
 1. Not every branch condition is set in the previous clock cycle. By checking if the previous operation had a WE signal to the relevant flag in the SREG register, the branch decision could be made in the cycle of the branch call in the decoder stage. This would lower the branch clock count to one if the branch condition is set on an earlier clock than the previous one. Nevertheless, this was tried in the development of the REIGHT 1 and brought significant problems with signal transit times. Furthermore, it should be considered that this case isn’t the norm, and the branch condition is set most likely in the previous cycle.
 1. Doubling both the instruction fetch and decode stages. In this approach, the initial IF and Decode pairing would generate control signals for the subsequent instruction in the event of a branch being taken, while the second pairing would handle control signals if the branch were not taken. To accommodate the branch condition, alterations to the input signals of PS 2 could be implemented. However, it's essential to note that this adjustment signifies a substantial architectural shift, albeit resulting in a mere 0.04 improvement in the IPC. If contemplating such significant modifications, it might be prudent to explore additional architectural enhancements described in section [4.4. Crucial changes to the architecture of the processor](#_ref154830233), which could substantially elevate the processor's overall speed and performance.
 
-## <a name="_toc155088110"></a>4.3. Summary of the previous suggestions for improvement
+## 4.3. Summary of the previous suggestions for improvement
 The previous two subchapters indicate that potential performance improvements with maintaining the current architecture of the processor are very minimal. Hence, the REIGHT 1, with its current architecture, is close to an optimum level of achievable performance. In comparison to similarly positioned microcontrollers in the market, the REIGHT 1 positions itself in the high-performance areas (one-core processors). For instance, when compared to the ATMega 328P, a microcontroller commonly used in the amateur field (also utilizing AVR® instruction set), the REIGHT 1 is more than 8 times faster. (ATMEL, 2015)
 
 However, if the REIGHT 1 intends to target a different market that demands significantly higher performance, substantial architectural changes will be necessary. These changes are outlined in Chapter [4.4. Crucial changes to the architecture of the processor](#_ref154830233).
 
-## <a name="_ref154830233"></a><a name="_toc155088111"></a>4.4. Crucial changes to the architecture of the processor
+## <a name="_ref154830233"></a>4.4. Crucial changes to the architecture of the processor
 To gain significantly higher performance, a second processor core could be added. This would halve the IPC (Instructions Per Cycle) but also require more complex programming of the microcontroller. Additionally, a cache could be implemented in the processor to expedite RAM loading times and facilitate easy data exchange between both cores.
 
 Furthermore, the processor could have multiple ALUs (Arithmetic Logic Units) that could be utilized to execute instructions speculatively. The instruction fetch (IF) stage could retrieve multiple instructions simultaneously, which would be processed in parallel during the execute stage.
@@ -409,10 +379,10 @@ Furthermore, the processor could have multiple ALUs (Arithmetic Logic Units) tha
 Another performance improvement would involve adding a branch cache. This cache stores the latest branch jumps and could predict upcoming branches before the decoder. However, these changes are very complex but could elevate the design to a whole new level.
 
 
-# <a name="_toc155088112"></a>5. Included software
+# 5. Included software
 The REIGHT 1 is delivered in a bundle with an 8-bit calculator software. This software is utilizing the Power of the REIGHT 1.
 
-## <a name="_toc155088113"></a>5.1. Key Features
+## 5.1. Key Features
 
 - **Effortless Arithmetic:** Seamlessly add, subtract, multiply, and divide with precision using our 8-bit arithmetic operations.
 
@@ -439,34 +409,6 @@ The REIGHT 1 is delivered in a bundle with an 8-bit calculator software. This so
 |**middle**|reset of 7-segment display|
 
 
-29
-
-# <a name="_toc155088114"></a>6. Bibliography
+# 6. Bibliography
 ATMEL. (2015). *ATmega328P Datasheet.* Retrieved from https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf
 
-
-B. Eng. Saitz, Ruben 
-
-# Digital attachment
-1\. VHDL description of processor and Vivado project: /Vivado/Prozessor
-
-2\. included calculator software: /Taschenrechner.asm
-
-
-# Declaration of independence
-
-I, Ruben Hermann Felix Saitz, hereby declare that I have independently prepared the present work using only the specified sources and aids. This work has not been submitted to any examination authority in the same or similar form and has not been published previously.
-
-
-Erfurt, January the 2<sup>nd</sup> of 2024								
-
-`                      `place, date							        Signature
-
-2
-
-
-[^1]: IO-Registers are implemented in design.
-[^2]: 
-[^3]: worst negative slack (Setup Timing) of 0,214 ns
-[^4]: Part: xc7a35tcpg236-1
-[ref1]: pictures/Aspose.Words.7963bbad-4a75-4673-9dd5-dcf76f495c96.010.png
