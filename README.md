@@ -43,7 +43,7 @@ Ernst-Abbe-Hochschule Jena
 |REIGHT 1|<p>8-bit RISC Microcontroller</p><p>with a clock speed of up to 130MHz</p>|
 | :- | -: |
 
-# <a name="_toc155088094"></a>Datasheet
+# Datasheet
 
 **Features**
 
@@ -69,84 +69,43 @@ Ernst-Abbe-Hochschule Jena
 ![](pictures/Aspose.Words.7963bbad-4a75-4673-9dd5-dcf76f495c96.003.png)
 
 # Table of contents
+
 [Datasheet](#datasheet)
 
-[List of figures and tables](#list-of-figures-and-tables)
+[List of Figures and Tables](#list-of-figures-and-tables)
 
-[List of abbreviations](#list-of-abbreviations)
+[List of Abbreviations](#list-of-abbreviations)
 
-1. [System description](#1-system-description)
-
-    1.1. [Instruction set](#11-instruction-set)
-
-    1.2. [Structure](#12-structure)
-
-    1.2.1. [Pipelines](#121-pipelines)
-
-[1.2.1 Block diagram	14](#_toc155088101)
-
-[**2. Special Features	15****](#_toc155088102)
-
-[2.1. Program counter	16](#_toc155088103)
-
-[2.2. Stack pointer	20](#_toc155088104)
-
-[2.3. Data memory	21](#_toc155088105)
-
-[**3. Performance evaluation	22****](#_toc155088106)
-
-[**4. Possible performance gains	24****](#_toc155088107)
-
-[4.1. Increasing the clock speed	24](#_toc155088108)
-
-[4.2. Lowering the IPC	24](#_toc155088109)
-
-[4.3. Summary of the previous suggestions for improvement	25](#_toc155088110)
-
-[4.4. Crucial changes to the architecture of the processor	26](#_toc155088111)
-
-[**5. Included software	27****](#_toc155088112)
-
-[5.1. Key Features	27](#_toc155088113)
-
-[**6. Bibliography	29****](#_toc155088114)
-
-# Inhaltsverzeichnis
-
-1. [Datasheet](#datasheet)
-    1.1. [List of Figures and Tables](#list-of-figures-and-tables)
-    1.2. [List of Abbreviations](#list-of-abbreviations)
-
-2. [System Description](#system-description)
+1. [System Description](#system-description)
     1. [Instruction Set](#11-instruction-set)
     2. [Structure](#12-structure)
         1. [Pipelines](#121-pipelines)
-            - [Block Diagram 14](#121-block-diagram-14)
+        2. [Block Diagram](#121-block-diagram-14)
 
-3. [Special Features 15**](#special-features-15)
-    1. [Program Counter 16](#21-program-counter-16)
-    2. [Stack Pointer 20](#22-stack-pointer-20)
-    3. [Data Memory 21](#23-data-memory-21)
+2. [Special Features](#special-features-15)
+    1. [Program Counter](#21-program-counter-16)
+    2. [Stack Pointer](#22-stack-pointer-20)
+    3. [Data Memory](#23-data-memory-21)
 
-4. [Performance Evaluation 22**](#performance-evaluation-22)
+3. [Performance Evaluation](#performance-evaluation-22)
 
-5. [Possible Performance Gains 24**](#possible-performance-gains-24)
-    1. [Increasing the Clock Speed 24](#41-increasing-the-clock-speed-24)
-    2. [Lowering the IPC 24](#42-lowering-the-ipc-24)
-    3. [Summary of the Previous Suggestions for Improvement 25](#43-summary-of-the-previous-suggestions-for-improvement-25)
-    4. [Crucial Changes to the Architecture of the Processor 26](#44-crucial-changes-to-the-architecture-of-the-processor-26)
+4. [Possible Performance Gains](#possible-performance-gains-24)
+    1. [Increasing the Clock Speed](#41-increasing-the-clock-speed-24)
+    2. [Lowering the IPC](#42-lowering-the-ipc-24)
+    3. [Summary of the Previous Suggestions for Improvement](#43-summary-of-the-previous-suggestions-for-improvement-25)
+    4. [Crucial Changes to the Architecture of the Processor](#44-crucial-changes-to-the-architecture-of-the-processor-26)
 
-6. [Included Software 27**](#included-software-27)
-    1. [Key Features 27](#51-key-features-27)
+5. [Included Software](#included-software-27)
+    1. [Key Features](#51-key-features-27)
 
-7. [Bibliography 29**](#bibliography-29)
-
-
+6. [Bibliography](#bibliography-29)
 
 
 
-# <a name="_toc155088095"></a>List of figures and tables
-[Figure 1: block diagram top level	14](https://technischeunivers049-my.sharepoint.com/personal/s9rusait_studeah_technischeunivers049_onmicrosoft_com/Documents/Beleg_Prozessordesign.docx#_Toc155088115)
+
+
+# List of figures and tables
+[Figure 1: block diagram top level](#_reftoplevel)
 
 [Figure 2: block diagram Program Counter	16](#_toc155088116)
 
@@ -165,7 +124,7 @@ Ernst-Abbe-Hochschule Jena
 
 
 
-# <a name="_toc155088096"></a>List of abbreviations
+# List of abbreviations
 
 |PC|Program Counter|
 | - | - |
@@ -190,16 +149,12 @@ Ernst-Abbe-Hochschule Jena
 
 
 
-V
-
-B. Eng. Saitz, Ruben6. Bibliography
-
-# <a name="_toc155088097"></a>1. System description
+# 1. System description
 The 8-bit processor REIGHT 1 was developed with a subset of the AVR® instructions but offers all the functions to run full-fledged microcontroller programs.
 
 With its two staged pipeline it is capable of running at 130Mhz clock speed. In order to show the structure of the processor, at first the selected set of instructions is shown below.
 
-## <a name="_toc155088098"></a>1.1. Instruction set
+## 1.1. Instruction set
 
 |**Instruction**|**operand**|**description**|**operation**|**FLAGS**|**clock cycles**|
 | - | - | - | - | - | - |
@@ -255,10 +210,10 @@ With its two staged pipeline it is capable of running at 130Mhz clock speed. In 
 |**CLC**||clear carry|C ß 0|C|1|
 |**NOP**||no operation||NONE|1|
 
-<a name="_toc155088118"></a>*Table 1: instruction set*
+*Table 1: instruction set*
 
 
-## <a name="_toc155088099"></a>1.2. Structure
+## 1.2. Structure
 A processor functions by executing a program composed of sequential instructions. These instructions reside in the program memory (PM), where each address corresponds to a single instruction. Address 0, consequently, marks the inception of the program. The REIGHT 1 accommodates a program memory capable of holding 512 16-bit operations, denoting the maximum executable program size for this processor.
 
 The program counter (PC), situated ahead of the PM, increments the memory address by one per clock cycle with exceptions clarified later. The resulting address is fed into the PM, generating the 16-bit instruction output.
@@ -278,7 +233,7 @@ Certain RAM cells serve dual purposes, serving as inputs and outputs for the REI
 Within the instructions some modify the PC—RJMP, the simplest, adds a constant value to the current PC value. Further insights into PC functionalities are explored in the special features section. A more intricate instruction, the branch, serves as a conditional jump instruction. When the condition (a comparison to a flag in SRAM) is fulfilled, the jump is executed; otherwise, the PC increments by 1 as usual. The most complex instruction pair, RCALL and RET, facilitates function calling and return within the program. This necessitates storing the old PC value in the stack during the call and substituting it with a new value. For the return, the old PC value is retrieved from the stack and reinstated into the PC.
 
 
-### <a name="_toc155088100"></a>1.2.1 Pipelines
+### 1.2.1 Pipelines
 Within logical circuits, a significant challenge arises with signal transit times—the duration it takes for a signal to traverse from one point to another on the PCB. These delays stem from the individual transistors' switching times, accumulating throughout the processor's circuitry. The sequence is such that only when the preceding element switches the subsequent follows suit. In complex processors, these signal transit times can extend, especially evident in the journey from the program counter to the ALU, often surpassing a single clock cycle. To counter this and achieve higher clock frequencies, the implementation of pipeline stages becomes crucial.
 
 During the implementation of the pipeline, the processor is divided into several parts; in case of REIGHT 1, three. This division is based upon the assumption that while some sections of the processor are engaged in switching others must wait their turn. By dividing the processor the sections can work on a problem without having to wait their turn.
@@ -286,41 +241,24 @@ During the implementation of the pipeline, the processor is divided into several
 These three integral parts of the REIGHT 1 are:
 
 1. instruction fetch: This encompasses the PC and the PM. In this stage the new instruction to process is being fetched.
-1. decode stage: This stage involves the decoder, the RF, and some forwarding MUXs, which will be explained later. In this stage, the decoding of the instruction and the setting of control signals happens, as well as the storing and reading the RF.
-1. execute Stage: This stage includes crucial components like the ALU, the DM with SP, Ports, and the SREG. This is where the calculation, but also the storing and loading of the DM takes place.
+2. decode stage: This stage involves the decoder, the RF, and some forwarding MUXs, which will be explained later. In this stage, the decoding of the instruction and the setting of control signals happens, as well as the storing and reading the RF.
+3. execute Stage: This stage includes crucial components like the ALU, the DM with SP, Ports, and the SREG. This is where the calculation, but also the storing and loading of the DM takes place.
 
 Each of these stages is divided by a pipeline stage, which functions as a clocked register routing all signals from the preceding section into the subsequent one. This mechanism significantly truncates the signal transit times to the duration of a single stage. However, it also implies that an instruction takes tree clock cycles to execute. This scenario gives rise to two critical issues:
 
 1. operational dependency: When an instruction's operand relies on the previous instruction's operand, the result is not yet stored in the RF. To resolve this, Forwarding MUXs are employed, facilitating the exchange of the respective operand with the output of the execute stage. Proper control of these MUXs demands comparison between the previous write address and the current read address of the RF. When the addresses match and the previous WE signal is active, the signal for the specific operand must be forwarded.
-1. branch calls: There is a possibility that when a branch is invoked, the corresponding status flag is not set yet (due to the clocked SREG). The most straightforward approach to ensure a correct branch call involves pausing the PC momentarily, awaiting one clock cycle, and then deciding whether to take the branch or not. The REIGHT 1 manages to execute a Branch in one clock cycle (if taken) and two cycles (if not taken), a special feature detailed further in the corresponding chapter.
+2. branch calls: There is a possibility that when a branch is invoked, the corresponding status flag is not set yet (due to the clocked SREG). The most straightforward approach to ensure a correct branch call involves pausing the PC momentarily, awaiting one clock cycle, and then deciding whether to take the branch or not. The REIGHT 1 manages to execute a Branch in one clock cycle (if taken) and two cycles (if not taken), a special feature detailed further in the corresponding chapter.
 
 The described REIGHT 1 is shown as a block diagram in the following subchapter.
 
 
-### <a name="_toc155088101"></a>1.2.1 Block diagram
+### 1.2.1 Block diagram
 
+<a name="_reftoplevel"></a>![Toplevel](./pictures/Toplevel_dark.png#gh-dark-mode-only)
+<a name="_reftoplevel"></a>![Toplevel](./pictures/Toplevel_light.png#gh-light-mode-only)
+<a name="_ref154731606"></a><a name="_toc155088115"></a> *Figure 1: block diagram toplevel*
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-![](pictures/Aspose.Words.7963bbad-4a75-4673-9dd5-dcf76f495c96.004.png)![](pictures/Aspose.Words.7963bbad-4a75-4673-9dd5-dcf76f495c96.005.png)![](pictures/Aspose.Words.7963bbad-4a75-4673-9dd5-dcf76f495c96.006.png)![](pictures/Aspose.Words.7963bbad-4a75-4673-9dd5-dcf76f495c96.007.png)![](pictures/Aspose.Words.7963bbad-4a75-4673-9dd5-dcf76f495c96.008.png)![](pictures/Aspose.Words.7963bbad-4a75-4673-9dd5-dcf76f495c96.009.png)![ref1]![ref1]![ref1]![ref1]![](pictures/Aspose.Words.7963bbad-4a75-4673-9dd5-dcf76f495c96.011.png)<a name="_ref154731606"></a><a name="_toc155088115"></a>
-# <a name="_toc155088102"></a>2. Special Features
+# 2. Special Features
 This processor utilizes part of the AVR® instruction set. To emphasize its special features, a comparison with AVR® processors is evident. The most crucial point of comparison is performance. However, since some instructions are multi-cycle operations, relying solely on clock speed is insufficient to describe the processor's performance accurately. Hence, the instruction per cycle (IPC) index is employed. This IPC represents the average duration of an instruction, considering the frequency of occurrence. The smaller the IPC, the faster the processor operates. Consequently, efforts should focus on optimizing multi-cycle operations to minimize the number of cycles. All optimizations aimed at enhancing the speed of multi-cycle operations are categorized as special features. To delve deeper into these features, the multi-clock cycle instructions of the AVR Instruction set are compared to the same implemented instructions of REIGHT 1, specifically examining the required cycles for each instruction.
 
 
@@ -336,16 +274,16 @@ This processor utilizes part of the AVR® instruction set. To emphasize its spec
 |**RCALL**|3|2|
 |**RET**|4|4|
 
-<a name="_toc155088119"></a>*Table 2: comparison of the used cycles AVR® and RIGHT 1*
+*Table 2: comparison of the used cycles AVR® and RIGHT 1*
 
 To achieve these speed improvements, optimizations were implemented on the PC, SP, and the RCALL/RET Process. These three optimizations constitute the main special features of this processor and are explained in more detail in the following subsections.
 
-## <a name="_toc155088103"></a>2.1. Program counter
+## 2.1. Program counter
 ![](pictures/Aspose.Words.7963bbad-4a75-4673-9dd5-dcf76f495c96.012.png)
 
-<a name="_ref154730456"></a><a name="_toc155088116"></a>*Figure 2: block diagram Program Counter*
+<a name="_ref154730456"></a>*Figure 2: block diagram Program Counter*
 
-[Figure 2](#_ref154730456) describes the structure of the PC. The PC is a special feature of the REIGHT 1 because it enables the processor to execute instructions that are multi-cycle in the AVR® instruction set with fewer cycles. To delve deeper into its functionality, it is necessary to explore the various operation modes of the PC, with particular focus on the operations to be performed in relation to the clock and how these operations work.
+[Figure 2](#) describes the structure of the PC. The PC is a special feature of the REIGHT 1 because it enables the processor to execute instructions that are multi-cycle in the AVR® instruction set with fewer cycles. To delve deeper into its functionality, it is necessary to explore the various operation modes of the PC, with particular focus on the operations to be performed in relation to the clock and how these operations work.
 
 The Program counter needs to realize the following tasks:
 
