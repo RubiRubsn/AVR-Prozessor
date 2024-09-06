@@ -94,17 +94,17 @@
 
 [Figure 2: block diagram Program Counter](#_refPC)
 
-[Figure 3: block diagram Stack Pointer	20](#_toc155088117)
+[Figure 3: block diagram Stack Pointer](#_toc155088117)
 
 
 
-[Table 1: instruction set	9](#_toc155088118)
+[Table 1: instruction set](#_toc155088118)
 
-[Table 2: comparison of the used cycles AVR® and RIGHT 1	15](#_toc155088119)
+[Table 2: comparison of the used cycles AVR® and RIGHT 1](#_toc155088119)
 
-[Table 3: calculation of IPC	22](#_toc155088120)
+[Table 3: calculation of IPC](#_toc155088120)
 
-[Table 4: utilization of the Basys 3 board	23](#_toc155088121)
+[Table 4: utilization of the Basys 3 board](#_toc155088121)
 
 
 
@@ -336,7 +336,7 @@ In crafting the IPC, a specific instruction mix is employed: 15% load, 5% store,
 The computation of the IPC is detailed below.
 
 
-|**Instruction type**|**probability of occurring in %**|**used clock cycles**||
+|**Instruction type**|**probability of occurring in %**|**used clock cycles**|
 | - | :- | :- |
 |**LD**|15|1|
 |**ST**|5|1|
@@ -351,7 +351,7 @@ The computation of the IPC is detailed below.
 
 This IPC is implementable with a clock frequency of 130 MHz[^3]. This outstanding performance is possible while only consuming 99mW of Power.
 
-The Artix-7ä FPGA[^4] on the Basys 3 board is utilized by the following amount.
+The Artix-7 FPGA on the Basys 3 board is utilized by the following amount.
 
 
 |**Resource**|**Utilization**|**Available**|**Utilization in %**|
